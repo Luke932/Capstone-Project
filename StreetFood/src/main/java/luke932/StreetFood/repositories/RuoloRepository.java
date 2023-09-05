@@ -9,6 +9,7 @@ import luke932.StreetFood.entities.Ruolo;
 
 @Repository
 public interface RuoloRepository extends JpaRepository<Ruolo, String> {
+	Ruolo findByNome(String nome);
 
 	Optional<Ruolo> findById(String sigla);
 }

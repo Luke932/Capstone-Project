@@ -37,8 +37,18 @@ public class UtenteService {
 		utenteR.findByEmail(body.getEmail()).ifPresent(utente -> {
 			throw new BadRequestException("L'email è stata già utilizzata");
 		});
+
+		Ruolo userRole = ruoloR.findByNome("USER");
+		System.out.println(userRole);
+		if (userRole == null) {
+			throw new NotFoundException("Ruolo 'USER' non trovato nel database");
+		}
+
 		Utente newUser = new Utente(body.getNome(), body.getCognome(), body.getUsername(), body.getEmail(),
 				body.getPassword());
+
+		newUser.setRuolo(userRole);
+
 		return utenteR.save(newUser);
 	}
 
@@ -50,11 +60,15 @@ public class UtenteService {
 
 	// -----------------SALVA UTENTE
 	public Utente save(Utente body) {
-		if (body.getRuolo() == null) {
-			Ruolo defaultRole = new Ruolo();
-			defaultRole.setNome("USER");
-			body.setRuolo(defaultRole);
+		if (body.getRuolo() == null || body.getRuolo().getNome() == null) {
+			Ruolo userRole = ruoloR.findByNome("USER");
+
+			if (userRole == null) {
+				throw new NotFoundException("Ruolo 'USER' non trovato nel database");
+			}
+			body.setRuolo(userRole);
 		}
+
 		return utenteR.save(body);
 	}
 
@@ -82,12 +96,20 @@ public class UtenteService {
 	// -----------------AGGIORNA UTENTE
 	public Utente updateUtente(UUID id, UtenteUpdatePayload body) {
 		Utente found = this.findById(id);
+
+		if (body.getRuolo() == null || body.getRuolo().getNome() == null) {
+			Ruolo userRole = ruoloR.findByNome("USER");
+
+			if (userRole == null) {
+				throw new NotFoundException("Ruolo 'USER' non trovato nel database");
+			}
+			body.setRuolo(userRole);
+		}
 		found.setUsername(body.getUsername());
 		found.setNome(body.getNome());
 		found.setCognome(body.getCognome());
 		found.setEmail(body.getEmail());
 		found.setPassword(body.getPassword());
-		found.setRuolo(body.getRuolo());
 
 		return utenteR.save(found);
 	}
