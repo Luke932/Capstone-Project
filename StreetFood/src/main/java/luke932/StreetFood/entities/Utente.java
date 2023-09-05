@@ -35,9 +35,14 @@ public class Utente {
 	@OneToMany(mappedBy = "utente")
 	private Set<Commento> commenti;
 
-	public Utente() {
+	public Utente(String username, String nome, String cognome, String email, String password) {
+		this.username = username;
+		this.nome = nome;
+		this.cognome = cognome;
+		this.email = email;
+		this.password = password;
 		this.ruolo = new Ruolo();
-		this.ruolo.setNome("User");
+		this.ruolo.setNome("USER");
 	}
 
 }
