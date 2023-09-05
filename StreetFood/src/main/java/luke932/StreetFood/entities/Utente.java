@@ -10,10 +10,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Transient;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
+@NoArgsConstructor
 public class Utente {
 
 	@Id
@@ -35,6 +38,9 @@ public class Utente {
 	@OneToMany(mappedBy = "utente")
 	private Set<Commento> commenti;
 
+	@Transient
+	private String ruoloNome;
+
 	public Utente(String username, String nome, String cognome, String email, String password) {
 		this.username = username;
 		this.nome = nome;
@@ -43,6 +49,15 @@ public class Utente {
 		this.password = password;
 		this.ruolo = new Ruolo();
 		this.ruolo.setNome("USER");
+	}
+
+	public Utente(String username, String password, String email, String nome, String cognome, String ruoloNome) {
+		this.username = username;
+		this.password = password;
+		this.email = email;
+		this.nome = nome;
+		this.cognome = cognome;
+		this.ruoloNome = ruoloNome;
 	}
 
 }

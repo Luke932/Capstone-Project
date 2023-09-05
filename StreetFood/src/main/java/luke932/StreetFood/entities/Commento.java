@@ -1,6 +1,6 @@
 package luke932.StreetFood.entities;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.UUID;
 
 import jakarta.persistence.Entity;
@@ -9,9 +9,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
+@NoArgsConstructor
 public class Commento {
 
 	@Id
@@ -27,6 +29,6 @@ public class Commento {
 	private Prodotto prodotto;
 
 	private String testoCommento;
-	private Date dataLike;
+	private LocalDate dataCommento;
 
 }

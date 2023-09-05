@@ -1,5 +1,6 @@
 package luke932.StreetFood.services;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,16 +17,19 @@ import luke932.StreetFood.exceptions.ItemNotFoundException;
 import luke932.StreetFood.exceptions.NotFoundException;
 import luke932.StreetFood.payloads.UtenteSavePayloadUser;
 import luke932.StreetFood.payloads.UtenteUpdatePayload;
+import luke932.StreetFood.repositories.RuoloRepository;
 import luke932.StreetFood.repositories.UtenteRepository;
 
 @Service
 public class UtenteService {
 
 	private final UtenteRepository utenteR;
+	private final RuoloRepository ruoloR;
 
 	@Autowired
-	public UtenteService(UtenteRepository utenteR) {
+	public UtenteService(UtenteRepository utenteR, RuoloRepository ruoloR) {
 		this.utenteR = utenteR;
+		this.ruoloR = ruoloR;
 	}
 
 	// -----------------CREATE UTENTE USER
@@ -52,6 +56,16 @@ public class UtenteService {
 			body.setRuolo(defaultRole);
 		}
 		return utenteR.save(body);
+	}
+
+	// -----------------RICERCA PER RUOLO
+	public Utente findByNome(String nome) {
+		return utenteR.findByNome(nome);
+	}
+
+	// -----------------GET UTENTI
+	public List<Utente> findNoPage() {
+		return utenteR.findAll();
 	}
 
 	// -----------------RICERCA UTENTI PER PAGINA
@@ -83,4 +97,5 @@ public class UtenteService {
 		Utente found = this.findById(id);
 		utenteR.delete(found);
 	}
+
 }
