@@ -56,4 +56,5 @@ public class LikeService {
 		Like found = getLikeoByID(id);
 		likeR.delete(found);
 	}
+
 }

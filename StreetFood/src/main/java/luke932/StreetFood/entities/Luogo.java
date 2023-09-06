@@ -1,8 +1,10 @@
 package luke932.StreetFood.entities;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -24,5 +26,6 @@ public class Luogo {
 	private String descrizione;
 
 	@OneToMany(mappedBy = "luogo")
-	private Set<Prodotto> prodotti = new HashSet<>();
+	@JsonBackReference
+	private List<Prodotto> prodotti = new ArrayList<>();
 }
