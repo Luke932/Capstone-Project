@@ -52,8 +52,7 @@ public class AppRunner implements CommandLineRunner {
 //		ruoloSrv.save(ruolo2);
 
 		// ----------------CREAZIONE ADMIN
-		Ruolo ruoloAdmin = new Ruolo();
-		ruoloAdmin.setNome("ADMIN");
+		Ruolo ruoloAdmin = ruoloSrv.findByNome("ADMIN");
 
 		Utente utenteAdmin = new Utente("Luke932", "Luca", "Giacalone", "luca_g@gmail.com", "1234");
 		utenteAdmin.setRuolo(ruoloAdmin);
@@ -82,7 +81,7 @@ public class AppRunner implements CommandLineRunner {
 		}
 
 		// ----------------CREAZIONE COMMENTO
-		Prodotto prodottiDalDb = prodottoSrv.findByNomeProdotto("Sushi");
+		Prodotto prodottiDalDb = prodottoSrv.findByNomeProdotto("Tacos");
 		Utente utentidalDb = utenteSrv.findByNome("Luca");
 		Commento commento = new Commento();
 		commento.setTestoCommento("ciao");
@@ -90,7 +89,7 @@ public class AppRunner implements CommandLineRunner {
 		commento.setProdotto(prodottiDalDb);
 		commento.setUtente(utentidalDb);
 
-		// commentoSrv.saveCommento(commento);
+		commentoSrv.saveCommento(commento);
 
 		// ----------------CREAZIONE LIKE
 		Like like = new Like();
@@ -98,7 +97,7 @@ public class AppRunner implements CommandLineRunner {
 		like.setProdotto(prodottiDalDb);
 		like.setUtente(utentidalDb);
 
-		// likeSrv.saveLike(like);
+		likeSrv.saveLike(like);
 	}
 
 }
