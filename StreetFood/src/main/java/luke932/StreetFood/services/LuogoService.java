@@ -42,7 +42,7 @@ public class LuogoService {
 		return luogoR.findAll(pag);
 	}
 
-	// -----------------RICERCA PER NOME PRODOTTO
+	// -----------------RICERCA PER TITOLO PRODOTTO
 	public Luogo findByTitolo(String titolo) {
 		return luogoR.findByTitolo(titolo);
 	}
@@ -54,7 +54,7 @@ public class LuogoService {
 	}
 
 	// ------------MODIFICA LUOGO PER ID
-	public Luogo updateCliente(UUID id, NewLuogoPayload body) {
+	public Luogo updateLuogo(UUID id, NewLuogoPayload body) {
 		Luogo found = this.getLuogoByID(id);
 		found.setTitolo(body.getTitolo());
 		found.setImmagine(body.getImmagine());
@@ -63,8 +63,8 @@ public class LuogoService {
 		return luogoR.save(found);
 	}
 
-	// ------------CANCELLAZIONE CLIENTE PER ID
-	public void deleteCliente(UUID id) {
+	// ------------CANCELLAZIONE LUOGO PER ID
+	public void deleteLuogo(UUID id) {
 		Luogo found = getLuogoByID(id);
 		luogoR.delete(found);
 	}
