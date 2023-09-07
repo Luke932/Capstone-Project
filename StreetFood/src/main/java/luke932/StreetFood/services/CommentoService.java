@@ -1,5 +1,6 @@
 package luke932.StreetFood.services;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -56,6 +57,26 @@ public class CommentoService {
 	public void deleteCommento(UUID id) {
 		Commento found = getCommentoByID(id);
 		commentoR.delete(found);
+	}
+
+	// ------------RESTITUISCE UNA LISTA DI COMMENTI ASSOCIATI A QUESTO PRODOTTO
+	public List<Commento> findByProdottoId(UUID prodottoId) {
+		return commentoR.findByProdottoId(prodottoId);
+	}
+
+	// ------------RESTITUISCE UNA LISTA DI COMMENTI ASSOCIATI A QUESTO UTENTE
+	public List<Commento> findByUtenteId(UUID utenteId) {
+		return commentoR.findByUtenteId(utenteId);
+	}
+
+	// ------------RESTITUISCE UN NUMERO DI COMMENTI ASSOCIATI A QUESTO PRODOTTO
+	public Long countCommentiByProdottoId(UUID prodottoId) {
+		return commentoR.countCommentiByProdottoId(prodottoId);
+	}
+
+	// ------------RESTITUISCE UN NUMERO DI COMMENTI ASSOCIATI A QUESTO UTENTE
+	public Long countCommentiByUtenteId(UUID utenteId) {
+		return commentoR.countCommentiByUtenteId(utenteId);
 	}
 
 }

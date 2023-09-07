@@ -1,5 +1,6 @@
 package luke932.StreetFood.controllers;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
@@ -63,4 +64,29 @@ public class CommentoController {
 	public void deleteCommento(@PathVariable UUID id) {
 		commentoSrv.deleteCommento(id);
 	}
+
+	// ------------RESTITUISCE UNA LISTA DI COMMENTI ASSOCIATI A QUESTO PRODOTTO
+	@GetMapping("/byProdotto/{prodottoId}")
+	public List<Commento> getCommentiByProdottoId(@PathVariable UUID prodottoId) {
+		return commentoSrv.findByProdottoId(prodottoId);
+	}
+
+	// ------------RESTITUISCE UNA LISTA DI COMMENTI ASSOCIATI A QUESTO UTENTE
+	@GetMapping("/byUtente/{utenteId}")
+	public List<Commento> getCommentiByUtenteId(@PathVariable UUID utenteId) {
+		return commentoSrv.findByUtenteId(utenteId);
+	}
+
+	// ------------RESTITUISCE UN NUMERO DI COMMENTI ASSOCIATI A QUESTO PRODOTTO
+	@GetMapping("/countByProdotto/{prodottoId}")
+	public Long countCommentiByProdottoId(@PathVariable UUID prodottoId) {
+		return commentoSrv.countCommentiByProdottoId(prodottoId);
+	}
+
+	// ------------RESTITUISCE UN NUMERO DI COMMENTI ASSOCIATI A QUESTO UTENTE
+	@GetMapping("/countByUtente/{utenteId}")
+	public Long countCommentiByUtenteId(@PathVariable UUID utenteId) {
+		return commentoSrv.countCommentiByUtenteId(utenteId);
+	}
+
 }

@@ -77,6 +77,11 @@ public class UtenteService {
 		return utenteR.findByNome(nome);
 	}
 
+	// -----------------RICERCA PER USERNAME
+	public Utente findByUsername(String username) {
+		return utenteR.findByUsername(username);
+	}
+
 	// -----------------GET UTENTI
 	public List<Utente> findNoPage() {
 		return utenteR.findAll();
@@ -118,6 +123,30 @@ public class UtenteService {
 	public void deleteUtente(UUID id) throws ItemNotFoundException {
 		Utente found = this.findById(id);
 		utenteR.delete(found);
+	}
+
+	// -----------------RICERCA TUTTI GLI UTENTI CHE HANNO COMMENTATO UN DETERMINATO
+	// PRODOTTO
+	public List<Utente> findUtentiByProdottoCommentato(UUID prodottoId) {
+		return utenteR.findUtentiByProdottoCommentato(prodottoId);
+	}
+
+	// -----------------RICERCA TUTTI GLI UTENTI CHE HANNO COMMENTATO UN DETERMINATO
+	// PRODOTTO E CHE HANNO UN CERTO RUOLO
+	public List<Utente> findUtentiByProdottoCommentatoAndRuolo(UUID prodottoId, String ruoloNome) {
+		return utenteR.findUtentiByProdottoCommentatoAndRuolo(prodottoId, ruoloNome);
+	}
+
+	// -----------------RICERCA TUTTI GLI UTENTI CHE HANNO COMMENTATO ALMENO UN
+	// PRODOTTO
+	public List<Utente> findUtentiConCommenti() {
+		return utenteR.findUtentiConCommenti();
+	}
+
+	// -----------------RICERCA TUTTI GLI UTENTI CHE HANNO MESSO LIKE AD ALMENO UN
+	// PRODOTTO
+	public List<Utente> findUtentiConLike() {
+		return utenteR.findUtentiConLike();
 	}
 
 }

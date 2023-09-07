@@ -1,5 +1,6 @@
 package luke932.StreetFood.services;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -55,6 +56,26 @@ public class LikeService {
 	public void deleteLike(UUID id) {
 		Like found = getLikeoByID(id);
 		likeR.delete(found);
+	}
+
+	// ------------RESTITUISCE UNA LISTA DI LIKE ASSOCIATI A QUESTO PRODOTTO
+	public List<Like> findByProdottoId(UUID prodottoId) {
+		return likeR.findByProdottoId(prodottoId);
+	}
+
+	// ------------RESTITUISCE UNA LISTA DI LIKE ASSOCIATI A QUESTO UTENTE
+	public List<Like> findByUtenteId(UUID utenteId) {
+		return likeR.findByUtenteId(utenteId);
+	}
+
+	// ------------RESTITUISCE UNA NUMERO DI LIKE ASSOCIATI A QUESTO PRODOTTO
+	public Long countLikesByProdottoId(UUID prodottoId) {
+		return likeR.countLikesByProdottoId(prodottoId);
+	}
+
+	// ------------RESTITUISCE UNA NUMERO DI LIKE ASSOCIATI A QUESTO PRODOTTO
+	public Long countLikesByUtenteId(UUID utenteId) {
+		return likeR.countLikesByUtenteId(utenteId);
 	}
 
 }

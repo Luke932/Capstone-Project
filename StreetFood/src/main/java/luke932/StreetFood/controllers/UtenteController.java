@@ -64,4 +64,39 @@ public class UtenteController {
 		utenteService.deleteUtente(userId);
 	}
 
+	// -----------------RICERCA PER USERNAME
+	@GetMapping("/username/{username}")
+	public Utente getUtenteByUsername(@PathVariable String username) {
+		return utenteService.findByUsername(username);
+	}
+
+	// -----------------RICERCA TUTTI GLI UTENTI CHE HANNO COMMENTATO UN DETERMINATO
+	// PRODOTTO
+	@GetMapping("/commentati/{prodottoId}")
+	public List<Utente> getUtentiByProdottoCommentato(@PathVariable UUID prodottoId) {
+		return utenteService.findUtentiByProdottoCommentato(prodottoId);
+	}
+
+	// -----------------RICERCA TUTTI GLI UTENTI CHE HANNO COMMENTATO UN DETERMINATO
+	// PRODOTTO E CHE HANNO UN CERTO RUOLO
+	@GetMapping("/commentati/{prodottoId}/{ruoloNome}")
+	public List<Utente> getUtentiByProdottoCommentatoAndRuolo(@PathVariable UUID prodottoId,
+			@PathVariable String ruoloNome) {
+		return utenteService.findUtentiByProdottoCommentatoAndRuolo(prodottoId, ruoloNome);
+	}
+
+	// -----------------RICERCA TUTTI GLI UTENTI CHE HANNO COMMENTATO ALMENO UN
+	// PRODOTTO
+	@GetMapping("/con-commenti")
+	public List<Utente> getUtentiConCommenti() {
+		return utenteService.findUtentiConCommenti();
+	}
+
+	// -----------------RICERCA TUTTI GLI UTENTI CHE HANNO MESSO LIKE AD ALMENO UN
+	// PRODOTTO
+	@GetMapping("/con-like")
+	public List<Utente> getUtentiConLike() {
+		return utenteService.findUtentiConLike();
+	}
+
 }

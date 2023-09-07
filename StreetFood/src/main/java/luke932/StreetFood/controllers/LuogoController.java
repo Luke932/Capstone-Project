@@ -1,5 +1,6 @@
 package luke932.StreetFood.controllers;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
@@ -64,4 +65,23 @@ public class LuogoController {
 	public void deleteLuogo(@PathVariable UUID id) {
 		luogoSrv.deleteLuogo(id);
 	}
+
+	// ------------RICERCA PER TITOLO PRODOTTO
+	@GetMapping("/titolo/{titolo}")
+	public Luogo getTitoloById(@PathVariable String titolo) {
+		return luogoSrv.findByTitolo(titolo);
+	}
+
+	// ------------TROVA TUTTI I LUOGHI CHE CONTENGONO UNA CERTA DESCRIZIONE
+	@GetMapping("/byDescrizione/{descrizione}")
+	public List<Luogo> getLuoghiByDescrizione(@PathVariable String descrizione) {
+		return luogoSrv.findLuoghiByDescrizione(descrizione);
+	}
+
+	// ------------TROVA TUTTI I LUOGHI DATO UN NOME PRODOTTO
+	@GetMapping("/conProdotto/{nomeProdotto}")
+	public List<Luogo> getLuoghiConProdotto(@PathVariable String nomeProdotto) {
+		return luogoSrv.findLuoghiConProdotto(nomeProdotto);
+	}
+
 }

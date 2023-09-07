@@ -1,6 +1,8 @@
 package luke932.StreetFood;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,17 +68,17 @@ public class AppRunner implements CommandLineRunner {
 		}
 
 		// ----------------CREAZIONE PRODOTTI
-//		List<Luogo> luoghiDalDb = new ArrayList<>();
-//		luoghiDalDb = luogoSrv.findNoPage();
-//		for (int i = 0; i < 10; i++) {
-//			Prodotto product = new Prodotto();
-//			product.setNomeProdotto(faker.food().dish());
-//			product.setDescrizione(faker.lorem().sentence());
-//			product.setImmagine(faker.internet().image());
-//			product.setAltro(faker.internet().avatar());
-//			product.setLuogo(luoghiDalDb.get(faker.number().numberBetween(0, luoghiDalDb.size() - 1)));
-//			// prodottoSrv.saveProdotto(product);
-//		}
+		List<Luogo> luoghiDalDb = new ArrayList<>();
+		luoghiDalDb = luogoSrv.findNoPage();
+		for (int i = 0; i < 10; i++) {
+			Prodotto product = new Prodotto();
+			product.setNomeProdotto(faker.food().dish());
+			product.setDescrizione(faker.lorem().sentence());
+			product.setImmagine(faker.internet().image());
+			product.setAltro(faker.internet().avatar());
+			product.setLuogo(luoghiDalDb.get(faker.number().numberBetween(0, luoghiDalDb.size() - 1)));
+			// prodottoSrv.saveProdotto(product);
+		}
 
 		// ----------------CREAZIONE COMMENTO
 		Prodotto prodottiDalDb = prodottoSrv.findByNomeProdotto("Tacos");

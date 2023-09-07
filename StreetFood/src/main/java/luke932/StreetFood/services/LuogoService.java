@@ -68,4 +68,15 @@ public class LuogoService {
 		Luogo found = getLuogoByID(id);
 		luogoR.delete(found);
 	}
+
+	// ------------TROVA TUTTI I LUOGHI CHE CONTENGONO UNA CERTA DESCRIZIONE
+	public List<Luogo> findLuoghiByDescrizione(String descrizione) {
+		return luogoR.findByDescrizioneContaining(descrizione);
+	}
+
+	// ------------TROVA TUTTI I LUOGHI DATO UN NOME PRODOTTO
+	public List<Luogo> findLuoghiConProdotto(String nomeProdotto) {
+		return luogoR.findLuoghiConProdotto(nomeProdotto);
+	}
+
 }

@@ -62,4 +62,5 @@ public class RuoloController {
 	public void deleteRole(@PathVariable UUID roleId) {
 		ruoloService.findByIdAndDelete(roleId);
 	}
+
 }

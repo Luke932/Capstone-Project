@@ -77,4 +77,55 @@ public class ProdottoService {
 		prodottoR.delete(found);
 	}
 
+	// ------------TROVA TUTTI I PRODOTTI DI UN CERTO LUOGO
+	public List<Prodotto> findByLuogoId(UUID luogoId) {
+		return prodottoR.findByLuogoId(luogoId);
+	}
+
+	// ------------TROVA TUTTI I PRODOTTI CHE HANNO RICEVUTO LIKE DA UN CERTO UTENTE
+	public List<Prodotto> findByLikesUtenteId(UUID utenteId) {
+		return prodottoR.findByLikesUtenteId(utenteId);
+	}
+
+	// ------------TROVA TUTTI I PRODOTTI DI UN CERTO LUOGO CON ALMENO UN CERTO
+	// NUMERO DI LIKE
+	public List<Prodotto> findByLuogoAndMinLikes(UUID luogoId, int minLikes) {
+		return prodottoR.findByLuogoAndMinLikes(luogoId, minLikes);
+	}
+
+	// ------------TROVA TUTTI I PRODOTTI CON UN CERTO NUMERO DI LIKE
+	public List<Prodotto> findProdottiConAlmenoNLike(int minLikes) {
+		return prodottoR.findProdottiConAlmenoNLike(minLikes);
+	}
+
+	// ------------TROVA TUTTI I PRODOTTI CHE HANNO RICEVUTO LIKE DA UTENTI CON UN
+	// CERTO RUOLO
+	public List<Prodotto> findProdottiConLikeDaUtentiConRuolo(String ruoloNome) {
+		return prodottoR.findProdottiConLikeDaUtentiConRuolo(ruoloNome);
+	}
+
+	// ================================================================================
+
+	// ------------TROVA TUTTI I PRODOTTI CHE HANNO RICEVUTO COMMENTI DA UN CERTO UTENTE
+	public List<Prodotto> findByCommentiUtenteId(UUID utenteId) {
+		return prodottoR.findByCommentiUtenteId(utenteId);
+	}
+
+	// ------------TROVA TUTTI I PRODOTTI DI UN CERTO LUOGO CON ALMENO UN CERTO
+	// NUMERO DI COMMENTI
+	public List<Prodotto> findByLuogoAndMinCommenti(UUID luogoId, int minLikes) {
+		return prodottoR.findByLuogoAndMinLikes(luogoId, minLikes);
+	}
+
+	// ------------TROVA TUTTI I PRODOTTI CON UN CERTO NUMERO DI COMMENTI
+	public List<Prodotto> findProdottiConAlmenoNCommento(int minLikes) {
+		return prodottoR.findProdottiConAlmenoNCommento(minLikes);
+	}
+
+	// ------------TROVA TUTTI I PRODOTTI CHE HANNO RICEVUTO COMMENTI DA UTENTI CON UN
+	// CERTO RUOLO
+	public List<Prodotto> findProdottiConCommentoDaUtentiConRuolo(String ruoloNome) {
+		return prodottoR.findProdottiConCommentoDaUtentiConRuolo(ruoloNome);
+	}
+
 }

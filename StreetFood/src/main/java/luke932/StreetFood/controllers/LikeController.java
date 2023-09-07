@@ -1,5 +1,6 @@
 package luke932.StreetFood.controllers;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
@@ -64,4 +65,27 @@ public class LikeController {
 		likeSrv.deleteLike(id);
 	}
 
+	// ------------RESTITUISCE UNA LISTA DI LIKE ASSOCIATI A QUESTO PRODOTTO
+	@GetMapping("/byProdotto/{prodottoId}")
+	public List<Like> getLikesByProdottoId(@PathVariable UUID prodottoId) {
+		return likeSrv.findByProdottoId(prodottoId);
+	}
+
+	// ------------RESTITUISCE UNA LISTA DI LIKE ASSOCIATI A QUESTO UTENTE
+	@GetMapping("/byUtente/{utenteId}")
+	public List<Like> getLikesByUtenteId(@PathVariable UUID utenteId) {
+		return likeSrv.findByUtenteId(utenteId);
+	}
+
+	// ------------RESTITUISCE UN NUMERO DI LIKE ASSOCIATI A QUESTO PRODOTTO
+	@GetMapping("/countByProdotto/{prodottoId}")
+	public Long countLikesByProdottoId(@PathVariable UUID prodottoId) {
+		return likeSrv.countLikesByProdottoId(prodottoId);
+	}
+
+	// ------------RESTITUISCE UN NUMERO DI LIKE ASSOCIATI A QUESTO UTENTE
+	@GetMapping("/countByUtente/{utenteId}")
+	public Long countLikesByUtenteId(@PathVariable UUID utenteId) {
+		return likeSrv.countLikesByUtenteId(utenteId);
+	}
 }
