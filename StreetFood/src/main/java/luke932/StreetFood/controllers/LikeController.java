@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import luke932.StreetFood.entities.Like;
+import luke932.StreetFood.exceptions.NotFoundException;
 import luke932.StreetFood.services.LikeService;
 
 @RestController
@@ -68,24 +69,41 @@ public class LikeController {
 	// ------------RESTITUISCE UNA LISTA DI LIKE ASSOCIATI A QUESTO PRODOTTO
 	@GetMapping("/byProdotto/{prodottoId}")
 	public List<Like> getLikesByProdottoId(@PathVariable UUID prodottoId) {
-		return likeSrv.findByProdottoId(prodottoId);
+		List<Like> likes = likeSrv.findByProdottoId(prodottoId);
+		if (likes.isEmpty()) {
+			throw new NotFoundException("Nessun like trovato per il prodotto con ID " + prodottoId);
+		}
+		return likes;
 	}
 
 	// ------------RESTITUISCE UNA LISTA DI LIKE ASSOCIATI A QUESTO UTENTE
 	@GetMapping("/byUtente/{utenteId}")
 	public List<Like> getLikesByUtenteId(@PathVariable UUID utenteId) {
-		return likeSrv.findByUtenteId(utenteId);
+		List<Like> likes = likeSrv.findByUtenteId(utenteId);
+		if (likes.isEmpty()) {
+			throw new NotFoundException("Nessun like trovato per l'utente con ID " + utenteId);
+		}
+		return likes;
 	}
 
 	// ------------RESTITUISCE UN NUMERO DI LIKE ASSOCIATI A QUESTO PRODOTTO
 	@GetMapping("/countByProdotto/{prodottoId}")
 	public Long countLikesByProdottoId(@PathVariable UUID prodottoId) {
-		return likeSrv.countLikesByProdottoId(prodottoId);
+		Long likeCount = likeSrv.countLikesByProdottoId(prodottoId);
+		if (likeCount == 0) {
+			throw new NotFoundException("Nessun like trovato per il prodotto con ID " + prodottoId);
+		}
+		return likeCount;
 	}
 
 	// ------------RESTITUISCE UN NUMERO DI LIKE ASSOCIATI A QUESTO UTENTE
 	@GetMapping("/countByUtente/{utenteId}")
 	public Long countLikesByUtenteId(@PathVariable UUID utenteId) {
-		return likeSrv.countLikesByUtenteId(utenteId);
+		Long likeCount = likeSrv.countLikesByUtenteId(utenteId);
+		if (likeCount == 0) {
+			throw new NotFoundException("Nessun like trovato per l'utente con ID " + utenteId);
+		}
+		return likeCount;
 	}
+
 }

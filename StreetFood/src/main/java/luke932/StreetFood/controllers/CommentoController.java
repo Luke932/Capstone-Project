@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import luke932.StreetFood.entities.Commento;
+import luke932.StreetFood.exceptions.NotFoundException;
 import luke932.StreetFood.services.CommentoService;
 
 @RestController
@@ -68,25 +69,40 @@ public class CommentoController {
 	// ------------RESTITUISCE UNA LISTA DI COMMENTI ASSOCIATI A QUESTO PRODOTTO
 	@GetMapping("/byProdotto/{prodottoId}")
 	public List<Commento> getCommentiByProdottoId(@PathVariable UUID prodottoId) {
-		return commentoSrv.findByProdottoId(prodottoId);
+		List<Commento> commenti = commentoSrv.findByProdottoId(prodottoId);
+		if (commenti.isEmpty()) {
+			throw new NotFoundException("Nessun commento trovato per il prodotto con ID " + prodottoId);
+		}
+		return commenti;
 	}
 
 	// ------------RESTITUISCE UNA LISTA DI COMMENTI ASSOCIATI A QUESTO UTENTE
 	@GetMapping("/byUtente/{utenteId}")
 	public List<Commento> getCommentiByUtenteId(@PathVariable UUID utenteId) {
-		return commentoSrv.findByUtenteId(utenteId);
+		List<Commento> commenti = commentoSrv.findByUtenteId(utenteId);
+		if (commenti.isEmpty()) {
+			throw new NotFoundException("Nessun commento trovato per l'utente con ID " + utenteId);
+		}
+		return commenti;
 	}
 
 	// ------------RESTITUISCE UN NUMERO DI COMMENTI ASSOCIATI A QUESTO PRODOTTO
 	@GetMapping("/countByProdotto/{prodottoId}")
 	public Long countCommentiByProdottoId(@PathVariable UUID prodottoId) {
-		return commentoSrv.countCommentiByProdottoId(prodottoId);
+		Long commentCount = commentoSrv.countCommentiByProdottoId(prodottoId);
+		if (commentCount == 0) {
+			throw new NotFoundException("Nessun commento trovato per il prodotto con ID " + prodottoId);
+		}
+		return commentCount;
 	}
 
 	// ------------RESTITUISCE UN NUMERO DI COMMENTI ASSOCIATI A QUESTO UTENTE
 	@GetMapping("/countByUtente/{utenteId}")
 	public Long countCommentiByUtenteId(@PathVariable UUID utenteId) {
-		return commentoSrv.countCommentiByUtenteId(utenteId);
+		Long commentCount = commentoSrv.countCommentiByUtenteId(utenteId);
+		if (commentCount == 0) {
+			throw new NotFoundException("Nessun commento trovato per l'utente con ID " + utenteId);
+		}
+		return commentCount;
 	}
-
 }

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import luke932.StreetFood.entities.Utente;
+import luke932.StreetFood.exceptions.NotFoundException;
 import luke932.StreetFood.payloads.UtenteUpdatePayload;
 import luke932.StreetFood.services.UtenteService;
 
@@ -74,7 +75,11 @@ public class UtenteController {
 	// PRODOTTO
 	@GetMapping("/commentati/{prodottoId}")
 	public List<Utente> getUtentiByProdottoCommentato(@PathVariable UUID prodottoId) {
-		return utenteService.findUtentiByProdottoCommentato(prodottoId);
+		List<Utente> utenti = utenteService.findUtentiByProdottoCommentato(prodottoId);
+		if (utenti.isEmpty()) {
+			throw new NotFoundException("Nessun utente ha commentato il prodotto con ID " + prodottoId);
+		}
+		return utenti;
 	}
 
 	// -----------------RICERCA TUTTI GLI UTENTI CHE HANNO COMMENTATO UN DETERMINATO
@@ -82,7 +87,12 @@ public class UtenteController {
 	@GetMapping("/commentati/{prodottoId}/{ruoloNome}")
 	public List<Utente> getUtentiByProdottoCommentatoAndRuolo(@PathVariable UUID prodottoId,
 			@PathVariable String ruoloNome) {
-		return utenteService.findUtentiByProdottoCommentatoAndRuolo(prodottoId, ruoloNome);
+		List<Utente> utenti = utenteService.findUtentiByProdottoCommentatoAndRuolo(prodottoId, ruoloNome);
+		if (utenti.isEmpty()) {
+			throw new NotFoundException(
+					"Nessun utente ha commentato il prodotto con ID " + prodottoId + " e ha il ruolo " + ruoloNome);
+		}
+		return utenti;
 	}
 
 	// -----------------RICERCA TUTTI GLI UTENTI CHE HANNO COMMENTATO ALMENO UN

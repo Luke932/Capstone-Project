@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import luke932.StreetFood.entities.Prodotto;
+import luke932.StreetFood.exceptions.NotFoundException;
 import luke932.StreetFood.payloads.NewProdottoPayload;
 import luke932.StreetFood.services.ProdottoService;
 
@@ -77,20 +78,33 @@ public class ProdottoController {
 	// ------------TROVA TUTTI I PRODOTTI DI UN CERTO LUOGO
 	@GetMapping("/prodotto/luogo/{luogoId}")
 	public List<Prodotto> getProdottiByLuogo(@PathVariable UUID luogoId) {
-		return prodottoSrv.findByLuogoId(luogoId);
+		List<Prodotto> prodotti = prodottoSrv.findByLuogoId(luogoId);
+		if (prodotti.isEmpty()) {
+			throw new NotFoundException("Nessun prodotto trovato per il luogo con ID " + luogoId);
+		}
+		return prodotti;
 	}
 
 	// ------------TROVA TUTTI I PRODOTTI CHE HANNO RICEVUTO LIKE DA UN CERTO UTENTE
 	@GetMapping("/prodotto/likes/utente/{utenteId}")
 	public List<Prodotto> getProdottiByLikesUtente(@PathVariable UUID utenteId) {
-		return prodottoSrv.findByLikesUtenteId(utenteId);
+		List<Prodotto> prodotti = prodottoSrv.findByLikesUtenteId(utenteId);
+		if (prodotti.isEmpty()) {
+			throw new NotFoundException("Nessun prodotto trovato per l'utente con ID " + utenteId);
+		}
+		return prodotti;
 	}
 
 	// ------------TROVA TUTTI I PRODOTTI DI UN CERTO LUOGO CON ALMENO UN CERTO
 	// NUMERO DI LIKE
 	@GetMapping("prodotto/luogo/{luogoId}/min-likes/{minLikes}")
 	public List<Prodotto> getProdottiByLuogoAndMinLikes(@PathVariable UUID luogoId, @PathVariable int minLikes) {
-		return prodottoSrv.findByLuogoAndMinLikes(luogoId, minLikes);
+		List<Prodotto> prodotti = prodottoSrv.findByLuogoAndMinLikes(luogoId, minLikes);
+		if (prodotti.isEmpty()) {
+			throw new NotFoundException(
+					"Nessun prodotto trovato per il luogo con ID " + luogoId + " con almeno " + minLikes + " like");
+		}
+		return prodotti;
 	}
 
 	// ------------TROVA TUTTI I PRODOTTI CON ALMENO UN CERTO NUMERO DI LIKE
