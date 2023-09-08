@@ -7,6 +7,7 @@ import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.github.javafaker.Faker;
@@ -40,6 +41,8 @@ public class AppRunner implements CommandLineRunner {
 	CommentoService commentoSrv;
 	@Autowired
 	LikeService likeSrv;
+	@Autowired
+	PasswordEncoder bcrypt;
 
 	@Override
 	public void run(String... args) throws Exception {
@@ -54,7 +57,8 @@ public class AppRunner implements CommandLineRunner {
 		// ----------------CREAZIONE ADMIN
 		Ruolo ruoloAdmin = ruoloSrv.findByNome("ADMIN");
 
-		Utente utenteAdmin = new Utente("Luke932", "Luca", "Giacalone", "luca_g@gmail.com", "1234");
+		Utente utenteAdmin = new Utente("Luke9327989", "Lucasssss", "Giacalonessssss", "lucasssss_g@gmail.com", "1234");
+		utenteAdmin.setPassword(bcrypt.encode(utenteAdmin.getPassword()));
 		utenteAdmin.setRuolo(ruoloAdmin);
 		// utenteSrv.save(utenteAdmin);
 

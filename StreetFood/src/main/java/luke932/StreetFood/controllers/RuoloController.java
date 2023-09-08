@@ -17,8 +17,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import luke932.StreetFood.entities.Ruolo;
+import luke932.StreetFood.entities.Utente;
 import luke932.StreetFood.payloads.RuoloSavePayload;
+import luke932.StreetFood.payloads.UtenteSavePayloadUser;
 import luke932.StreetFood.services.RuoloService;
+import luke932.StreetFood.services.UtenteService;
 
 @RestController
 @RequestMapping("/ruoli")
@@ -27,12 +30,24 @@ public class RuoloController {
 	@Autowired
 	private RuoloService ruoloService;
 
+	@Autowired
+	private UtenteService utenteSrv;
+
 	// --------------- POST RUOLO
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	@PreAuthorize("hasAuthority('ADMIN')")
 	public Ruolo saveRole(@RequestBody RuoloSavePayload body) {
 		Ruolo created = ruoloService.save(body);
+		return created;
+	}
+
+	// --------------- POST UTENTE ADMIN
+	@PostMapping("/register")
+	@ResponseStatus(HttpStatus.CREATED)
+	@PreAuthorize("hasAuthority('ADMIN')")
+	public Utente saveAdmin(@RequestBody UtenteSavePayloadUser body) {
+		Utente created = utenteSrv.createAdminUser(body);
 		return created;
 	}
 

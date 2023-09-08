@@ -29,7 +29,7 @@ public class UtenteController {
 		this.utenteService = utenteService;
 	}
 
-	// --------------- POST UTENTE
+	// --------------- POST UTENTE USER
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	@PreAuthorize("hasAuthority('ADMIN')")

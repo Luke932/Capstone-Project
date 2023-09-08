@@ -52,6 +52,26 @@ public class UtenteService {
 		return utenteR.save(newUser);
 	}
 
+	// -----------------CREATE UTENTE ADMIN
+	public Utente createAdminUser(UtenteSavePayloadUser body) {
+
+		utenteR.findByEmail(body.getEmail()).ifPresent(utente -> {
+			throw new BadRequestException("L'email è stata già utilizzata");
+		});
+
+		Ruolo adminRole = ruoloR.findByNome("ADMIN");
+		if (adminRole == null) {
+			throw new NotFoundException("Ruolo 'ADMIN' non trovato nel database");
+		}
+
+		Utente newAdminUser = new Utente(body.getNome(), body.getCognome(), body.getUsername(), body.getEmail(),
+				body.getPassword());
+
+		newAdminUser.setRuolo(adminRole);
+
+		return utenteR.save(newAdminUser);
+	}
+
 	// -----------------RICERCA PER EMAIL
 	public Utente findByEmail(String email) {
 		return utenteR.findByEmail(email)
