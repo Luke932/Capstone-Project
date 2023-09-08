@@ -1,10 +1,10 @@
 package luke932.StreetFood.exceptions;
 
-import java.nio.file.AccessDeniedException;
 import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -51,16 +51,16 @@ public class ExceptionsHandler {
 		return new ErrorPayload(e.getMessage(), LocalDate.now());
 	}
 
-	@ExceptionHandler(AccessDeniedException.class)
-	@ResponseStatus(HttpStatus.FORBIDDEN)
-	public ErrorPayload handleForbidden(AccessDeniedException e) {
-		return new ErrorPayload("Non hai accesso a questo endpoint", LocalDate.now());
-	}
-
 	@ExceptionHandler(UnauthorizedException.class)
 	@ResponseStatus(HttpStatus.UNAUTHORIZED)
 	public ErrorPayload handleUnauthorized(UnauthorizedException e) {
 		return new ErrorPayload(e.getMessage(), LocalDate.now());
+	}
+
+	@ExceptionHandler(AccessDeniedException.class)
+	@ResponseStatus(HttpStatus.FORBIDDEN)
+	public ErrorPayload handleForbidden(AccessDeniedException e) {
+		return new ErrorPayload("Non hai accesso a questo endpoint", LocalDate.now());
 	}
 
 	@ExceptionHandler(Exception.class)
@@ -70,5 +70,4 @@ public class ExceptionsHandler {
 		e.printStackTrace();
 		return new ErrorPayload("Errore generico", LocalDate.now());
 	}
-
 }

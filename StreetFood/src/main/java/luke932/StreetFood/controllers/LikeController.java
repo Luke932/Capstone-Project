@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,7 +39,6 @@ public class LikeController {
 
 	// ------------SALVATAGGIO LIKE
 	@PostMapping
-	// @PreAuthorize("hasAuthority('AMMINISTRATORE')")
 	@ResponseStatus(HttpStatus.CREATED)
 	public Like createCommento(@RequestBody Like like) {
 		return likeSrv.saveLike(like);
@@ -53,7 +53,7 @@ public class LikeController {
 
 	// ------------MODIFICA LIKE
 	@PutMapping("/{id}")
-	// @PreAuthorize("hasAuthority('AMMINISTRATORE')")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public Like updateLuogo(@PathVariable UUID id, @RequestBody Like like) {
 		return likeSrv.updateLike(id, like);
 	}
@@ -61,13 +61,14 @@ public class LikeController {
 	// ------------CANCELLAZIONE LIKE
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	// @PreAuthorize("hasAuthority('AMMINISTRATORE')")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public void deleteLike(@PathVariable UUID id) {
 		likeSrv.deleteLike(id);
 	}
 
 	// ------------RESTITUISCE UNA LISTA DI LIKE ASSOCIATI A QUESTO PRODOTTO
 	@GetMapping("/byProdotto/{prodottoId}")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public List<Like> getLikesByProdottoId(@PathVariable UUID prodottoId) {
 		List<Like> likes = likeSrv.findByProdottoId(prodottoId);
 		if (likes.isEmpty()) {
@@ -78,6 +79,7 @@ public class LikeController {
 
 	// ------------RESTITUISCE UNA LISTA DI LIKE ASSOCIATI A QUESTO UTENTE
 	@GetMapping("/byUtente/{utenteId}")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public List<Like> getLikesByUtenteId(@PathVariable UUID utenteId) {
 		List<Like> likes = likeSrv.findByUtenteId(utenteId);
 		if (likes.isEmpty()) {
@@ -88,6 +90,7 @@ public class LikeController {
 
 	// ------------RESTITUISCE UN NUMERO DI LIKE ASSOCIATI A QUESTO PRODOTTO
 	@GetMapping("/countByProdotto/{prodottoId}")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public Long countLikesByProdottoId(@PathVariable UUID prodottoId) {
 		Long likeCount = likeSrv.countLikesByProdottoId(prodottoId);
 		if (likeCount == 0) {
@@ -98,6 +101,7 @@ public class LikeController {
 
 	// ------------RESTITUISCE UN NUMERO DI LIKE ASSOCIATI A QUESTO UTENTE
 	@GetMapping("/countByUtente/{utenteId}")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public Long countLikesByUtenteId(@PathVariable UUID utenteId) {
 		Long likeCount = likeSrv.countLikesByUtenteId(utenteId);
 		if (likeCount == 0) {

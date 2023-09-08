@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,7 +39,7 @@ public class LuogoController {
 
 	// ------------SALVATAGGIO LUOGHI
 	@PostMapping
-	// @PreAuthorize("hasAuthority('AMMINISTRATORE')")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@ResponseStatus(HttpStatus.CREATED)
 	public Luogo createLuogo(@RequestBody Luogo luogo) {
 		return luogoSrv.saveLuogo(luogo);
@@ -53,7 +54,7 @@ public class LuogoController {
 
 	// ------------MODIFICA LUOGHI
 	@PutMapping("/{id}")
-	// @PreAuthorize("hasAuthority('AMMINISTRATORE')")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public Luogo updateLuogo(@PathVariable UUID id, @RequestBody NewLuogoPayload nuovoLuogo) {
 		return luogoSrv.updateLuogo(id, nuovoLuogo);
 	}
@@ -61,7 +62,7 @@ public class LuogoController {
 	// ------------CANCELLAZIONE LUOGHI
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	// @PreAuthorize("hasAuthority('AMMINISTRATORE')")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public void deleteLuogo(@PathVariable UUID id) {
 		luogoSrv.deleteLuogo(id);
 	}

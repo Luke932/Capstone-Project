@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,7 +42,7 @@ public class ProdottoController {
 
 	// ------------CREAZIONE PRODOTTI
 	@PostMapping
-	// @PreAuthorize("hasAuthority('AMMINISTRATORE')")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@ResponseStatus(HttpStatus.CREATED)
 	public Prodotto createProdotto(@RequestBody Prodotto prodotto) {
 		return prodottoSrv.saveProdotto(prodotto);
@@ -56,7 +57,7 @@ public class ProdottoController {
 
 	// ------------MODIFICA PRODOTTO PER ID
 	@PutMapping("/{id}")
-	// @PreAuthorize("hasAuthority('AMMINISTRATORE')")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public Prodotto updateProdotto(@PathVariable UUID id, @RequestBody NewProdottoPayload nuovoProdotto) {
 		return prodottoSrv.updateProdotto(id, nuovoProdotto);
 	}
@@ -64,7 +65,7 @@ public class ProdottoController {
 	// ------------CANCELLAZIONE PRODOTTO PER ID
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	// @PreAuthorize("hasAuthority('AMMINISTRATORE')")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public void deleteProdotto(@PathVariable UUID id) {
 		prodottoSrv.deleteProdotto(id);
 	}
@@ -87,6 +88,7 @@ public class ProdottoController {
 
 	// ------------TROVA TUTTI I PRODOTTI CHE HANNO RICEVUTO LIKE DA UN CERTO UTENTE
 	@GetMapping("/prodotto/likes/utente/{utenteId}")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public List<Prodotto> getProdottiByLikesUtente(@PathVariable UUID utenteId) {
 		List<Prodotto> prodotti = prodottoSrv.findByLikesUtenteId(utenteId);
 		if (prodotti.isEmpty()) {
@@ -98,6 +100,7 @@ public class ProdottoController {
 	// ------------TROVA TUTTI I PRODOTTI DI UN CERTO LUOGO CON ALMENO UN CERTO
 	// NUMERO DI LIKE
 	@GetMapping("prodotto/luogo/{luogoId}/min-likes/{minLikes}")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public List<Prodotto> getProdottiByLuogoAndMinLikes(@PathVariable UUID luogoId, @PathVariable int minLikes) {
 		List<Prodotto> prodotti = prodottoSrv.findByLuogoAndMinLikes(luogoId, minLikes);
 		if (prodotti.isEmpty()) {
@@ -109,6 +112,7 @@ public class ProdottoController {
 
 	// ------------TROVA TUTTI I PRODOTTI CON ALMENO UN CERTO NUMERO DI LIKE
 	@GetMapping("/prodotto/min-likes/{minLikes}")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public List<Prodotto> getProdottiWithMinLikes(@PathVariable int minLikes) {
 		return prodottoSrv.findProdottiConAlmenoNLike(minLikes);
 	}
@@ -116,6 +120,7 @@ public class ProdottoController {
 	// ------------TROVA TUTTI I PRODOTTI CHE HANNO RICEVUTO LIKE DA UTENTI CON UN
 	// CERTO RUOLO
 	@GetMapping("prodotto/likes/ruolo/{ruoloNome}")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public List<Prodotto> getProdottiWithLikesFromUtentiConRuolo(@PathVariable String ruoloNome) {
 		return prodottoSrv.findProdottiConLikeDaUtentiConRuolo(ruoloNome);
 	}
@@ -125,6 +130,7 @@ public class ProdottoController {
 	// ------------TROVA TUTTI I PRODOTTI CHE HANNO RICEVUTO COMMENTI DA UN CERTO
 	// UTENTE
 	@GetMapping("prodotto/commenti/utente/{utenteId}")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public List<Prodotto> getProdottiByCommentiUtente(@PathVariable UUID utenteId) {
 		return prodottoSrv.findByCommentiUtenteId(utenteId);
 	}
@@ -132,12 +138,14 @@ public class ProdottoController {
 	// ------------TROVA TUTTI I PRODOTTI DI UN CERTO LUOGO CON ALMENO UN CERTO
 	// NUMERO DI COMMENTI
 	@GetMapping("prodotto/luogo/{luogoId}/min-commenti/{minCommenti}")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public List<Prodotto> getProdottiByLuogoAndMinCommenti(@PathVariable UUID luogoId, @PathVariable int minCommenti) {
 		return prodottoSrv.findByLuogoAndMinCommenti(luogoId, minCommenti);
 	}
 
 	// ------------TROVA TUTTI I PRODOTTI CON ALMENO UN CERTO NUMERO DI COMMENTI
 	@GetMapping("prodotto/min-commenti/{minCommenti}")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public List<Prodotto> getProdottiWithMinCommenti(@PathVariable int minCommenti) {
 		return prodottoSrv.findProdottiConAlmenoNCommento(minCommenti);
 	}
@@ -145,6 +153,7 @@ public class ProdottoController {
 	// ------------TROVA TUTTI I PRODOTTI CHE HANNO RICEVUTO COMMENTI DA UTENTI CON
 	// UN CERTO RUOLO
 	@GetMapping("prodotto/commenti/ruolo/{ruoloNome}")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public List<Prodotto> getProdottiWithCommentiFromUtentiConRuolo(@PathVariable String ruoloNome) {
 		return prodottoSrv.findProdottiConCommentoDaUtentiConRuolo(ruoloNome);
 	}

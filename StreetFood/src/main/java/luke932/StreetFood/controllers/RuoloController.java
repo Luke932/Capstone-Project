@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,7 +30,7 @@ public class RuoloController {
 	// --------------- POST RUOLO
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	// @PreAuthorize("hasAuthority('AMMINISTRATORE')")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public Ruolo saveRole(@RequestBody RuoloSavePayload body) {
 		Ruolo created = ruoloService.save(body);
 		return created;
@@ -50,7 +51,7 @@ public class RuoloController {
 
 	// --------------- PUT RUOLO
 	@PutMapping("/{roleId}")
-	// @PreAuthorize("hasAuthority('AMMINISTRATORE')")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public Ruolo updateRole(@PathVariable UUID roleId, @RequestBody Ruolo body) {
 		return ruoloService.findByIdAndUpdate(roleId, body);
 	}
@@ -58,7 +59,7 @@ public class RuoloController {
 	// --------------- DELETE RUOLO
 	@DeleteMapping("/{roleId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	// @PreAuthorize("hasAuthority('AMMINISTRATORE')")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public void deleteRole(@PathVariable UUID roleId) {
 		ruoloService.findByIdAndDelete(roleId);
 	}
