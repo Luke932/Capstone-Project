@@ -67,9 +67,8 @@ export class AuthService {
     email: string;
     password: string;
     username:string;
-    ruoloNome: String
   }) {
-    return this.http.post(`${this.baseUrl}auth/registrazione`, data);
+    return this.http.post(`${this.baseUrl}auth/register`, data);
   }
 
 

@@ -29,13 +29,13 @@ export class AuthGuard implements CanActivate {
       map((user) => {
         if (user) {
           return true;
-        } else {
+        };
 
-          alert('Non fare il furbo! Se vuoi consultare il nostro mondo videoludico REGISTRATI!')
 
-          return this.router.createUrlTree(['/']);
 
-        }
+          return this.router.createUrlTree(['/login']);
+
+
       })
     );
   }

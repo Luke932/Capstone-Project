@@ -14,24 +14,24 @@ import { TokenInterceptor } from './auth/token.interceptor.interceptor';
 
 
 
+
 const routes: Routes= [
-/*  {
-    path: '',
+
+  {
+    path:'',
+    component:LoginComponent,
+ },
+  {
+    path:'register',
+    component: RegisterComponent,
+  },
+  {
+    path: 'home',
     component: HomeComponent,
 
   },
   {
-    path:'login',
-    component:LoginComponent,
-
-  },*/
-  {
-    path:'register',
-    component: RegisterComponent,
-
-  },
-  {
-    path:'clienti',
+    path:'prodotti',
     component: ProdottiComponent,
     canActivate: [AuthGuard],
   },
