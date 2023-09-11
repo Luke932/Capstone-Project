@@ -40,14 +40,14 @@ public class UtenteController {
 
 	// --------------- GET UTENTI
 	@GetMapping
-	@PreAuthorize("hasAuthority('ADMIN')")
+	// @PreAuthorize("hasAuthority('ADMIN')")
 	public List<Utente> getUsers() {
 		return utenteService.findNoPage();
 	}
 
 	// --------------- GET UTENTE BY ID
 	@GetMapping("/{userId}")
-	@PreAuthorize("hasAuthority('ADMIN')")
+	// @PreAuthorize("hasAuthority('ADMIN')")
 	public Utente getUserById(@PathVariable UUID userId) {
 		return utenteService.findById(userId);
 

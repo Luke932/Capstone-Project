@@ -6,5 +6,6 @@ export interface Utente {
   nome:string,
   cognome:string,
   username:string,
+  ruolo?:string,
   id?:string
 }

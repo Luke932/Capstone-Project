@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
 
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { map, tap } from 'rxjs/operators';
@@ -30,7 +30,6 @@ export class AuthService {
     return this.http.post<AuthData>(`${this.baseUrl}auth/login`, data).pipe(
       tap((data) => {
         this.isLoggedIn = true;
-        this.router.navigate(['/clienti']);
         this.authSubj.next(data);
         this.utente = data;
         console.log(this.utente);
@@ -40,6 +39,20 @@ export class AuthService {
         this.userProfile = data.utente;
       })
     );
+  }
+
+  getUserDetails(): Observable<any> {
+    const token = localStorage.getItem('Token');
+
+    if (token) {
+      const userId = this.jwtHelper.decodeToken(token)?.sub; // Estrai l'ID dell'utente dal token
+
+      if (userId) {
+        return this.http.get<any>(`${this.baseUrl}utenti/${userId}`);
+      }
+    }
+
+    return throwError("Impossibile ottenere i dettagli dell'utente.");
   }
 
 

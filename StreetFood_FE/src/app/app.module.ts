@@ -11,36 +11,33 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthGuard } from './auth/auth.guard.guard';
 import { ProdottiComponent } from './components/prodotti/prodotti.component';
 import { TokenInterceptor } from './auth/token.interceptor.interceptor';
+import { ProfiloComponent } from './components/profilo/profilo.component';
+import { HomeModificheComponent } from './components/home.modifiche/home.modifiche.component';
+import { AccessoNegatoComponent } from './components/accesso-negato/accesso-negato.component';
 
 
 
 
-const routes: Routes= [
-
+const routes: Routes = [
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
   {
-    path:'',
-    component:LoginComponent,
- },
-  {
-    path:'register',
-    component: RegisterComponent,
-  },
-  {
-    path: 'home',
-    component: HomeComponent,
-
-  },
-  {
-    path:'prodotti',
-    component: ProdottiComponent,
+    path: 'user',
+    loadChildren: () => import('./user/user.module').then(m => m.UserModule),
     canActivate: [AuthGuard],
+    data: { expectedRole: 'USER' }
   },
   {
-    path:'**',
-redirectTo:'',
-   canActivate: [AuthGuard]
-  }
-]
+    path: 'admin',
+    loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule),
+    canActivate: [AuthGuard],
+    data: { expectedRole: 'ADMIN' }
+  },
+  { path: 'access-denied', component: AccessoNegatoComponent },
+
+];
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -48,7 +45,9 @@ redirectTo:'',
     RegisterComponent,
     LoginComponent,
     ProdottiComponent,
-    HomeComponent
+    HomeComponent,
+    ProfiloComponent,
+    HomeModificheComponent
   ],
   imports: [
     BrowserModule,

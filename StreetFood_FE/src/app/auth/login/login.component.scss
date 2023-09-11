@@ -1,25 +1,45 @@
 
 
-.registration-container {
-  background-image: url('../../../assets/img/image2.jpg');
-  background-size: cover;
-  background-repeat: no-repeat;
+.login-container {
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  animation: animateBackground 20s linear infinite;
 }
 
-.registration-box {
+@keyframes animateBackground {
+  0% {
+    background-image: url('../../../assets/img/image1.jpg');
+  }
+  25% {
+    background-image: url('../../../assets/img/image2.jpg');
+  }
+  50% {
+    background-image: url('../../../assets/img/image3.jpg');
+  }
+  75% {
+    background-image: url('../../../assets/img/image4.jpg');
+  }
+  100% {
+    background-image: url('../../../assets/img/image5.jpg');
+  }
+}
+
+.login-box {
   background-color: rgba(255, 255, 255, 0.8);
   padding: 20px;
   border-radius: 10px;
 }
 
+button, h1 {
+  margin-top: 1rem;
+}
 
 button {
-  margin-top: 1rem;
   margin-bottom: 1rem;
-position: relative;
-left: 40%;
+  position: relative;
+  left: 40%;
 }
