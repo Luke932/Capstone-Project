@@ -1,19 +1,17 @@
 import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
-import { NavbarComponent } from './components/navbar/navbar.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { LoginComponent } from './auth/login/login.component';
 import { RouterModule, Routes } from '@angular/router';
-import { HomeComponent } from './components/home/home.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthGuard } from './auth/auth.guard.guard';
-import { ProdottiComponent } from './components/prodotti/prodotti.component';
 import { TokenInterceptor } from './auth/token.interceptor.interceptor';
-import { ProfiloComponent } from './components/profilo/profilo.component';
 import { HomeModificheComponent } from './components/home.modifiche/home.modifiche.component';
 import { AccessoNegatoComponent } from './components/accesso-negato/accesso-negato.component';
+import { UserModule } from './user/user.module';
+
 
 
 
@@ -41,19 +39,16 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     AppComponent,
-    NavbarComponent,
     RegisterComponent,
     LoginComponent,
-    ProdottiComponent,
-    HomeComponent,
-    ProfiloComponent,
-    HomeModificheComponent
+    HomeModificheComponent,
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     RouterModule.forRoot(routes),
-    FormsModule
+    FormsModule,
+    UserModule
   ],
   providers: [ {
     provide: HTTP_INTERCEPTORS,
