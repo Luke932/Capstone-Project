@@ -1,2 +1,13 @@
-
-
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <div class="card rounded-lg" *ngFor="let lg of luoghi; let i = index">
+        <img src="{{ lg.immagine }}" class="card-img-top" alt="Card Image">
+        <div class="card-body">
+          <h5 class="card-title">{{ lg.titolo }}</h5>
+          <p class="card-text">{{ lg.descrizione }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

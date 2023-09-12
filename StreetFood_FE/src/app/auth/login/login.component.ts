@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { AuthService } from '../auth.service.service';
 import { Router } from '@angular/router';
+import { RoleService } from '../role.service';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -10,8 +12,10 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
   isLoading = false;
+  userRole$ = new BehaviorSubject<string>('');
+  usernameUser = new BehaviorSubject<string>('');
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router, private roleSrv: RoleService) {}
 
   ngOnInit(): void {}
 
@@ -29,7 +33,14 @@ export class LoginComponent implements OnInit {
             (user) => {
               console.log('Dettagli utente:', user);
               const userRole = user?.ruolo?.nome;
+              const username = user?.username;
+              this.authService.setUserProfile(username);
+              this.usernameUser.next(username);
+
               console.log('Ruolo dell\'utente:', userRole);
+
+              this.roleSrv.setUserRole(userRole);
+              this.userRole$.next(userRole);
 
               if (userRole === 'ADMIN') {
                 this.router.navigate(['/admin']);

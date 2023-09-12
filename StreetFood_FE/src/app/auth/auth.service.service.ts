@@ -23,6 +23,7 @@ export class AuthService {
   user$ = this.authSubj.asObservable();
   timeLogout: any;
   user!: AuthData | null;
+  private userName = new BehaviorSubject<string>('');
   constructor(private http: HttpClient, private router: Router) {}
 
 
@@ -105,7 +106,19 @@ export class AuthService {
     }, expirationMilliseconds);
   }
 
+  setUserProfile(userName: string) {
+    this.userName.next(userName);
+  }
+
+  getUserProfile() {
+    return this.userName.asObservable();
+  }
+
   getUserData(): Utente {
     return this.userProfile;
   }
+
+
+
+
 }

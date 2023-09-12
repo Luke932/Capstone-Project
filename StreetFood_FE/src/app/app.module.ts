@@ -10,7 +10,11 @@ import { AuthGuard } from './auth/auth.guard.guard';
 import { TokenInterceptor } from './auth/token.interceptor.interceptor';
 import { HomeModificheComponent } from './components/home.modifiche/home.modifiche.component';
 import { AccessoNegatoComponent } from './components/accesso-negato/accesso-negato.component';
-import { UserModule } from './user/user.module';
+import { HomeComponent } from './components/home/home.component';
+import { ProdottiComponent } from './components/prodotti/prodotti.component';
+import { ProfiloComponent } from './components/profilo/profilo.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
+
 
 
 
@@ -22,13 +26,21 @@ const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   {
     path: 'user',
-    loadChildren: () => import('./user/user.module').then(m => m.UserModule),
+    children: [
+      { path: '', redirectTo: 'home', pathMatch: 'full' },
+      { path: 'home', component: HomeComponent },
+      { path: 'prodotti', component: ProdottiComponent },
+      { path: 'profilo', component: ProfiloComponent },
+    ],
     canActivate: [AuthGuard],
     data: { expectedRole: 'USER' }
   },
   {
     path: 'admin',
-    loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule),
+    children: [
+      { path: 'homemodifiche', component: HomeModificheComponent },
+      // Altre rotte amministratore...
+    ],
     canActivate: [AuthGuard],
     data: { expectedRole: 'ADMIN' }
   },
@@ -42,19 +54,24 @@ const routes: Routes = [
     RegisterComponent,
     LoginComponent,
     HomeModificheComponent,
+    HomeComponent,
+    ProdottiComponent,
+    ProfiloComponent,
+    NavbarComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     RouterModule.forRoot(routes),
     FormsModule,
-    UserModule
   ],
   providers: [ {
     provide: HTTP_INTERCEPTORS,
     useClass: TokenInterceptor,
     multi: true,
-  },],
+  },
+AuthGuard
+],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

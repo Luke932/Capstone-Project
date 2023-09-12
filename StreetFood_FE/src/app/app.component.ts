@@ -7,16 +7,13 @@ import { RoleService } from './auth/role.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
-isLoading = false;
-userRole!: string;
-
-constructor (private roleService: RoleService) {}
+export class AppComponent {
 
 
-ngOnInit(): void {
-  const userRole = this.roleService.getUserRole();
-  }
+constructor () {}
+
+
+
 
   title = 'StreetFood_FE';
 }
