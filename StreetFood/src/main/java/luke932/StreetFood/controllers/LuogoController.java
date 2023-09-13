@@ -47,7 +47,7 @@ public class LuogoController {
 
 	// ------------IMPAGINAZIONE LUOGHI
 	@GetMapping
-	public Page<Luogo> getLuogo(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size,
+	public Page<Luogo> getLuogo(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "3") int size,
 			@RequestParam(defaultValue = "id") String sortBy) {
 		return luogoSrv.find(page, size, sortBy);
 	}

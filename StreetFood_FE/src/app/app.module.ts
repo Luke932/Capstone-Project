@@ -14,6 +14,9 @@ import { HomeComponent } from './components/home/home.component';
 import { ProdottiComponent } from './components/prodotti/prodotti.component';
 import { ProfiloComponent } from './components/profilo/profilo.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { FooterComponent } from './components/footer/footer.component';
+import { AuthService } from './auth/auth.service.service';
+import { RoleService } from './auth/role.service';
 
 
 
@@ -24,6 +27,7 @@ const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
+  { path: 'access-denied', component: AccessoNegatoComponent },
   {
     path: 'user',
     children: [
@@ -44,7 +48,7 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     data: { expectedRole: 'ADMIN' }
   },
-  { path: 'access-denied', component: AccessoNegatoComponent },
+
 
 ];
 
@@ -57,7 +61,9 @@ const routes: Routes = [
     HomeComponent,
     ProdottiComponent,
     ProfiloComponent,
-    NavbarComponent
+    NavbarComponent,
+    AccessoNegatoComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,
@@ -65,7 +71,10 @@ const routes: Routes = [
     RouterModule.forRoot(routes),
     FormsModule,
   ],
-  providers: [ {
+  providers: [
+    AuthService,
+    RoleService,
+    {
     provide: HTTP_INTERCEPTORS,
     useClass: TokenInterceptor,
     multi: true,

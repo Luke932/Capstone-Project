@@ -1,10 +1,26 @@
 .navbar-bg {
   background-color: #73aff3;
   padding: 1rem;
+  z-index: 100;
 }
 
-.navbar-image, img {
-  width: 5%;
+.navbar-content {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-content img {
+  max-width: 10%;
+  height: auto;
+  flex-shrink: 0;
+  margin-right: 10px;
+}
+
+.navbar-content h1 {
+  font-family: "Comic Sans MS", cursive;
+  font-size: 24px;
+  margin: 0;
+  flex-grow: 1;
 }
 
 .navbar-username, a {
@@ -13,6 +29,10 @@
   margin-left: 10px;
 }
 
-.nav {
-  margin-bottom: 5rem;
+@media screen and (max-width: 450px) {
+  img {
+    display: none;
+  }
 }
+
+

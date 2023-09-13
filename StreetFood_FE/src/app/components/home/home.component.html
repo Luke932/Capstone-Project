@@ -1,12 +1,51 @@
-<div class="container">
-  <div class="row">
-    <div class="col-12">
-      <div class="card rounded-lg" *ngFor="let lg of luoghi; let i = index">
-        <img src="{{ lg.immagine }}" class="card-img-top" alt="Card Image">
-        <div class="card-body">
-          <h5 class="card-title">{{ lg.titolo }}</h5>
-          <p class="card-text">{{ lg.descrizione }}</p>
+<div class="background-image">
+  <div class="container">
+    <div class="row mt-4">
+      <div class="col-12 d-flex justify-content-center">
+        <input [(ngModel)]="titoloDaCercare" placeholder="Inserisci il titolo...">
+        <button (click)="cercaLuogo()">Cerca</button>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12">
+        <div *ngIf="!mostraRisultati">
+        <div class="card rounded-lg" *ngFor="let lg of luoghi" >
+          <img src="{{ lg.immagine }}" class="card-img-top" alt="Card Image">
+          <div class="card-body">
+            <h5 class="card-title">{{ lg.titolo }}</h5>
+            <p class="card-text">{{ lg.descrizione }}</p>
+          </div>
         </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <div *ngIf="mostraRisultati">
+            <div class="card rounded-lg" *ngFor="let lg of luoghiTrovati" >
+              <img src="{{ lg.immagine }}" class="card-img-top" alt="Card Image">
+              <div class="card-body">
+                <h5 class="card-title">{{ lg.titolo }}</h5>
+                <p class="card-text">{{ lg.descrizione }}</p>
+              </div>
+            </div>
+            </div>
+
+    <div class="row mt-4">
+      <div class="col-12 d-flex justify-content-center">
+        <nav aria-label="Page navigation example">
+          <ul class="pagination">
+            <li class="page-item" [class.disabled]="currentPage === 0">
+              <a class="page-link" (click)="previousPage()" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+            <li class="page-item" [class.disabled]="currentPage === totalPages - 1">
+              <a class="page-link" (click)="nextPage()" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
       </div>
     </div>
   </div>

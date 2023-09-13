@@ -20,8 +20,13 @@ export class AuthGuard implements CanActivate {
         const userRole = userDetails?.ruolo?.nome;
         const expectedRole = route.data['expectedRole'];
 
+        if (!userRole) {
+          this.router.navigate(['/access-denied']); // Utente non autenticato
+          return false;
+        }
+
         if (expectedRole && userRole !== expectedRole) {
-          this.router.navigate(['/access-denied']); // Reindirizza in caso di accesso non autorizzato
+          this.router.navigate(['/access-denied']); // Ruolo non autorizzato
           return false;
         }
 
@@ -29,8 +34,12 @@ export class AuthGuard implements CanActivate {
       }),
       catchError(error => {
         console.error('Errore nel recuperare i dettagli dell\'utente:', error);
-        return [false]; // Restituisci false in caso di errore
+        this.router.navigate(['/access-denied']); // Errore nel recupero dei dettagli
+        return [false];
       })
     );
   }
 }
+
+
+

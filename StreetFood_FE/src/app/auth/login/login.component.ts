@@ -4,6 +4,8 @@ import { AuthService } from '../auth.service.service';
 import { Router } from '@angular/router';
 import { RoleService } from '../role.service';
 import { BehaviorSubject } from 'rxjs';
+import { FooterService } from 'src/app/services/footer.service';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
   selector: 'app-login',
@@ -15,9 +17,14 @@ export class LoginComponent implements OnInit {
   userRole$ = new BehaviorSubject<string>('');
   usernameUser = new BehaviorSubject<string>('');
 
-  constructor(private authService: AuthService, private router: Router, private roleSrv: RoleService) {}
 
-  ngOnInit(): void {}
+  constructor(private authService: AuthService, private router: Router, private roleSrv: RoleService, private footSrv: FooterService, private appCmp: AppComponent) {
+    this.footSrv.setShowFooter(false);
+  }
+
+  ngOnInit(): void {
+    this.appCmp.showNavbar = false;
+  }
 
   access(form: NgForm) {
     this.isLoading = true;
@@ -36,7 +43,8 @@ export class LoginComponent implements OnInit {
               const username = user?.username;
               this.authService.setUserProfile(username);
               this.usernameUser.next(username);
-
+              localStorage.setItem('userRole', userRole);
+              localStorage.setItem('username', username);
               console.log('Ruolo dell\'utente:', userRole);
 
               this.roleSrv.setUserRole(userRole);

@@ -14,7 +14,7 @@ import { Utente } from '../models/utente.interface';
   providedIn: 'root',
 })
 export class AuthService {
-    isLoggedIn = false;
+  isLoggedIn: boolean = false;
   jwtHelper = new JwtHelperService();
   baseUrl = environment.baseURL;
   userProfile!: Utente;
@@ -42,6 +42,11 @@ export class AuthService {
     );
   }
 
+  isLoggedIns(): boolean {
+    const token = localStorage.getItem('Token');
+    return !this.jwtHelper.isTokenExpired(token);
+  }
+
   getUserDetails(): Observable<any> {
     const token = localStorage.getItem('Token');
 
@@ -60,19 +65,18 @@ export class AuthService {
   restore() {
     const utenteLS = localStorage.getItem('utente');
 
-    if (!utenteLS) {
-      return;
-    } else {
+    if (utenteLS) {
       const userData: AuthData = JSON.parse(utenteLS);
       if (!this.jwtHelper.isTokenExpired(userData.token)) {
         this.isLoggedIn = true;
         this.authSubj.next(userData);
         this.autologout(userData);
         this.userProfile = userData.utente;
-      }
 
+      }
     }
   }
+
 
 
   signup(data: {
@@ -85,16 +89,18 @@ export class AuthService {
     return this.http.post(`${this.baseUrl}auth/register`, data);
   }
 
-
   logout() {
-    this.authSubj.next(null);
-    localStorage.removeItem('utente');
-    localStorage.removeItem('Token');
-    this.router.navigate(['/']);
-    if (this.timeLogout) {
-      clearTimeout(this.timeLogout);
+    if (this.isLoggedIn) {
+      localStorage.removeItem('utente');
+      localStorage.removeItem('Token');
+      this.router.navigate(['/']);
+      this.authSubj.next(null);
+      if (this.timeLogout) {
+        clearTimeout(this.timeLogout);
+      }
     }
   }
+
   autologout(data: AuthData) {
     const expirationDate = this.jwtHelper.getTokenExpirationDate(
       data.token
@@ -108,11 +114,14 @@ export class AuthService {
 
   setUserProfile(userName: string) {
     this.userName.next(userName);
+    localStorage.setItem('username', userName);
   }
+
 
   getUserProfile() {
     return this.userName.asObservable();
   }
+
 
   getUserData(): Utente {
     return this.userProfile;

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RoleService } from './auth/role.service';
+import { AuthService } from './auth/auth.service.service';
 
 
 @Component({
@@ -7,10 +7,20 @@ import { RoleService } from './auth/role.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
+  showNavbar = false;
 
 
-constructor () {}
+
+  constructor(private authService: AuthService) {
+    this.authService.user$.subscribe(user => {
+      this.showNavbar = !!user;
+    });
+  }
+
+  ngOnInit(): void {
+    this.authService.restore();
+  }
 
 
 

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FooterService } from 'src/app/services/footer.service';
 
 @Component({
   selector: 'app-home.modifiche',
@@ -7,7 +8,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeModificheComponent implements OnInit {
 
-  constructor() { }
+  constructor(private footSrv: FooterService) {
+    this.footSrv.setShowFooter(true);
+  }
 
   ngOnInit(): void {
   }

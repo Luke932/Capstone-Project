@@ -1,7 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { Prodotti } from '../models/prodotti';
+import { catchError } from 'rxjs/operators';
+import { throwError } from 'rxjs';
 import { Luoghi } from '../models/luoghi';
 
 @Injectable({
@@ -10,9 +11,36 @@ import { Luoghi } from '../models/luoghi';
 export class HomeServiceService {
 
   baseUrl = environment.baseURL;
+
   constructor(private http: HttpClient) {}
 
-  getAllLuoghi() {
-    return this.http.get<Luoghi[]>(`${this.baseUrl}luoghi`);
+  getAllLuoghi(page: number) {
+    return this.http.get<Luoghi[]>(`${this.baseUrl}luoghi?page=${page}`)
+      .pipe(
+        catchError(this.handleError)
+      );
   }
+
+  getLuogoByTitolo(titolo: string) {
+    return this.http.get<Luoghi[]>(`${this.baseUrl}luoghi/titolo/${titolo}`)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+
+  private handleError(error: HttpErrorResponse) {
+    if (error.error instanceof ErrorEvent) {
+      console.error('Errore del client o di rete:', error.error.message);
+    } else if (error.status === 403) {
+      console.error('Accesso vietato. Assicurati di essere autenticato correttamente.');
+    } else {
+      console.error(
+        `Codice di ritorno dal server ${error.status}, ` +
+        `corpo dell'errore: ${error.error}`);
+    }
+    return throwError(
+      'Qualcosa è andato storto; riprova più tardi.');
+  }
+
 }

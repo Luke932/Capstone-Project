@@ -1,24 +1,25 @@
-
-
 <div class="nav" *ngIf="(userRole$ | async) === 'USER'">
-  <nav class="navbar navbar-expand-lg navbar-bg fixed-top">
+  <nav class="navbar navbar-expand-lg navbar-bg">
     <div class="container-fluid">
-      <div class="d-flex align-items-center">
-        <img src="../../../assets/img/benvenuti-a-palermo-italia-vintage-metallo-arrugginito-segno-su-uno-sfondo-bianco-illustrazione-vettoriale-w21k27.png" alt="Palermo" class="navbar-image">
-        <h1 class="navbar-username text-warning">
+      <div class="d-flex align-items-center navbar-content">
+        <img src="../../../assets/img/benvenuti-a-palermo-italia-vintage-metallo-arrugginito-segno-su-uno-sfondo-bianco-illustrazione-vettoriale-w21k27.png" alt="Palermo">
+        <h1 class="navbar-username text-wood me-5">
           Benvenuto a Palermo, {{ username }}
         </h1>
+      <button class="navbar-toggler ms-5" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
       </div>
-      <div class="navbar-collapse">
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link text-warning" [routerLink]="'/user/home'" routerLinkActive="active">Home</a>
+            <a class="nav-link text-wood" [routerLink]="'/user/home'" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" >Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-warning" [routerLink]="'/user/prodotti'" routerLinkActive="active">Prodotti</a>
+            <a class="nav-link text-wood" [routerLink]="'/user/prodotti'" routerLinkActive="active">Prodotti</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-warning" [routerLink]="'/user/profilo'" routerLinkActive="active">Profilo</a>
+            <a class="nav-link text-wood" [routerLink]="'/user/profilo'" routerLinkActive="active">Profilo</a>
           </li>
         </ul>
       </div>
@@ -27,9 +28,29 @@
 </div>
 
 
-<!--
-<div *ngIf="userRole === 'ADMIN'">
-   Elementi della navbar specifici per l'amministratore
-</div>
--->
+
+
+<div *ngIf="(userRole$ | async) === 'ADMIN'">
+    <nav class="navbar navbar-expand-lg navbar-bg">
+      <div class="container-fluid">
+        <div class="d-flex align-items-center">
+          <img src="../../../assets/img/benvenuti-a-palermo-italia-vintage-metallo-arrugginito-segno-su-uno-sfondo-bianco-illustrazione-vettoriale-w21k27.png" alt="Palermo" class="navbar-image">
+          <h1 class="navbar-username text-wood me-5">
+            Benvenuto a Palermo, {{ username }}
+          </h1>
+        <button class="navbar-toggler ms-5" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        </div>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link text-wood" [routerLink]="'/admin/homemodifiche'" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" >Home</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </div>
+
 

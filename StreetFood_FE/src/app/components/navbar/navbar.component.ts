@@ -12,21 +12,32 @@ import { RoleService } from 'src/app/auth/role.service';
 export class NavbarComponent implements OnInit {
   userRole$!: Observable<string>;
   username!: string;
+  isLoggedIn = false;
 
   constructor(private roleSrv: RoleService, private router: Router, private authSrv: AuthService) {}
 
   ngOnInit(): void {
     this.userRole$ = this.roleSrv.getUserRole$();
-    console.log(this.userRole$);
-   /* this.authSrv.getUserProfile().pipe(take(1)).subscribe(username => {
-      this.username = of(username);
-      console.log(this.username);
-    });*/
-    this.authSrv.getUserProfile().subscribe(userProfile => {
-      this.username = userProfile;
-      console.log(userProfile);
-    });
+    this.authSrv.user$.subscribe(user => {
+      this.isLoggedIn = !!user;
 
+      if (this.isLoggedIn) {
+        const username = localStorage.getItem('username');
+        if (username) {
+          this.username = username;
+        } else {
+          this.authSrv.getUserProfile().subscribe(username => {
+            if (username) {
+              console.log(username);
+              this.username = username;
+            }
+          });
+        }
+      }
+    });
   }
+
+
+
 
 }
