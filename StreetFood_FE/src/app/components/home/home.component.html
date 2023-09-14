@@ -1,11 +1,19 @@
 <div class="background-image">
   <div class="container">
-    <div class="row mt-4">
-      <div class="col-12 d-flex justify-content-center">
-        <input [(ngModel)]="titoloDaCercare" placeholder="Inserisci il titolo...">
-        <button (click)="cercaLuogo()">Cerca</button>
+    <div class="row">
+      <div class="col-12 d-flex justify-content-center barra">
+        <input class="input-field" [(ngModel)]="titoloDaCercare" placeholder="Inserisci il titolo...">
+        <select class="dropdown-field" [(ngModel)]="tipoRicerca">
+          <option value="descrizione">Ricerca per descrizione</option>
+          <option value="prodotto">Ricerca per prodotto</option>
+          <option value="titolo">Ricerca per titolo</option>
+        </select>
+        <button class="search-button" (click)="cercaLuogo(tipoRicerca)">Cerca</button>
       </div>
     </div>
+
+
+
 
     <div class="row">
       <div class="col-12">
@@ -49,4 +57,6 @@
       </div>
     </div>
   </div>
+</div>
+</div>
 </div>

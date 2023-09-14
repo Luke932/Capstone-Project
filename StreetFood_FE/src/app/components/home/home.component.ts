@@ -17,6 +17,7 @@ export class HomeComponent implements OnInit {
   totalElements: number = 0;
   titoloDaCercare: string = '';
   mostraRisultati: boolean = false;
+  tipoRicerca: string = 'descrizione';
 
   constructor(private homeSrv: HomeServiceService, private footSrv: FooterService) {
     this.footSrv.setShowFooter(true);
@@ -43,24 +44,62 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  cercaLuogo(): void {
+  cercaLuogo(tipoRicerca: string): void {
     if (this.titoloDaCercare.trim() !== '') {
-      this.homeSrv.getLuogoByTitolo(this.titoloDaCercare).subscribe(
-        (data: any) => {
-          if (data && typeof data === 'object' && !Array.isArray(data)) {
-            // Questo è un oggetto singolo, non un array
-            this.luoghiTrovati = [data]; // Metti l'oggetto all'interno di un array
-            this.mostraRisultati = true; // Assicurati che mostri i risultati di cercaLuogo
-          } else {
-            console.error("I dati ricevuti non sono validi", data);
-          }
-        },
-        (error: HttpErrorResponse) => {
-          console.error('Errore nella richiesta HTTP:', error);
-        }
-      );
+      switch (tipoRicerca) {
+        case 'titolo':
+          this.homeSrv.getLuogoByTitolo(this.titoloDaCercare).subscribe(
+            (data: any) => {
+              if (data && typeof data === 'object' && !Array.isArray(data)) {
+                this.luoghiTrovati = [data];
+                this.mostraRisultati = true;
+              } else {
+                console.error("I dati ricevuti non sono validi", data);
+              }
+            },
+            (error: HttpErrorResponse) => {
+              console.error('Errore nella richiesta HTTP:', error);
+            }
+          );
+          break;
+        case 'descrizione':
+          this.homeSrv.getLuogoByDescrizione(this.titoloDaCercare).subscribe(
+            (data: any) => {
+              if (Array.isArray(data)) {
+                this.luoghiTrovati = data;
+                this.mostraRisultati = true;
+              } else {
+                console.error("I dati ricevuti non sono validi", data);
+              }
+            },
+            (error: HttpErrorResponse) => {
+              console.error('Errore nella richiesta HTTP:', error);
+            }
+          );
+          break;
+        case 'prodotto':
+          this.homeSrv.getLuogoByNomeProdotto(this.titoloDaCercare).subscribe(
+            (data: any) => {
+              if (Array.isArray(data)) {
+                this.luoghiTrovati = data;
+                this.mostraRisultati = true;
+              } else {
+                console.error("I dati ricevuti non sono validi", data);
+              }
+            },
+            (error: HttpErrorResponse) => {
+              console.error('Errore nella richiesta HTTP:', error);
+            }
+          );
+          break;
+        default:
+          console.error("Tipo di ricerca non valido");
+          break;
+      }
     }
   }
+
+
 
 
   nextPage(): void {

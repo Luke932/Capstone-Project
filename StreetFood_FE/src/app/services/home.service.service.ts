@@ -28,6 +28,20 @@ export class HomeServiceService {
       );
   }
 
+  getLuogoByDescrizione(descrizione: string) {
+    return this.http.get<Luoghi[]>(`${this.baseUrl}luoghi/byDescrizione/${descrizione}`)
+    .pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  getLuogoByNomeProdotto(prodotto: string) {
+    return this.http.get<Luoghi[]>(`${this.baseUrl}luoghi/conProdotto/${prodotto}`)
+    .pipe(
+      catchError(this.handleError)
+    );
+  }
+
 
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {

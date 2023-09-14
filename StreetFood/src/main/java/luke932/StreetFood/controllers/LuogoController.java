@@ -67,7 +67,7 @@ public class LuogoController {
 		luogoSrv.deleteLuogo(id);
 	}
 
-	// ------------RICERCA PER TITOLO PRODOTTO
+	// ------------RICERCA PER TITOLO LUOGO
 	@GetMapping("/titolo/{titolo}")
 	public Luogo getTitoloById(@PathVariable String titolo) {
 		return luogoSrv.findByTitolo(titolo);
