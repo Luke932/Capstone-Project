@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -25,7 +26,7 @@ public class Luogo {
 	private String immagine;
 	private String descrizione;
 
-	@OneToMany(mappedBy = "luogo")
+	@OneToMany(mappedBy = "luogo", cascade = CascadeType.ALL, orphanRemoval = true)
 	@JsonBackReference
 	private List<Prodotto> prodotti = new ArrayList<>();
 }

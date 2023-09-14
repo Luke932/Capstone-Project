@@ -42,6 +42,7 @@ const routes: Routes = [
   {
     path: 'admin',
     children: [
+      { path: '', redirectTo: 'homemodifiche', pathMatch: 'full' },
       { path: 'homemodifiche', component: HomeModificheComponent },
       // Altre rotte amministratore...
     ],

@@ -42,6 +42,18 @@ export class HomeServiceService {
     );
   }
 
+  createLuogo(luogo: any) {
+    return this.http.post<any>(`${this.baseUrl}luoghi`, luogo);
+  }
+
+  updateLuogo(id: string, nuovoLuogo: any) {
+    return this.http.put<any>(`${this.baseUrl}luoghi/${id}`, nuovoLuogo);
+  }
+
+  deleteLuogo(id: string) {
+    return this.http.delete(`${this.baseUrl}luoghi/${id}`);
+  }
+
 
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
