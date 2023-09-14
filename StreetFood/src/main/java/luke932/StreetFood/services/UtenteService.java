@@ -45,7 +45,7 @@ public class UtenteService {
 		}
 
 		Utente newUser = new Utente(body.getNome(), body.getCognome(), body.getUsername(), body.getEmail(),
-				body.getPassword());
+				body.getPassword(), body.getFoto());
 
 		newUser.setRuolo(userRole);
 
@@ -65,7 +65,7 @@ public class UtenteService {
 		}
 
 		Utente newAdminUser = new Utente(body.getNome(), body.getCognome(), body.getUsername(), body.getEmail(),
-				body.getPassword());
+				body.getPassword(), body.getFoto());
 
 		newAdminUser.setRuolo(adminRole);
 

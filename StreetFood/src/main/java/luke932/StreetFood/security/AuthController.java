@@ -1,5 +1,6 @@
 package luke932.StreetFood.security;
 
+import java.io.IOException;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,12 +9,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import luke932.StreetFood.entities.Utente;
 import luke932.StreetFood.exceptions.BadRequestException;
@@ -21,6 +25,7 @@ import luke932.StreetFood.exceptions.UnauthorizedException;
 import luke932.StreetFood.payloads.UtenteLoginPayload;
 import luke932.StreetFood.payloads.UtenteLoginSuccessful;
 import luke932.StreetFood.payloads.UtenteSavePayloadUser;
+import luke932.StreetFood.services.FileService;
 import luke932.StreetFood.services.UtenteService;
 
 @RestController
@@ -30,17 +35,30 @@ public class AuthController {
 	private final UtenteService utenteSrv;
 	private final JWTTools jwtTools;
 	private final PasswordEncoder bcrypt;
+	private final FileService fileService;
 
 	@Autowired
-	public AuthController(UtenteService utenteSrv, JWTTools jwtTools, PasswordEncoder bcrypt) {
+	public AuthController(UtenteService utenteSrv, JWTTools jwtTools, PasswordEncoder bcrypt, FileService fileService) {
 		this.utenteSrv = utenteSrv;
 		this.jwtTools = jwtTools;
 		this.bcrypt = bcrypt;
+		this.fileService = fileService;
 	}
 
 	@PostMapping("/register")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Utente saveUser(@RequestBody @Validated UtenteSavePayloadUser body) {
+	public Utente saveUser(@ModelAttribute @Validated UtenteSavePayloadUser body,
+			@RequestParam("file") MultipartFile file) throws IOException {
+
+		if (file != null && !file.isEmpty()) {
+			byte[] fileData = file.getBytes();
+			String fileName = file.getOriginalFilename();
+
+			fileService.saveFile(fileName, fileData);
+
+			body.setFoto(fileData);
+		}
+
 		body.setPassword(bcrypt.encode(body.getPassword()));
 		Utente created = utenteSrv.createUser(body);
 

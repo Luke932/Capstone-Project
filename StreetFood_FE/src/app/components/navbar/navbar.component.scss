@@ -21,6 +21,7 @@
   font-size: 24px;
   margin: 0;
   flex-grow: 1;
+  width: 100%;
 }
 
 .navbar-username, a {
@@ -34,5 +35,20 @@
     display: none;
   }
 }
+
+.rounded-user-photo {
+  border-radius: 100%;
+  overflow: hidden;
+  margin: 0;
+  width: 100%;
+  position: relative;
+  right: 200px;
+}
+
+
+
+
+
+
 
 

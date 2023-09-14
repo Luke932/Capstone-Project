@@ -19,6 +19,7 @@ import luke932.StreetFood.entities.Prodotto;
 import luke932.StreetFood.entities.Ruolo;
 import luke932.StreetFood.entities.Utente;
 import luke932.StreetFood.payloads.RuoloSavePayload;
+import luke932.StreetFood.payloads.UtenteSavePayloadUser;
 import luke932.StreetFood.services.CommentoService;
 import luke932.StreetFood.services.LikeService;
 import luke932.StreetFood.services.LuogoService;
@@ -55,12 +56,27 @@ public class AppRunner implements CommandLineRunner {
 //		ruoloSrv.save(ruolo2);
 
 		// ----------------CREAZIONE ADMIN
+
 		Ruolo ruoloAdmin = ruoloSrv.findByNome("ADMIN");
 
-		Utente utenteAdmin = new Utente("Luke9327989", "Lucasssss", "Giacalonessssss", "lucasssss_g@gmail.com", "1234");
+		UtenteSavePayloadUser utenteAdmin = new UtenteSavePayloadUser("Luke9327989", "Lucasssss", "Giacalonessssss",
+				"lucasssss_g@gmail.com", "1234", ruoloAdmin);
 		utenteAdmin.setPassword(bcrypt.encode(utenteAdmin.getPassword()));
-		utenteAdmin.setRuolo(ruoloAdmin);
-		// utenteSrv.save(utenteAdmin);
+
+		utenteSrv.createAdminUser(utenteAdmin);
+
+		// ----------------CREAZIONE USER
+//		String filePath2 = "C:\\Users\\Luca\\Desktop\\Luca\\46ed0123-fd43-4782-a9fb-6911ed3d0142";
+//		Path path2 = Paths.get(filePath2);
+//		byte[] fileData2 = Files.readAllBytes(path2);
+//
+//		Ruolo ruoloUser = ruoloSrv.findByNome("USER");
+//
+//		UtenteSavePayloadUser utenteUser = new UtenteSavePayloadUser("Marco2.0", "Marco", "Ciambra",
+//				"marco_g@gmail.com", "1234", fileData2, ruoloUser);
+//		utenteUser.setPassword(bcrypt.encode(utenteUser.getPassword()));
+
+		// utenteSrv.createUser(utenteUser);
 
 		// ----------------CREAZIONE LUOGHI
 		for (int i = 0; i < 10; i++) {
@@ -86,7 +102,7 @@ public class AppRunner implements CommandLineRunner {
 
 		// ----------------CREAZIONE COMMENTO
 		Prodotto prodottiDalDb = prodottoSrv.findByNomeProdotto("Tacos");
-		Utente utentidalDb = utenteSrv.findByNome("Luca");
+		Utente utentidalDb = utenteSrv.findByNome("Lucasssss");
 		Commento commento = new Commento();
 		commento.setTestoCommento("ciao");
 		commento.setDataCommento(LocalDate.now());
