@@ -34,7 +34,7 @@ export class HomeComponent implements OnInit {
         this.totalElements = data.totalElements;
         this.totalPages = data.totalPages;
         this.currentPage = page;
-        this.mostraRisultati = false; // Assicurati che mostri i risultati di getLuoghi
+        this.mostraRisultati = false;
       } else {
         console.error("I dati ricevuti non sono un array", data);
       }
