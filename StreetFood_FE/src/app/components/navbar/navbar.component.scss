@@ -9,7 +9,7 @@
   align-items: center;
 }
 
-.navbar-content img {
+.navbar-content img, img {
   max-width: 10%;
   height: auto;
   flex-shrink: 0;
@@ -41,6 +41,4 @@
   overflow: hidden;
   margin: 0;
   width: 100%;
-  position: relative;
-  right: 250px;
 }

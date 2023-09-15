@@ -88,7 +88,11 @@ export class AuthService {
     if (this.isLoggedIn) {
       localStorage.removeItem('utente');
       localStorage.removeItem('Token');
-      this.router.navigate(['/']);
+      localStorage.removeItem('username');
+      localStorage.removeItem('token');
+      localStorage.removeItem('userPhotoUrl');
+      localStorage.removeItem('userRole');
+      this.router.navigate(['/login']);
       this.authSubj.next(null);
       if (this.timeLogout) {
         clearTimeout(this.timeLogout);
