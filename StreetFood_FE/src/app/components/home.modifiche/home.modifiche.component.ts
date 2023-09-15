@@ -20,6 +20,8 @@ export class HomeModificheComponent implements OnInit {
   tipoRicerca: string = 'descrizione';
   mostraForm: boolean = false;
 formLuogo: any = {};
+luogoDaNascondere: string = '';
+
 
   constructor(private homeSrv: HomeServiceService, private footSrv: FooterService) {
     this.footSrv.setShowFooter(true);
@@ -104,6 +106,7 @@ formLuogo: any = {};
   creaLuogo(luogo: any) {
     this.homeSrv.createLuogo(luogo).subscribe(
       (response) => {
+        this.luoghi.push(response);
         console.log('Luogo creato con successo', response);
       },
       (error) => {
@@ -112,9 +115,15 @@ formLuogo: any = {};
     );
   }
 
+
   aggiornaLuogo(id: string, nuovoLuogo: any) {
     this.homeSrv.updateLuogo(id, nuovoLuogo).subscribe(
       (response) => {
+
+        const indice = this.luoghi.findIndex(lg => lg.id === id);
+        if (indice !== -1) {
+          this.luoghi[indice] = nuovoLuogo;
+        }
         console.log('Luogo aggiornato con successo', response);
       },
       (error) => {
@@ -123,9 +132,11 @@ formLuogo: any = {};
     );
   }
 
+
   eliminaLuogo(id: string) {
     this.homeSrv.deleteLuogo(id).subscribe(
       () => {
+        this.luoghi = this.luoghi.filter(lg => lg.id !== id);
         console.log('Luogo eliminato con successo');
       },
       (error) => {
@@ -133,6 +144,7 @@ formLuogo: any = {};
       }
     );
   }
+
 
   mostraFormCreazione(): void {
     this.mostraForm = true;

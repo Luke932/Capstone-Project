@@ -1,21 +1,9 @@
 
 
-
-
-
-
-
-
-
-
-
 <div class="background-image">
   <div class="container">
 
 
-    <div class="col-12 d-flex justify-content-end mb-3">
-      <button class="btn btn-success" (click)="mostraFormCreazione()">Crea</button>
-    </div>
 
     <div *ngIf="mostraForm">
       <form (ngSubmit)="inviaForm()">
@@ -35,7 +23,6 @@
       </form>
     </div>
 
-
     <div class="row">
       <div class="col-12 d-flex justify-content-center barra">
         <input class="input-field" [(ngModel)]="titoloDaCercare" placeholder="Inserisci il titolo...">
@@ -44,57 +31,57 @@
           <option value="prodotto">Ricerca per prodotto</option>
           <option value="titolo">Ricerca per titolo</option>
         </select>
-        <button class="search-button" (click)="cercaLuogo(tipoRicerca)">Cerca</button>
+        <button class="search-button me-3" (click)="cercaLuogo(tipoRicerca)">Cerca</button>
+        <button class="btn btn-success" (click)="mostraFormCreazione()">Crea</button>
       </div>
     </div>
-
-
-
 
     <div class="row">
       <div class="col-12">
         <div *ngIf="!mostraRisultati">
-        <div class="card rounded-lg" *ngFor="let lg of luoghi" >
-          <img src="{{ lg.immagine }}" class="card-img-top" alt="Card Image">
-          <div class="card-body">
-            <h5 class="card-title">{{ lg.titolo }}</h5>
-            <p class="card-text">{{ lg.descrizione }}</p>
-            <button class="btn btn-warning" (click)="mostraFormAggiornamento(lg)">Modifica</button>
-            <button class="btn btn-danger" (click)="lg.id && eliminaLuogo(lg.id)">Elimina</button>
+          <div class="card rounded-lg" *ngFor="let lg of luoghi" [hidden]="luogoDaNascondere === lg.id">
+            <img src="{{ lg.immagine }}" class="card-img-top" alt="Card Image">
+            <div class="card-body">
+              <h5 class="card-title">{{ lg.titolo }}</h5>
+              <p class="card-text">{{ lg.descrizione }}</p>
+              <button class="btn btn-warning me-5" (click)="mostraFormAggiornamento(lg)">Modifica</button>
+              <button class="btn btn-danger" (click)="lg.id && eliminaLuogo(lg.id)">Elimina</button>
+            </div>
           </div>
         </div>
-        </div>
-        <div class="row">
-          <div class="col-12">
-            <div *ngIf="mostraRisultati">
-            <div class="card rounded-lg" *ngFor="let lg of luoghiTrovati" >
-              <img src="{{ lg.immagine }}" class="card-img-top" alt="Card Image">
-              <div class="card-body">
-                <h5 class="card-title">{{ lg.titolo }}</h5>
-                <p class="card-text">{{ lg.descrizione }}</p>
-              </div>
-            </div>
-            </div>
 
-    <div class="row mt-4">
-      <div class="col-12 d-flex justify-content-center">
-        <nav aria-label="Page navigation example">
-          <ul class="pagination">
-            <li class="page-item" [class.disabled]="currentPage === 0">
-              <a class="page-link" (click)="previousPage()" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-              </a>
-            </li>
-            <li class="page-item" [class.disabled]="currentPage === totalPages - 1">
-              <a class="page-link" (click)="nextPage()" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-              </a>
-            </li>
-          </ul>
-        </nav>
+        <div *ngIf="mostraRisultati">
+          <div class="card rounded-lg" *ngFor="let lg of luoghiTrovati" [hidden]="luogoDaNascondere === lg.id">
+            <img src="{{ lg.immagine }}" class="card-img-top" alt="Card Image">
+            <div class="card-body">
+              <h5 class="card-title">{{ lg.titolo }}</h5>
+              <p class="card-text">{{ lg.descrizione }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-4">
+          <div class="col-12 d-flex justify-content-center">
+            <nav aria-label="Page navigation example">
+              <ul class="pagination">
+                <li class="page-item" [class.disabled]="currentPage === 0">
+                  <a class="page-link" (click)="previousPage()" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                  </a>
+                </li>
+                <li class="page-item" [class.disabled]="currentPage === totalPages - 1">
+                  <a class="page-link" (click)="nextPage()" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                  </a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
       </div>
     </div>
+
   </div>
 </div>
-</div>
-</div>
+
+
