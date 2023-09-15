@@ -38,6 +38,9 @@
         <h1 class="navbar-username text-wood me-5">
           Benvenuto a Palermo, {{ username }}
         </h1>
+        <div *ngIf="userPhotoUrl" >
+          <img [src]="userPhotoUrl" alt="Foto Utente" class="rounded-user-photo">
+        </div>
       <button class="navbar-toggler ms-5" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
