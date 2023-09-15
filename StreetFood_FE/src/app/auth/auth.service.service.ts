@@ -79,15 +79,10 @@ export class AuthService {
 
 
 
-  signup(data: {
-    nome: string;
-    cognome: string;
-    email: string;
-    password: string;
-    username:string;
-  }) {
-    return this.http.post(`${this.baseUrl}auth/register`, data);
+  signup(formData: FormData) {
+    return this.http.post(`${this.baseUrl}auth/register`, formData);
   }
+
 
   logout() {
     if (this.isLoggedIn) {

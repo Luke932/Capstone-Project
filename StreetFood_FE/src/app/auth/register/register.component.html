@@ -23,6 +23,10 @@
             <label for="password">Inserisci password</label>
             <input type="password" id="password" name="password" class="form-control" required ngModel>
           </div>
+          <div>
+            <label for="photo">Carica Foto:</label>
+            <input type="file" id="photo" (change)="onFileSelected($event)" required>
+          </div>
           <div class="text-center">
              <button type="submit" class="text-center" [disabled]="form.invalid" class="btn btn-primary mb-5">Registrati</button>
           <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status"></span>

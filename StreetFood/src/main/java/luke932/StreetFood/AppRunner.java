@@ -16,7 +16,6 @@ import luke932.StreetFood.entities.Commento;
 import luke932.StreetFood.entities.Like;
 import luke932.StreetFood.entities.Luogo;
 import luke932.StreetFood.entities.Prodotto;
-import luke932.StreetFood.entities.Ruolo;
 import luke932.StreetFood.entities.Utente;
 import luke932.StreetFood.payloads.RuoloSavePayload;
 import luke932.StreetFood.services.CommentoService;
@@ -53,14 +52,6 @@ public class AppRunner implements CommandLineRunner {
 		RuoloSavePayload ruolo2 = new RuoloSavePayload(true, false, "USER");
 //		ruoloSrv.save(ruolo1);
 //		ruoloSrv.save(ruolo2);
-
-		// ----------------CREAZIONE ADMIN
-		Ruolo ruoloAdmin = ruoloSrv.findByNome("ADMIN");
-
-		Utente utenteAdmin = new Utente("Luke9327989", "Lucasssss", "Giacalonessssss", "lucasssss_g@gmail.com", "1234");
-		utenteAdmin.setPassword(bcrypt.encode(utenteAdmin.getPassword()));
-		utenteAdmin.setRuolo(ruoloAdmin);
-		// utenteSrv.save(utenteAdmin);
 
 		// ----------------CREAZIONE LUOGHI
 		for (int i = 0; i < 10; i++) {

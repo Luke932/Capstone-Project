@@ -8,6 +8,7 @@ export interface AuthData {
     nome: string;
     cognome: string;
     username: string;
+    immagine: string;
     id:string,
     ruolo:string
   };

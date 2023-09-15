@@ -12,6 +12,7 @@ import { AppComponent } from 'src/app/app.component';
 })
 export class RegisterComponent implements OnInit {
   isLoading = false
+  selectedFile!: File;
 
   constructor(private authSrv: AuthService, private router:Router, private footSrv: FooterService, private app: AppComponent) {
     this.footSrv.setShowFooter(false);
@@ -21,11 +22,27 @@ export class RegisterComponent implements OnInit {
     this.app.showNavbar = false;
   }
 
+  onFileSelected(event: Event): void {
+    const inputElement = event.target as HTMLInputElement;
+    if (inputElement?.files && inputElement.files[0]) {
+      this.selectedFile = inputElement.files[0];
+    }
+  }
+
+
   registra(form: NgForm) {
     this.isLoading = true;
-    console.log(form.value);
+
     try {
-      this.authSrv.signup(form.value).subscribe(
+      const formData = new FormData();
+      formData.append('username', form.value.username);
+      formData.append('nome', form.value.nome);
+      formData.append('cognome', form.value.cognome);
+      formData.append('email', form.value.email);
+      formData.append('password', form.value.password);
+      formData.append('file', this.selectedFile);
+
+      this.authSrv.signup(formData).subscribe(
         () => {
           this.router.navigate(['/login']);
           this.isLoading = false;
@@ -34,12 +51,10 @@ export class RegisterComponent implements OnInit {
           console.error(error.error);
           if (error.error === 'Email format is invalid') {
             alert('Formato email non valido!');
-          }
-          else if(error.error === 'Email already exists'){
-            alert('Email già in uso!')
-          }
-          else if(error.error === 'Password is too short'){
-            alert('Password troppo corta!')
+          } else if (error.error === 'Email already exists') {
+            alert('Email già in uso!');
+          } else if (error.error === 'Password is too short') {
+            alert('Password troppo corta!');
           }
 
           this.isLoading = false;
@@ -50,5 +65,4 @@ export class RegisterComponent implements OnInit {
       this.isLoading = false;
     }
   }
-
 }

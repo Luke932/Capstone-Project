@@ -36,6 +36,7 @@ public class Utente implements UserDetails {
 	private String cognome;
 	private String email;
 	private String password;
+	private byte[] foto;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "Ruolo", referencedColumnName = "nome")
@@ -47,12 +48,13 @@ public class Utente implements UserDetails {
 	@OneToMany(mappedBy = "utente")
 	private Set<Commento> commenti;
 
-	public Utente(String username, String nome, String cognome, String email, String password) {
+	public Utente(String username, String nome, String cognome, String email, String password, byte[] foto) {
 		this.username = username;
 		this.nome = nome;
 		this.cognome = cognome;
 		this.email = email;
 		this.password = password;
+		this.foto = foto;
 		this.ruolo = new Ruolo();
 		this.ruolo.setNome("USER");
 	}

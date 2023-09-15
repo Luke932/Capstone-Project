@@ -22,4 +22,5 @@ public class UtenteSavePayloadUser {
 	private String email;
 	@NotNull(message = "Password obbligatoria")
 	private String password;
+	private byte[] foto;
 }
