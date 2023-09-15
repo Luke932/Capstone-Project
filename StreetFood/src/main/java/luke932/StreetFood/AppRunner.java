@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import com.github.javafaker.Faker;
 
+import jakarta.transaction.Transactional;
 import luke932.StreetFood.entities.Commento;
 import luke932.StreetFood.entities.Like;
 import luke932.StreetFood.entities.Luogo;
@@ -44,6 +45,7 @@ public class AppRunner implements CommandLineRunner {
 	PasswordEncoder bcrypt;
 
 	@Override
+	@Transactional
 	public void run(String... args) throws Exception {
 		Faker faker = new Faker(Locale.ITALIAN);
 
@@ -59,20 +61,48 @@ public class AppRunner implements CommandLineRunner {
 			luogo.setTitolo(faker.address().city());
 			luogo.setImmagine(faker.internet().image());
 			luogo.setDescrizione(faker.lorem().paragraph());
-			// luogoSrv.saveLuogo(luogo);
+			luogoSrv.saveLuogo(luogo);
 		}
 
 		// ----------------CREAZIONE PRODOTTI
-		List<Luogo> luoghiDalDb = new ArrayList<>();
-		luoghiDalDb = luogoSrv.findNoPage();
+		List<Luogo> luoghiDalDb = luogoSrv.findNoPage();
 		for (int i = 0; i < 10; i++) {
 			Prodotto product = new Prodotto();
 			product.setNomeProdotto(faker.food().dish());
 			product.setDescrizione(faker.lorem().sentence());
 			product.setImmagine(faker.internet().image());
 			product.setAltro(faker.internet().avatar());
-			product.setLuogo(luoghiDalDb.get(faker.number().numberBetween(0, luoghiDalDb.size() - 1)));
-			// prodottoSrv.saveProdotto(product);
+
+			int numLuoghiAssociati = faker.number().numberBetween(1, 6);
+			List<Luogo> luoghiAssociati = new ArrayList<>();
+
+			for (int j = 0; j < numLuoghiAssociati; j++) {
+				Luogo luogoAssociato = luoghiDalDb.get(faker.number().numberBetween(0, luoghiDalDb.size() - 1));
+				luoghiAssociati.add(luogoAssociato);
+			}
+
+			product.setLuoghi(luoghiAssociati);
+			prodottoSrv.saveProdotto(product);
+		}
+
+		// ----------------ASSOCIAZIONE TRA LUOGHI E PRODOTTI
+		List<Luogo> luoghi = luogoSrv.findNoPage();
+		List<Prodotto> prodotti = prodottoSrv.findNoPage();
+
+		for (Luogo luogo : luoghi) {
+			for (Prodotto prodotto : prodotti) {
+				luogo.getProdotti().add(prodotto);
+				prodotto.getLuoghi().add(luogo);
+			}
+		}
+
+		// Salvataggio delle entità Luogo e Prodotto dopo il completamento dei loop
+		for (Luogo luogo : luoghi) {
+			luogoSrv.saveLuogo(luogo);
+		}
+
+		for (Prodotto prodotto : prodotti) {
+			prodottoSrv.saveProdotto(prodotto);
 		}
 
 		// ----------------CREAZIONE COMMENTO

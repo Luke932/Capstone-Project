@@ -6,11 +6,12 @@ import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import lombok.Data;
 import lombok.ToString;
 
@@ -26,7 +27,9 @@ public class Luogo {
 	private String immagine;
 	private String descrizione;
 
-	@OneToMany(mappedBy = "luogo", cascade = CascadeType.ALL, orphanRemoval = true)
+	@ManyToMany
 	@JsonBackReference
+	@JoinTable(name = "luogo_prodotto", joinColumns = @JoinColumn(name = "luogo_id"), inverseJoinColumns = @JoinColumn(name = "prodotto_id"))
 	private List<Prodotto> prodotti = new ArrayList<>();
+
 }

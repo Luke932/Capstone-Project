@@ -1,5 +1,6 @@
 package luke932.StreetFood.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -11,8 +12,7 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
@@ -37,10 +37,9 @@ public class Prodotto {
 	private String immagine;
 	private String altro;
 
-	@ManyToOne
-	@JoinColumn(name = "luogo_id")
+	@ManyToMany(mappedBy = "prodotti")
 	@JsonBackReference
-	private Luogo luogo;
+	private List<Luogo> luoghi = new ArrayList<>();
 
 	@OneToMany(mappedBy = "prodotto", cascade = CascadeType.ALL)
 	@JsonManagedReference
@@ -53,20 +52,21 @@ public class Prodotto {
 	@Transient
 	private String titolo;
 
-	public Prodotto(String nomeProdotto, String descrizione, String immagine, String altro, Luogo luogo) {
-		this.nomeProdotto = nomeProdotto;
-		this.descrizione = descrizione;
-		this.immagine = immagine;
-		this.altro = altro;
-		this.luogo = luogo;
-	}
-
 	public Prodotto(String nomeProdotto, String descrizione, String immagine, String altro, String titolo) {
 		this.nomeProdotto = nomeProdotto;
 		this.descrizione = descrizione;
 		this.immagine = immagine;
 		this.altro = altro;
 		this.titolo = titolo;
+	}
+
+	public Prodotto(String nomeProdotto, String descrizione, String immagine, String altro, List<Luogo> luoghi) {
+		super();
+		this.nomeProdotto = nomeProdotto;
+		this.descrizione = descrizione;
+		this.immagine = immagine;
+		this.altro = altro;
+		this.luoghi = luoghi;
 	}
 
 }

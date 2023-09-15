@@ -1,5 +1,6 @@
 package luke932.StreetFood.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
 import luke932.StreetFood.entities.Luogo;
 import luke932.StreetFood.entities.Prodotto;
 import luke932.StreetFood.exceptions.NotFoundException;
@@ -31,10 +33,16 @@ public class ProdottoService {
 	}
 
 	// -----------SALVATAGGIO PRODOTTI
+	@Transactional
 	public Prodotto saveProdotto(Prodotto prodotto) {
-		Luogo luogo = luogoR.findByTitolo(prodotto.getTitolo());
+		Luogo luogo = prodotto.getLuoghi().get(0);
+
+		List<Luogo> listaLuoghi = new ArrayList<>();
+		listaLuoghi.add(luogo);
+
 		Prodotto newProd = new Prodotto(prodotto.getNomeProdotto(), prodotto.getDescrizione(), prodotto.getImmagine(),
-				prodotto.getAltro(), luogo);
+				prodotto.getAltro(), listaLuoghi);
+
 		return prodottoR.save(newProd);
 	}
 
@@ -78,9 +86,9 @@ public class ProdottoService {
 	}
 
 	// ------------TROVA TUTTI I PRODOTTI DI UN CERTO LUOGO
-	public List<Prodotto> findByLuogoId(UUID luogoId) {
-		return prodottoR.findByLuogoId(luogoId);
-	}
+//	public List<Prodotto> findByLuogoId(UUID luogoId) {
+//		return prodottoR.findByLuogoId(luogoId);
+//	}
 
 	// ------------TROVA TUTTI I PRODOTTI CHE HANNO RICEVUTO LIKE DA UN CERTO UTENTE
 	public List<Prodotto> findByLikesUtenteId(UUID utenteId) {
@@ -89,14 +97,14 @@ public class ProdottoService {
 
 	// ------------TROVA TUTTI I PRODOTTI DI UN CERTO LUOGO CON ALMENO UN CERTO
 	// NUMERO DI LIKE
-	public List<Prodotto> findByLuogoAndMinLikes(UUID luogoId, int minLikes) {
-		return prodottoR.findByLuogoAndMinLikes(luogoId, minLikes);
-	}
+//	public List<Prodotto> findByLuogoAndMinLikes(UUID luogoId, int minLikes) {
+//		return prodottoR.findByLuogoAndMinLikes(luogoId, minLikes);
+//	}
 
 	// ------------TROVA TUTTI I PRODOTTI CON UN CERTO NUMERO DI LIKE
-	public List<Prodotto> findProdottiConAlmenoNLike(int minLikes) {
-		return prodottoR.findProdottiConAlmenoNLike(minLikes);
-	}
+//	public List<Prodotto> findProdottiConAlmenoNLike(int minLikes) {
+//		return prodottoR.findProdottiConAlmenoNLike(minLikes);
+//	}
 
 	// ------------TROVA TUTTI I PRODOTTI CHE HANNO RICEVUTO LIKE DA UTENTI CON UN
 	// CERTO RUOLO
@@ -106,23 +114,25 @@ public class ProdottoService {
 
 	// ================================================================================
 
-	// ------------TROVA TUTTI I PRODOTTI CHE HANNO RICEVUTO COMMENTI DA UN CERTO UTENTE
+	// ------------TROVA TUTTI I PRODOTTI CHE HANNO RICEVUTO COMMENTI DA UN CERTO
+	// UTENTE
 	public List<Prodotto> findByCommentiUtenteId(UUID utenteId) {
 		return prodottoR.findByCommentiUtenteId(utenteId);
 	}
 
 	// ------------TROVA TUTTI I PRODOTTI DI UN CERTO LUOGO CON ALMENO UN CERTO
 	// NUMERO DI COMMENTI
-	public List<Prodotto> findByLuogoAndMinCommenti(UUID luogoId, int minLikes) {
-		return prodottoR.findByLuogoAndMinLikes(luogoId, minLikes);
-	}
+//	public List<Prodotto> findByLuogoAndMinCommenti(UUID luogoId, int minLikes) {
+//		return prodottoR.findByLuogoAndMinLikes(luogoId, minLikes);
+//	}
 
 	// ------------TROVA TUTTI I PRODOTTI CON UN CERTO NUMERO DI COMMENTI
 	public List<Prodotto> findProdottiConAlmenoNCommento(int minLikes) {
 		return prodottoR.findProdottiConAlmenoNCommento(minLikes);
 	}
 
-	// ------------TROVA TUTTI I PRODOTTI CHE HANNO RICEVUTO COMMENTI DA UTENTI CON UN
+	// ------------TROVA TUTTI I PRODOTTI CHE HANNO RICEVUTO COMMENTI DA UTENTI CON
+	// UN
 	// CERTO RUOLO
 	public List<Prodotto> findProdottiConCommentoDaUtentiConRuolo(String ruoloNome) {
 		return prodottoR.findProdottiConCommentoDaUtentiConRuolo(ruoloNome);

@@ -77,14 +77,14 @@ public class ProdottoController {
 	}
 
 	// ------------TROVA TUTTI I PRODOTTI DI UN CERTO LUOGO
-	@GetMapping("/prodotto/luogo/{luogoId}")
-	public List<Prodotto> getProdottiByLuogo(@PathVariable UUID luogoId) {
-		List<Prodotto> prodotti = prodottoSrv.findByLuogoId(luogoId);
-		if (prodotti.isEmpty()) {
-			throw new NotFoundException("Nessun prodotto trovato per il luogo con ID " + luogoId);
-		}
-		return prodotti;
-	}
+//	@GetMapping("/prodotto/luogo/{luogoId}")
+//	public List<Prodotto> getProdottiByLuogo(@PathVariable UUID luogoId) {
+//		List<Prodotto> prodotti = prodottoSrv.findByLuogoId(luogoId);
+//		if (prodotti.isEmpty()) {
+//			throw new NotFoundException("Nessun prodotto trovato per il luogo con ID " + luogoId);
+//		}
+//		return prodotti;
+//	}
 
 	// ------------TROVA TUTTI I PRODOTTI CHE HANNO RICEVUTO LIKE DA UN CERTO UTENTE
 	@GetMapping("/prodotto/likes/utente/{utenteId}")
@@ -99,23 +99,23 @@ public class ProdottoController {
 
 	// ------------TROVA TUTTI I PRODOTTI DI UN CERTO LUOGO CON ALMENO UN CERTO
 	// NUMERO DI LIKE
-	@GetMapping("prodotto/luogo/{luogoId}/min-likes/{minLikes}")
-	@PreAuthorize("hasAuthority('ADMIN')")
-	public List<Prodotto> getProdottiByLuogoAndMinLikes(@PathVariable UUID luogoId, @PathVariable int minLikes) {
-		List<Prodotto> prodotti = prodottoSrv.findByLuogoAndMinLikes(luogoId, minLikes);
-		if (prodotti.isEmpty()) {
-			throw new NotFoundException(
-					"Nessun prodotto trovato per il luogo con ID " + luogoId + " con almeno " + minLikes + " like");
-		}
-		return prodotti;
-	}
+//	@GetMapping("prodotto/luogo/{luogoId}/min-likes/{minLikes}")
+//	@PreAuthorize("hasAuthority('ADMIN')")
+//	public List<Prodotto> getProdottiByLuogoAndMinLikes(@PathVariable UUID luogoId, @PathVariable int minLikes) {
+//		List<Prodotto> prodotti = prodottoSrv.findByLuogoAndMinLikes(luogoId, minLikes);
+//		if (prodotti.isEmpty()) {
+//			throw new NotFoundException(
+//					"Nessun prodotto trovato per il luogo con ID " + luogoId + " con almeno " + minLikes + " like");
+//		}
+//		return prodotti;
+//	}
 
 	// ------------TROVA TUTTI I PRODOTTI CON ALMENO UN CERTO NUMERO DI LIKE
-	@GetMapping("/prodotto/min-likes/{minLikes}")
-	@PreAuthorize("hasAuthority('ADMIN')")
-	public List<Prodotto> getProdottiWithMinLikes(@PathVariable int minLikes) {
-		return prodottoSrv.findProdottiConAlmenoNLike(minLikes);
-	}
+//	@GetMapping("/prodotto/min-likes/{minLikes}")
+//	@PreAuthorize("hasAuthority('ADMIN')")
+//	public List<Prodotto> getProdottiWithMinLikes(@PathVariable int minLikes) {
+//		return prodottoSrv.findProdottiConAlmenoNLike(minLikes);
+//	}
 
 	// ------------TROVA TUTTI I PRODOTTI CHE HANNO RICEVUTO LIKE DA UTENTI CON UN
 	// CERTO RUOLO
@@ -137,11 +137,11 @@ public class ProdottoController {
 
 	// ------------TROVA TUTTI I PRODOTTI DI UN CERTO LUOGO CON ALMENO UN CERTO
 	// NUMERO DI COMMENTI
-	@GetMapping("prodotto/luogo/{luogoId}/min-commenti/{minCommenti}")
-	@PreAuthorize("hasAuthority('ADMIN')")
-	public List<Prodotto> getProdottiByLuogoAndMinCommenti(@PathVariable UUID luogoId, @PathVariable int minCommenti) {
-		return prodottoSrv.findByLuogoAndMinCommenti(luogoId, minCommenti);
-	}
+//	@GetMapping("prodotto/luogo/{luogoId}/min-commenti/{minCommenti}")
+//	@PreAuthorize("hasAuthority('ADMIN')")
+//	public List<Prodotto> getProdottiByLuogoAndMinCommenti(@PathVariable UUID luogoId, @PathVariable int minCommenti) {
+//		return prodottoSrv.findByLuogoAndMinCommenti(luogoId, minCommenti);
+//	}
 
 	// ------------TROVA TUTTI I PRODOTTI CON ALMENO UN CERTO NUMERO DI COMMENTI
 	@GetMapping("prodotto/min-commenti/{minCommenti}")

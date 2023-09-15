@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
 import luke932.StreetFood.entities.Luogo;
 import luke932.StreetFood.exceptions.NotFoundException;
 import luke932.StreetFood.payloads.NewLuogoPayload;
@@ -27,6 +28,7 @@ public class LuogoService {
 	}
 
 	// -----------SALVATAGGIO LUOGHI
+	@Transactional
 	public Luogo saveLuogo(Luogo luogo) {
 		return luogoR.save(luogo);
 	}
