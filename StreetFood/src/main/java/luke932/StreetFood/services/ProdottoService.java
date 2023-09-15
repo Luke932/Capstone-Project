@@ -95,17 +95,6 @@ public class ProdottoService {
 		return prodottoR.findByLikesUtenteId(utenteId);
 	}
 
-	// ------------TROVA TUTTI I PRODOTTI DI UN CERTO LUOGO CON ALMENO UN CERTO
-	// NUMERO DI LIKE
-//	public List<Prodotto> findByLuogoAndMinLikes(UUID luogoId, int minLikes) {
-//		return prodottoR.findByLuogoAndMinLikes(luogoId, minLikes);
-//	}
-
-	// ------------TROVA TUTTI I PRODOTTI CON UN CERTO NUMERO DI LIKE
-//	public List<Prodotto> findProdottiConAlmenoNLike(int minLikes) {
-//		return prodottoR.findProdottiConAlmenoNLike(minLikes);
-//	}
-
 	// ------------TROVA TUTTI I PRODOTTI CHE HANNO RICEVUTO LIKE DA UTENTI CON UN
 	// CERTO RUOLO
 	public List<Prodotto> findProdottiConLikeDaUtentiConRuolo(String ruoloNome) {
@@ -113,18 +102,6 @@ public class ProdottoService {
 	}
 
 	// ================================================================================
-
-	// ------------TROVA TUTTI I PRODOTTI CHE HANNO RICEVUTO COMMENTI DA UN CERTO
-	// UTENTE
-	public List<Prodotto> findByCommentiUtenteId(UUID utenteId) {
-		return prodottoR.findByCommentiUtenteId(utenteId);
-	}
-
-	// ------------TROVA TUTTI I PRODOTTI DI UN CERTO LUOGO CON ALMENO UN CERTO
-	// NUMERO DI COMMENTI
-//	public List<Prodotto> findByLuogoAndMinCommenti(UUID luogoId, int minLikes) {
-//		return prodottoR.findByLuogoAndMinLikes(luogoId, minLikes);
-//	}
 
 	// ------------TROVA TUTTI I PRODOTTI CON UN CERTO NUMERO DI COMMENTI
 	public List<Prodotto> findProdottiConAlmenoNCommento(int minLikes) {
@@ -136,6 +113,35 @@ public class ProdottoService {
 	// CERTO RUOLO
 	public List<Prodotto> findProdottiConCommentoDaUtentiConRuolo(String ruoloNome) {
 		return prodottoR.findProdottiConCommentoDaUtentiConRuolo(ruoloNome);
+	}
+
+	// ================================================================================
+
+	// ------------TROVA TUTTI I PRODOTTI DI UN LUOGO CON UN MINIMO DI LIKE
+	public List<Prodotto> findProdottiByLuogoAndMinLikes(UUID luogoId, int minLikes) {
+		return prodottoR.findProdottiByLuogoAndMinLikes(luogoId, minLikes);
+	}
+
+	// ------------TROVA TUTTI I PRODOTTI DI UN LUOGO
+	public List<Prodotto> findByLuoghi(Luogo luogo) {
+		return prodottoR.findByLuoghi(luogo);
+	}
+
+	// ------------TROVA TUTTI I PRODOTTI TRAMITE IL NOME DI UN PRODOTTO E UNA LISTA
+	// DI LUOGHI
+	public List<Prodotto> findProdottiByNomeAndLuoghi(String nomeProdotto, List<UUID> luoghiIds) {
+		return prodottoR.findProdottiByNomeAndLuoghi(nomeProdotto, luoghiIds);
+	}
+
+	// ------------TROVA TUTTI I PRODOTTI TRAMITE UN NUMERO DI LIKE
+	public List<Prodotto> findProdottiByNumLikes(int numLikes) {
+		return prodottoR.findProdottiByNumLikes(numLikes);
+	}
+
+	// ------------TROVA TUTTI I PRODOTTI TRAMITE UNA LISTA DI LUOGHI ED UN NUMERO
+	// DI LIKE
+	public List<Prodotto> findProdottiByLuoghiAndNumLikes(List<UUID> luoghiIds, int numLikes) {
+		return prodottoR.findProdottiByLuoghiAndNumLikes(luoghiIds, numLikes);
 	}
 
 }

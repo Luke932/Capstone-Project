@@ -61,7 +61,7 @@ public class AppRunner implements CommandLineRunner {
 			luogo.setTitolo(faker.address().city());
 			luogo.setImmagine(faker.internet().image());
 			luogo.setDescrizione(faker.lorem().paragraph());
-			luogoSrv.saveLuogo(luogo);
+			// luogoSrv.saveLuogo(luogo);
 		}
 
 		// ----------------CREAZIONE PRODOTTI
@@ -82,7 +82,7 @@ public class AppRunner implements CommandLineRunner {
 			}
 
 			product.setLuoghi(luoghiAssociati);
-			prodottoSrv.saveProdotto(product);
+			// prodottoSrv.saveProdotto(product);
 		}
 
 		// ----------------ASSOCIAZIONE TRA LUOGHI E PRODOTTI
@@ -96,7 +96,6 @@ public class AppRunner implements CommandLineRunner {
 			}
 		}
 
-		// Salvataggio delle entità Luogo e Prodotto dopo il completamento dei loop
 		for (Luogo luogo : luoghi) {
 			luogoSrv.saveLuogo(luogo);
 		}

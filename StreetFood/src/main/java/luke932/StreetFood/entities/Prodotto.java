@@ -43,11 +43,11 @@ public class Prodotto {
 
 	@OneToMany(mappedBy = "prodotto", cascade = CascadeType.ALL)
 	@JsonManagedReference
-	private List<Like> likes;
+	private List<Like> likes = new ArrayList<>();
 
 	@OneToMany(mappedBy = "prodotto", cascade = CascadeType.ALL)
 	@JsonManagedReference
-	private List<Commento> commenti;
+	private List<Commento> commenti = new ArrayList<>();
 
 	@Transient
 	private String titolo;
