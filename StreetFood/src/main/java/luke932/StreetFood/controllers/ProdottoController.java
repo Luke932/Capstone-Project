@@ -113,6 +113,8 @@ public class ProdottoController {
 		return prodottoSrv.findProdottiConCommentoDaUtentiConRuolo(ruoloNome);
 	}
 
+	// ================================================================================
+
 	// ------------TROVA TUTTI I PRODOTTI DI UN CERTO LUOGO CON UN MINIMO DI LIKE
 	@GetMapping("/luogoMinLikes")
 	public List<Prodotto> findProdottiByLuogoAndMinLikes(@RequestParam UUID luogoId, @RequestParam int minLikes) {

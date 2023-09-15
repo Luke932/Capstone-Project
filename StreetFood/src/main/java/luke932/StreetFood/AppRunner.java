@@ -1,9 +1,11 @@
 package luke932.StreetFood;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -66,23 +68,23 @@ public class AppRunner implements CommandLineRunner {
 
 		// ----------------CREAZIONE PRODOTTI
 		List<Luogo> luoghiDalDb = luogoSrv.findNoPage();
-		for (int i = 0; i < 10; i++) {
-			Prodotto product = new Prodotto();
-			product.setNomeProdotto(faker.food().dish());
-			product.setDescrizione(faker.lorem().sentence());
-			product.setImmagine(faker.internet().image());
-			product.setAltro(faker.internet().avatar());
 
-			int numLuoghiAssociati = faker.number().numberBetween(1, 6);
-			List<Luogo> luoghiAssociati = new ArrayList<>();
+		if (!luoghiDalDb.isEmpty()) {
+			IntStream.range(0, 10).forEach(i -> {
+				Prodotto product = new Prodotto();
+				product.setNomeProdotto(faker.food().dish());
+				product.setDescrizione(faker.lorem().sentence());
+				product.setImmagine(faker.internet().image());
+				product.setAltro(faker.internet().avatar());
 
-			for (int j = 0; j < numLuoghiAssociati; j++) {
-				Luogo luogoAssociato = luoghiDalDb.get(faker.number().numberBetween(0, luoghiDalDb.size() - 1));
-				luoghiAssociati.add(luogoAssociato);
-			}
+				int numLuoghiAssociati = faker.number().numberBetween(1, 6);
+				List<Luogo> luoghiAssociati = IntStream.range(0, numLuoghiAssociati)
+						.mapToObj(j -> luoghiDalDb.get(faker.number().numberBetween(0, luoghiDalDb.size() - 1)))
+						.collect(Collectors.toList());
 
-			product.setLuoghi(luoghiAssociati);
-			// prodottoSrv.saveProdotto(product);
+				product.setLuoghi(luoghiAssociati);
+				// prodottoSrv.saveProdotto(product);
+			});
 		}
 
 		// ----------------ASSOCIAZIONE TRA LUOGHI E PRODOTTI
@@ -105,23 +107,28 @@ public class AppRunner implements CommandLineRunner {
 		}
 
 		// ----------------CREAZIONE COMMENTO
-		Prodotto prodottiDalDb = prodottoSrv.findByNomeProdotto("Tacos");
-		Utente utentidalDb = utenteSrv.findByNome("Luca");
+		UUID getBYid = UUID.fromString("480c9358-981f-468d-9dc8-b29bf3912286");
+		Prodotto prodottoDalDb = prodottoSrv.getProdottoByID(getBYid);
+		UUID getBYidUT = UUID.fromString("2667404d-dbab-4168-a2cf-6bf94936e93b");
+		Utente utenteDalDb = utenteSrv.findById(getBYidUT);
+//		System.out.println(prodottoDalDb);
+//		System.out.println(utenteDalDb);
 		Commento commento = new Commento();
 		commento.setTestoCommento("ciao");
 		commento.setDataCommento(LocalDate.now());
-		commento.setProdotto(prodottiDalDb);
-		commento.setUtente(utentidalDb);
+		commento.setProdotto(prodottoDalDb);
+		commento.setUtente(utenteDalDb);
 
 		// commentoSrv.saveCommento(commento);
 
 		// ----------------CREAZIONE LIKE
 		Like like = new Like();
 		like.setDataLike(LocalDate.now());
-		like.setProdotto(prodottiDalDb);
-		like.setUtente(utentidalDb);
+		like.setProdotto(prodottoDalDb);
+		like.setUtente(utenteDalDb);
 
 		// likeSrv.saveLike(like);
+
 	}
 
 }

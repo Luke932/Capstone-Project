@@ -85,11 +85,6 @@ public class ProdottoService {
 		prodottoR.delete(found);
 	}
 
-	// ------------TROVA TUTTI I PRODOTTI DI UN CERTO LUOGO
-//	public List<Prodotto> findByLuogoId(UUID luogoId) {
-//		return prodottoR.findByLuogoId(luogoId);
-//	}
-
 	// ------------TROVA TUTTI I PRODOTTI CHE HANNO RICEVUTO LIKE DA UN CERTO UTENTE
 	public List<Prodotto> findByLikesUtenteId(UUID utenteId) {
 		return prodottoR.findByLikesUtenteId(utenteId);

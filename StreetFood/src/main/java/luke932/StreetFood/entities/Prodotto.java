@@ -18,11 +18,9 @@ import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Entity
 @Data
-@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties({ "titolo", "accountNonExpired", "authorities", "credentialsNonExpired", "accountNonLocked" })
@@ -67,6 +65,12 @@ public class Prodotto {
 		this.immagine = immagine;
 		this.altro = altro;
 		this.luoghi = luoghi;
+	}
+
+	@Override
+	public String toString() {
+		return "Prodotto [id=" + id + ", nomeProdotto=" + nomeProdotto + ", descrizione=" + descrizione + ", immagine="
+				+ immagine + ", altro=" + altro + "]";
 	}
 
 }
