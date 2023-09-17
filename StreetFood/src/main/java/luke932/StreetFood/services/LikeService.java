@@ -1,5 +1,6 @@
 package luke932.StreetFood.services;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -12,6 +13,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import luke932.StreetFood.entities.Like;
+import luke932.StreetFood.entities.Prodotto;
+import luke932.StreetFood.entities.Utente;
 import luke932.StreetFood.exceptions.NotFoundException;
 import luke932.StreetFood.repositories.LikeRepository;
 
@@ -19,15 +22,28 @@ import luke932.StreetFood.repositories.LikeRepository;
 public class LikeService {
 
 	private final LikeRepository likeR;
+	private final UtenteService utenteService;
+	private final ProdottoService prodottoService;
 
 	@Autowired
-	public LikeService(LikeRepository LikeR) {
+	public LikeService(LikeRepository LikeR, UtenteService utenteService, ProdottoService prodottoService) {
 		this.likeR = LikeR;
+		this.utenteService = utenteService;
+		this.prodottoService = prodottoService;
 	}
 
 	// -------------CREAZIONE LIKE
 	public Like saveLike(Like like) {
 		return likeR.save(like);
+	}
+
+	// -------------CREAZIONE LIKE
+	public void createLike(Utente utente, Prodotto prodotto) {
+		Like like = new Like();
+		like.setUtente(utente);
+		like.setProdotto(prodotto);
+		like.setDataLike(LocalDate.now());
+		likeR.save(like);
 	}
 
 	// -----------IMPAGINAZIONE GET LIKE
@@ -39,7 +55,7 @@ public class LikeService {
 	// ------------RICERCA LIKE PER ID
 	public Like getLikeoByID(UUID id) {
 		Optional<Like> found = likeR.findById(id);
-		return found.orElseThrow(() -> new NotFoundException("Commento non trovato con ID " + id));
+		return found.orElseThrow(() -> new NotFoundException("Like non trovato con ID " + id));
 	}
 
 	// ------------MODIFICA CLIENTE PER ID
@@ -76,6 +92,12 @@ public class LikeService {
 	// ------------RESTITUISCE UNA NUMERO DI LIKE ASSOCIATI A QUESTO PRODOTTO
 	public Long countLikesByUtenteId(UUID utenteId) {
 		return likeR.countLikesByUtenteId(utenteId);
+	}
+
+	// ------------METODO PER TROVARE UN LIKE SPECIFICO DI UN PRODOTTO DA PARTE DI
+	// UTENTE
+	public Like getLikeByUserAndProduct(UUID utenteId, UUID prodottoId) {
+		return likeR.findByUtenteIdAndProdottoId(utenteId, prodottoId);
 	}
 
 }

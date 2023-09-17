@@ -52,7 +52,7 @@ public class ProdottoController {
 	// ------------IMPAGINAZIONE PRODOTTI
 	@GetMapping
 	public Page<Prodotto> getProdotti(@RequestParam(defaultValue = "0") int page,
-			@RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "id") String sortBy) {
+			@RequestParam(defaultValue = "12") int size, @RequestParam(defaultValue = "id") String sortBy) {
 		return prodottoSrv.find(page, size, sortBy);
 	}
 

@@ -41,12 +41,15 @@ export class LoginComponent implements OnInit {
               console.log('Dettagli utente:', user);
               const userRole = user?.ruolo?.nome;
               const username = user?.username;
+              const id = user?.id;
               const foto = user?.foto;
               this.authService.setUserProfile(username);
               this.usernameUser.next(username);
               localStorage.setItem('userRole', userRole);
               localStorage.setItem('username', username);
               localStorage.setItem('userPhotoUrl', foto);
+              localStorage.setItem('id', id);
+              console.log(id);
               console.log('Ruolo dell\'utente:', userRole);
 
               this.roleSrv.setUserRole(userRole);

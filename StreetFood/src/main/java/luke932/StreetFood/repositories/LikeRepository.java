@@ -12,6 +12,8 @@ import luke932.StreetFood.entities.Like;
 @Repository
 public interface LikeRepository extends JpaRepository<Like, UUID> {
 
+	Like findByUtenteIdAndProdottoId(UUID utenteId, UUID prodottoId);
+
 	List<Like> findByProdottoId(UUID prodottoId);
 
 	List<Like> findByUtenteId(UUID utenteId);

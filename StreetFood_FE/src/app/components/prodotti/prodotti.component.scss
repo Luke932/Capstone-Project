@@ -1,0 +1,15 @@
+.card {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  height: 400px;
+}
+
+
+
+span.liked {
+  color: red; /* Riempimento rosso quando è stato cliccato il like */
+}
+
+span.unliked {
+  color: black;
+}

@@ -1,10 +1,13 @@
 package luke932.StreetFood.controllers;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +21,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import luke932.StreetFood.entities.Like;
+import luke932.StreetFood.entities.Prodotto;
+import luke932.StreetFood.entities.Utente;
 import luke932.StreetFood.exceptions.NotFoundException;
+import luke932.StreetFood.repositories.ProdottoRepository;
+import luke932.StreetFood.repositories.UtenteRepository;
 import luke932.StreetFood.services.LikeService;
 
 @RestController
@@ -26,9 +33,14 @@ import luke932.StreetFood.services.LikeService;
 public class LikeController {
 
 	private final LikeService likeSrv;
+	private final UtenteRepository utenteRepository;
+	private final ProdottoRepository prodottoRepository;
 
-	public LikeController(LikeService likeSrv) {
+	public LikeController(LikeService likeSrv, UtenteRepository utenteRepository,
+			ProdottoRepository prodottoRepository) {
 		this.likeSrv = likeSrv;
+		this.utenteRepository = utenteRepository;
+		this.prodottoRepository = prodottoRepository;
 	}
 
 	// ------------RICERCA LIKE PER ID
@@ -40,8 +52,47 @@ public class LikeController {
 	// ------------SALVATAGGIO LIKE
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Like createCommento(@RequestBody Like like) {
-		return likeSrv.saveLike(like);
+	public ResponseEntity<?> createAndDeleteLike(@RequestBody Map<String, String> likeData) {
+		UUID utenteId = UUID.fromString(likeData.get("utenteId"));
+		UUID prodottoId = UUID.fromString(likeData.get("prodottoId"));
+
+		Like existingLike = likeSrv.getLikeByUserAndProduct(utenteId, prodottoId);
+
+		if (existingLike != null) {
+			likeSrv.deleteLike(existingLike.getId());
+			return ResponseEntity.ok("Like rimosso");
+		} else {
+			Utente utente = new Utente();
+			utente.setId(utenteId);
+
+			Prodotto prodotto = new Prodotto();
+			prodotto.setId(prodottoId);
+
+			Like like = new Like();
+			like.setUtente(utente);
+			like.setProdotto(prodotto);
+			like.setDataLike(LocalDate.now());
+
+			Like savedLike = likeSrv.saveLike(like);
+			return ResponseEntity.ok(savedLike);
+		}
+	}
+
+	// ------------SALVATAGGIO LIKE
+	@PostMapping("/create")
+	public String createLike(@RequestParam String utenteId, @RequestParam String prodottoId) {
+		UUID utenteUUID = UUID.fromString(utenteId);
+		UUID prodottoUUID = UUID.fromString(prodottoId);
+
+		Utente utente = utenteRepository.findById(utenteUUID).orElse(null);
+		Prodotto prodotto = prodottoRepository.findById(prodottoUUID).orElse(null);
+
+		if (utente != null && prodotto != null) {
+			likeSrv.createLike(utente, prodotto);
+			return "Like creato con successo.";
+		} else {
+			return "Utente o prodotto non trovato.";
+		}
 	}
 
 	// ------------IMPAGINAZIONE LIKE
@@ -61,9 +112,15 @@ public class LikeController {
 	// ------------CANCELLAZIONE LIKE
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	@PreAuthorize("hasAuthority('ADMIN')")
 	public void deleteLike(@PathVariable UUID id) {
 		likeSrv.deleteLike(id);
+	}
+
+	// ------------CANCELLAZIONE LIKE
+	@DeleteMapping("/delete")
+	public String deleteLikes(@RequestParam UUID likeId) {
+		likeSrv.deleteLike(likeId);
+		return "Like eliminato con successo.";
 	}
 
 	// ------------RESTITUISCE UNA LISTA DI LIKE ASSOCIATI A QUESTO PRODOTTO
@@ -108,6 +165,14 @@ public class LikeController {
 			throw new NotFoundException("Nessun like trovato per l'utente con ID " + utenteId);
 		}
 		return likeCount;
+	}
+
+	// -------------METODO PER TROVARE UN LIKE SPECIFICO DI UN PRODOTTO DA PARTE DI
+	// UTENTE
+	@GetMapping("/{utenteId}/{prodottoId}")
+	public ResponseEntity<Like> getLikeByUserAndProduct(@PathVariable UUID utenteId, @PathVariable UUID prodottoId) {
+		Like like = likeSrv.getLikeByUserAndProduct(utenteId, prodottoId);
+		return ResponseEntity.ok(like);
 	}
 
 }
