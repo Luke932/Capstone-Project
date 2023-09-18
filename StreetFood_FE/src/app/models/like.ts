@@ -3,7 +3,7 @@ import { Utente } from "./utente.interface";
 
 export interface Like {
   id?: string;
-  prodotto: Prodotti;
-  utente: Utente;
+  prodottoId: string | undefined;
+  utente: string | undefined;
   dataLike: Date;
 }

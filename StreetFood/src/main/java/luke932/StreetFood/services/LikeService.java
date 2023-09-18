@@ -37,13 +37,13 @@ public class LikeService {
 		return likeR.save(like);
 	}
 
-	// -------------CREAZIONE LIKE
-	public void createLike(Utente utente, Prodotto prodotto) {
+	public UUID createLike(Utente utente, Prodotto prodotto) {
 		Like like = new Like();
 		like.setUtente(utente);
 		like.setProdotto(prodotto);
 		like.setDataLike(LocalDate.now());
-		likeR.save(like);
+		Like savedLike = likeR.save(like);
+		return savedLike.getId(); // Restituisci l'ID del like appena creato
 	}
 
 	// -----------IMPAGINAZIONE GET LIKE

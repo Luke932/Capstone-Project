@@ -80,7 +80,7 @@ public class LikeController {
 
 	// ------------SALVATAGGIO LIKE
 	@PostMapping("/create")
-	public String createLike(@RequestParam String utenteId, @RequestParam String prodottoId) {
+	public ResponseEntity<UUID> createLike(@RequestParam String utenteId, @RequestParam String prodottoId) {
 		UUID utenteUUID = UUID.fromString(utenteId);
 		UUID prodottoUUID = UUID.fromString(prodottoId);
 
@@ -88,10 +88,11 @@ public class LikeController {
 		Prodotto prodotto = prodottoRepository.findById(prodottoUUID).orElse(null);
 
 		if (utente != null && prodotto != null) {
-			likeSrv.createLike(utente, prodotto);
-			return "Like creato con successo.";
+			UUID likeId = likeSrv.createLike(utente, prodotto); // Assumi che createLike restituisca l'ID del like
+			return ResponseEntity.ok(likeId); // Restituisci l'ID del like come parte della risposta
 		} else {
-			return "Utente o prodotto non trovato.";
+			// Gestisci il caso in cui utente o prodotto non siano trovati
+			return ResponseEntity.notFound().build();
 		}
 	}
 

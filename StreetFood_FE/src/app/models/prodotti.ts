@@ -5,4 +5,5 @@ export interface Prodotti {
   immagine: string;
   altro: string;
   isLiked: boolean;
+likeId?: string;
 }

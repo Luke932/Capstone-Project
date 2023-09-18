@@ -7,9 +7,9 @@
           <img [src]="prodotto.immagine" class="card-img-top" alt="...">
           <p class="card-text">{{ prodotto.descrizione }}</p>
 
-          <span class="material-symbols-outlined"
-                [ngClass]="{'liked': prodotto.isLiked, 'unliked': !prodotto.isLiked}"
-                (click)="toggleLike(prodotto)">
+          <span class="material-symbols-outlined heart-icon"
+                [ngClass]="{'liked': isLiked[i]}"
+                (click)="toggleLike(prodotto, i)">
             favorite
           </span>
         </div>

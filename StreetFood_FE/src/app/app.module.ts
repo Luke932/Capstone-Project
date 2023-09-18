@@ -17,6 +17,9 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { AuthService } from './auth/auth.service.service';
 import { RoleService } from './auth/role.service';
+import { LikeService } from './services/like.service';
+import { ProdottiService } from './services/prodotti.service';
+import { FooterService } from './services/footer.service';
 
 
 
@@ -76,6 +79,9 @@ const routes: Routes = [
   providers: [
     AuthService,
     RoleService,
+    LikeService,
+    ProdottiService,
+    FooterService,
     {
     provide: HTTP_INTERCEPTORS,
     useClass: TokenInterceptor,

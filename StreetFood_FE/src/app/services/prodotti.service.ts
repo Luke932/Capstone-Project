@@ -2,7 +2,7 @@ import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Prodotti } from '../models/prodotti';
-import { Observable, catchError, of, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, of, throwError } from 'rxjs';
 import { Like } from '../models/like';
 
 @Injectable({
@@ -10,9 +10,19 @@ import { Like } from '../models/like';
 })
 export class ProdottiService {
   baseUrl = environment.baseURL;
+  private likedItemsSubject = new BehaviorSubject<string[]>([]);
+  likedItems$ = this.likedItemsSubject.asObservable();
 
 
   constructor(private http: HttpClient) { }
+
+
+
+
+
+  updateLikedItems(likedItems: string[]): void {
+    this.likedItemsSubject.next(likedItems);
+  }
 
   getAllProdotti(page: number) {
     const utenteId = this.getId(); // Recupera l'ID dell'utente
@@ -31,8 +41,12 @@ export class ProdottiService {
     );
   }
 
-
-
+getLikesByUser(utenteId: string) {
+  const url = `${this.baseUrl}like?utenteId=${utenteId}`;
+  return this.http.get<Like[]>(url).pipe(
+    catchError(this.handleError)
+  );
+}
 
 
   createAndDeleteLike(utenteId: string, prodottoId: string) {
@@ -58,8 +72,14 @@ export class ProdottiService {
 
 
   deleteLikes(likeId: string): Observable<string> {
-    return this.http.delete<string>(`${this.baseUrl}like/delete`, { params: { likeId } });
+    return this.http.delete<string>(`${this.baseUrl}like/delete`, { params: { likeId } })
+      .pipe(
+        catchError(error => {
+          return throwError('Errore durante la cancellazione del like');
+        })
+      );
   }
+
 
 
   getId() {

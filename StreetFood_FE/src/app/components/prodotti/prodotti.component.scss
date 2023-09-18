@@ -6,10 +6,17 @@
 
 
 
-span.liked {
-  color: red; /* Riempimento rosso quando è stato cliccato il like */
+
+
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-size: 2em; /* Imposta la dimensione dell'icona del cuore */
+  cursor: pointer; /* Rende l'icona cliccabile */
 }
 
-span.unliked {
-  color: black;
+.liked {
+  color: red; /* Imposta il colore rosso quando il like è attivo */
 }
+
+
+
