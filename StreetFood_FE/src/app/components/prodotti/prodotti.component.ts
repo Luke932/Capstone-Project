@@ -4,10 +4,11 @@ import { Like } from 'src/app/models/like';
 import { Prodotti } from 'src/app/models/prodotti';
 import { LikeService } from 'src/app/services/like.service';
 import { ProdottiService } from 'src/app/services/prodotti.service';
-import { CommentoService } from 'src/app/services/commento.service';
+
 import { Commento } from 'src/app/models/commento';
-import { NgForm } from '@angular/forms';
+
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { CommentoService } from 'src/app/services/commento.service';
 
 
 @Component({

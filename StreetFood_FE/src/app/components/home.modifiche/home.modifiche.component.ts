@@ -1,5 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { SafeUrl } from '@angular/platform-browser';
 import { Luoghi } from 'src/app/models/luoghi';
 import { FooterService } from 'src/app/services/footer.service';
 import { HomeServiceService } from 'src/app/services/home.service.service';
@@ -21,6 +22,8 @@ export class HomeModificheComponent implements OnInit {
   mostraForm: boolean = false;
 formLuogo: any = {};
 luogoDaNascondere: string = '';
+selectedFile!: File;
+userPhotoUrl!: SafeUrl | null;
 
 
   constructor(private homeSrv: HomeServiceService, private footSrv: FooterService) {
@@ -38,7 +41,20 @@ luogoDaNascondere: string = '';
         this.totalElements = data.totalElements;
         this.totalPages = data.totalPages;
         this.currentPage = page;
-        this.mostraRisultati = false; // Assicurati che mostri i risultati di getLuoghi
+
+        for (let luogo of this.luoghi) {
+          if (luogo.immagineBase64) {
+            const byteCharacters = atob(luogo.immagineBase64);
+            const byteNumbers = new Array(byteCharacters.length);
+            for (let i = 0; i < byteCharacters.length; i++) {
+              byteNumbers[i] = byteCharacters.charCodeAt(i);
+            }
+            const byteArray = new Uint8Array(byteNumbers);
+            luogo.immagineBlob = new Blob([byteArray], { type: 'image/jpeg' });
+          }
+        }
+
+        this.mostraRisultati = false;
       } else {
         console.error("I dati ricevuti non sono un array", data);
       }
@@ -47,6 +63,7 @@ luogoDaNascondere: string = '';
       console.error('Errore nella richiesta HTTP:', error);
     });
   }
+
 
   cercaLuogo(tipoRicerca: string): void {
     if (this.titoloDaCercare.trim() !== '') {
@@ -103,8 +120,11 @@ luogoDaNascondere: string = '';
     }
   }
 
-  creaLuogo(luogo: any) {
-    this.homeSrv.createLuogo(luogo).subscribe(
+  creaLuogo() {
+    const file = this.selectedFile; // Assume che selectedFile contenga il file selezionato
+    const luogo = this.formLuogo;
+
+    this.homeSrv.createLuogoWithFile(luogo, file).subscribe(
       (response) => {
         this.luoghi.push(response);
         console.log('Luogo creato con successo', response);
@@ -114,6 +134,16 @@ luogoDaNascondere: string = '';
       }
     );
   }
+
+
+  onFileSelected(event: Event): void {
+    const inputElement = event.target as HTMLInputElement;
+    if (inputElement?.files && inputElement.files[0]) {
+      this.selectedFile = inputElement.files[0];
+    }
+  }
+
+
 
 
   aggiornaLuogo(id: string, nuovoLuogo: any) {
@@ -155,16 +185,27 @@ luogoDaNascondere: string = '';
     this.formLuogo = { ...luogo };
   }
 
-  inviaForm(): void {
-    if (this.formLuogo.id) {
-      // Esegui l'aggiornamento
-      this.aggiornaLuogo(this.formLuogo.id, this.formLuogo);
+  inviaForm() {
+    const file = this.selectedFile;
+    const luogo = this.formLuogo;
+
+    if (file) { // Controlla se un file è stato selezionato
+      this.homeSrv.createLuogoWithFile(luogo, file).subscribe(
+        (response) => {
+          this.luoghi.push(response);
+          console.log('Luogo creato con successo', response);
+        },
+        (error) => {
+          console.error('Errore durante la creazione del luogo', error);
+        }
+      );
     } else {
-      // Esegui la creazione
-      this.creaLuogo(this.formLuogo);
+      console.error('Nessun file selezionato');
     }
-    this.mostraForm = false;
   }
+
+
+
 
   nextPage(): void {
     if (this.currentPage < this.totalPages - 1) {

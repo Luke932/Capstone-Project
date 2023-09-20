@@ -1,6 +1,8 @@
 export interface Luoghi {
-  id?: string,
-  titolo: string,
-  descrizione: string,
-  immagine: string,
+  immagineBase64: any;
+  immagineBlob: Blob;
+  id?: string;
+  titolo: string;
+  descrizione: string;
+  immagine: string;
 }

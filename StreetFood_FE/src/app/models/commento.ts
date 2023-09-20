@@ -1,5 +1,5 @@
 import { Prodotti } from "./prodotti";
-import { Utente } from "./utente.interface";
+
 
 export interface Commento {
   id: string;

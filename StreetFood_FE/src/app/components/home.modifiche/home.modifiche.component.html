@@ -16,8 +16,8 @@
           <input class="form-control" id="descrizione" [(ngModel)]="formLuogo.descrizione" name="descrizione" required>
         </div>
         <div class="mb-3">
-          <label for="immagine" class="form-label">URL Immagine</label>
-          <input type="text" class="form-control" id="immagine" [(ngModel)]="formLuogo.immagine" name="immagine" required>
+          <label for="immagine" class="form-label">Carica Immagine</label>
+          <input type="file" class="form-control" id="immagine" (change)="onFileSelected($event)" accept="image/*">
         </div>
         <button type="submit" class="btn btn-primary">Aggiorna</button>
       </form>
@@ -40,7 +40,7 @@
       <div class="col-12">
         <div *ngIf="!mostraRisultati">
           <div class="card rounded-lg" *ngFor="let lg of luoghi" [hidden]="luogoDaNascondere === lg.id">
-            <img src="{{ lg.immagine }}" class="card-img-top" alt="Card Image">
+            <img src="{{ lg.immagineBase64 }}" class="card-img-top" alt="Card Image">
             <div class="card-body">
               <h5 class="card-title">{{ lg.titolo }}</h5>
               <p class="card-text">{{ lg.descrizione }}</p>

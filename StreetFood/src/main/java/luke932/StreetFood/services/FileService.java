@@ -21,7 +21,7 @@ public class FileService {
 
 	public byte[] getFile(String fileName) throws IOException {
 
-		String filePath = FILE_UPLOAD_PATH + fileName;
+		String filePath = FILE_UPLOAD_PATH + File.separator + fileName;
 
 		File file = new File(filePath);
 		if (!file.exists()) {
@@ -30,4 +30,5 @@ public class FileService {
 
 		return Files.readAllBytes(file.toPath());
 	}
+
 }
