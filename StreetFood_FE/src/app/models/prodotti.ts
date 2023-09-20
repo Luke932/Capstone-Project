@@ -1,4 +1,7 @@
+import { Commento } from "./commento";
+
 export interface Prodotti {
+  mostraFormCommento: boolean;
   id?: string,
   nomeProdotto: string;
   descrizione: string;
@@ -6,4 +9,5 @@ export interface Prodotti {
   altro: string;
   isLiked: boolean;
 likeId?: string;
+commenti?: Commento[];
 }

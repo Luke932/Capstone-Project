@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -39,9 +38,9 @@ public class CommentoController {
 
 	// ------------SALVATAGGIO COMMENTI
 	@PostMapping
-	@ResponseStatus(HttpStatus.CREATED)
-	public Commento createCommento(@RequestBody Commento commento) {
-		return commentoSrv.saveCommento(commento);
+	public Commento createCommento(@RequestParam UUID utenteId, @RequestParam UUID prodottoId,
+			@RequestParam String testoCommento) {
+		return commentoSrv.createCommento(utenteId, prodottoId, testoCommento);
 	}
 
 	// ------------IMPAGINAZIONE COMMENTI
@@ -52,16 +51,14 @@ public class CommentoController {
 	}
 
 	// ------------MODIFICA COMMENTI
-	@PutMapping("/{id}")
-	@PreAuthorize("hasAuthority('ADMIN')")
-	public Commento updateLuogo(@PathVariable UUID id, @RequestBody Commento commento) {
-		return commentoSrv.updateCommento(id, commento);
+	@PutMapping("/{commentoId}")
+	public Commento updateCommento(@PathVariable UUID commentoId, @RequestParam String nuovoTestoCommento) {
+		return commentoSrv.updateCommentoById(commentoId, nuovoTestoCommento);
 	}
 
 	// ------------CANCELLAZIONE COMMENTI
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	@PreAuthorize("hasAuthority('ADMIN')")
 	public void deleteCommento(@PathVariable UUID id) {
 		commentoSrv.deleteCommento(id);
 	}

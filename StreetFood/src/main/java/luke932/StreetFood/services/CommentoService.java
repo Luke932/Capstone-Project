@@ -1,5 +1,6 @@
 package luke932.StreetFood.services;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -11,22 +12,41 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import jakarta.persistence.EntityNotFoundException;
 import luke932.StreetFood.entities.Commento;
+import luke932.StreetFood.entities.Prodotto;
+import luke932.StreetFood.entities.Utente;
 import luke932.StreetFood.exceptions.NotFoundException;
 import luke932.StreetFood.repositories.CommentoRepository;
+import luke932.StreetFood.repositories.ProdottoRepository;
+import luke932.StreetFood.repositories.UtenteRepository;
 
 @Service
 public class CommentoService {
 
 	private final CommentoRepository commentoR;
+	private final UtenteRepository utenteR;
+	private final ProdottoRepository prodottoR;
 
 	@Autowired
-	public CommentoService(CommentoRepository commentoR) {
+	public CommentoService(CommentoRepository commentoR, UtenteRepository utenteR, ProdottoRepository prodottoR) {
 		this.commentoR = commentoR;
+		this.utenteR = utenteR;
+		this.prodottoR = prodottoR;
 	}
 
 	// -------------CREAZIONE COMMENTO
-	public Commento saveCommento(Commento commento) {
+	public Commento createCommento(UUID utenteId, UUID prodottoId, String testoCommento) {
+		Utente utente = utenteR.findById(utenteId).orElseThrow(() -> new EntityNotFoundException("Utente non trovato"));
+		Prodotto prodotto = prodottoR.findById(prodottoId)
+				.orElseThrow(() -> new EntityNotFoundException("Prodotto non trovato"));
+
+		Commento commento = new Commento();
+		commento.setUtente(utente);
+		commento.setProdotto(prodotto);
+		commento.setTestoCommento(testoCommento);
+		commento.setDataCommento(LocalDate.now());
+
 		return commentoR.save(commento);
 	}
 
@@ -43,14 +63,11 @@ public class CommentoService {
 	}
 
 	// ------------MODIFICA COMMENTO PER ID
-	public Commento updateCommento(UUID id, Commento body) {
-		Commento found = this.getCommentoByID(id);
-		found.setTestoCommento(body.getTestoCommento());
-		found.setProdotto(body.getProdotto());
-		found.setUtente(body.getUtente());
-		found.setDataCommento(body.getDataCommento());
-
-		return commentoR.save(found);
+	public Commento updateCommentoById(UUID commentoId, String nuovoTestoCommento) {
+		Commento commento = commentoR.findById(commentoId)
+				.orElseThrow(() -> new EntityNotFoundException("Commento non trovato"));
+		commento.setTestoCommento(nuovoTestoCommento);
+		return commentoR.save(commento);
 	}
 
 	// ------------CANCELLAZIONE COMMENTO PER ID

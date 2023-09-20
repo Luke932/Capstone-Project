@@ -1,10 +1,14 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Like } from 'src/app/models/like';
-import { LikeResponse } from 'src/app/models/like-response';
 import { Prodotti } from 'src/app/models/prodotti';
 import { LikeService } from 'src/app/services/like.service';
 import { ProdottiService } from 'src/app/services/prodotti.service';
+import { CommentoService } from 'src/app/services/commento.service';
+import { Commento } from 'src/app/models/commento';
+import { NgForm } from '@angular/forms';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+
 
 @Component({
   selector: 'app-prodotti',
@@ -18,24 +22,101 @@ export class ProdottiComponent implements OnInit {
   totalElements: number = 0;
   likes: Like[] = [];
   isLiked: boolean[] = [];
+  nuovoTestoCommento: string = ''; // Aggiungi questa proprietà per il nuovo testo del commento
+  commentoId: string = '';
+  utenteId: string = '';
+  testoCommento: string = '';
+  commentoInModifica: Commento | null = null; // Commento attualmente in modifica
+  commentoDaEliminare: Commento | null = null;
+  showCommentForm: boolean = false;
+  prodottoInCommento: Prodotti | null = null;
+   userPhotoUrl!: SafeUrl | null;
 
-  constructor(private prodottiSrv: ProdottiService, private likeService: LikeService) { }
+  constructor(private prodottiSrv: ProdottiService, private likeService: LikeService,private commentoService: CommentoService,private domSan: DomSanitizer) {
+    this.likes = this.likeService.getLikes();
+        console.log('Likes nel costruttore:', this.likes); // Aggiunto per debug
+  }
 
   ngOnInit(): void {
+    this.utenteId = this.prodottiSrv.getId() || '';
     this.getProdotti(0);
     this.loadLikesFromSessionStorage(); // Carica i like memorizzati
     this.updateIsLiked();
+
+    // Aggiungi questo
+    this.prodotti.forEach(prodotto => {
+      if (prodotto.id) {
+        this.prodottiSrv.getLikesByUserAndProduct(this.utenteId, prodotto.id).subscribe(
+          (likes) => {
+            const likedByUser = likes.length > 0;
+            if (likedByUser) {
+              prodotto.isLiked = true;
+            }
+          },
+          (error) => {
+            console.error(`Errore durante il recupero dei like per il prodotto ${prodotto.id}:`, error);
+          }
+        );
+      }
+    });
+
+    const imageByte = localStorage.getItem('userPhotoUrl');
+    console.log(imageByte);
+
+    if (imageByte) {
+      const byteCharacters = atob(imageByte);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: 'image/jpeg' });
+
+      this.userPhotoUrl = this.domSan.bypassSecurityTrustUrl(URL.createObjectURL(blob));
+    }
+
+    console.log(this.userPhotoUrl);
+
+
+
+
+    this.prodotti.forEach(prodotto => {
+      prodotto.mostraFormCommento = false; // Inizializza a false
+      // ...
+    });
+
   }
 
+
+
+  hasLikedInSessionStorage(prodottoId: string | undefined): boolean {
+    if (prodottoId) {
+      const likesString = localStorage.getItem('likes');
+      if (likesString) {
+        const likes = JSON.parse(likesString);
+        return likes.some((like: { prodottoId: string; }) => like.prodottoId === prodottoId);
+      }
+    }
+    return false;
+  }
+
+
+
   private updateIsLiked() {
-    console.log('Updating isLiked'); // Aggiunto per debug
+    console.log('Updating isLiked');
+
+    const likes = this.likeService.getLikes(); // Ottieni l'array dei like dal servizio
 
     this.isLiked = this.prodotti.map(prodotto => {
-      return this.likes.some(like => like.prodottoId === prodotto.id);
+      const likedInSession = likes.some(like => like.prodottoId === prodotto.id);
+      const likedInStorage = this.hasLikedInSessionStorage(prodotto.id);
+      return likedInSession || likedInStorage;
     });
 
     console.log(this.isLiked); // Aggiunto per debug
   }
+
+
 
 
   getProdotti(page: number): void {
@@ -51,6 +132,8 @@ export class ProdottiComponent implements OnInit {
         this.totalElements = data.totalElements;
         this.totalPages = data.totalPages;
         this.currentPage = page;
+
+        this.updateIsLiked(); // Aggiorna lo stato dei like
       } else {
         console.error("I dati ricevuti non sono un array", data);
       }
@@ -62,33 +145,33 @@ export class ProdottiComponent implements OnInit {
 
   toggleLike(prodotto: Prodotti, index: number) {
     const utenteId = this.prodottiSrv.getId() || '';
-    console.log(utenteId);
+    const likeId = prodotto.likeId;
 
-    if (prodotto.id !== undefined) {
-      const likeId = prodotto.likeId;
-      console.log(likeId);
-
-      if (likeId !== undefined) {
-        this.prodottiSrv.deleteLike(likeId).subscribe(
-          (response) => {
-            console.log(response);
-            prodotto.likeId = undefined;
-            this.isLiked[index] = false;
-            this.updateLikesArray(prodotto); // Aggiorna l'array dei like
-            this.saveLikesToSessionStorage(); // Salva i like nel localStorage
-          },
-          (error) => {
-            console.error('Errore durante la cancellazione del like:', error);
-          }
-        );
-      } else {
+    if (likeId !== undefined) {
+      this.prodottiSrv.deleteLike(likeId).subscribe(
+        (response) => {
+          console.log(response);
+          prodotto.likeId = undefined;
+          this.isLiked[index] = false;
+          this.updateLikesArray(prodotto);
+          localStorage.removeItem('likes');
+          this.isLiked = [...this.isLiked];
+        },
+        (error) => {
+          console.error('Errore durante la cancellazione del like:', error);
+        }
+      );
+    } else if (prodotto.id) {
+      const alreadyLiked = this.likes.some(like => like.prodottoId === prodotto.id);
+      if (!alreadyLiked) {
         this.prodottiSrv.createLike(utenteId, prodotto.id).subscribe(
           (response) => {
             if (response) {
               prodotto.likeId = response;
               this.isLiked[index] = true;
-              this.updateLikesArray(prodotto); // Aggiorna l'array dei like
-              this.saveLikesToSessionStorage(); // Salva i like nel localStorage
+              this.updateLikesArray(prodotto);
+              localStorage.setItem('likes', JSON.stringify(this.likes));
+              this.isLiked = [...this.isLiked];
             } else {
               console.error('Errore: likeId non ricevuto dal backend');
             }
@@ -97,11 +180,43 @@ export class ProdottiComponent implements OnInit {
             console.error('Errore durante la creazione del like:', error);
           }
         );
+      } else {
+        // L'utente ha già messo "mi piace", quindi rimuoviamo il like
+        this.prodottiSrv.getLikesByUserAndProduct(utenteId, prodotto.id).subscribe(
+          (likes) => {
+            if (likes && likes.length > 0) {
+              const likeToRemove = likes[0];
+              if (likeToRemove.id) {
+                this.prodottiSrv.deleteLike(likeToRemove.id).subscribe(
+                  (response) => {
+                    console.log(response);
+                    prodotto.likeId = undefined;
+                    this.isLiked[index] = false;
+                    this.updateLikesArray(prodotto);
+                    localStorage.removeItem('likes');
+                    this.isLiked = [...this.isLiked];
+                  },
+                  (error) => {
+                    console.error('Errore durante la cancellazione del like:', error);
+                  }
+                );
+              }
+            }
+          },
+          (error) => {
+            console.error('Errore durante il recupero dei like:', error);
+          }
+        );
       }
-    } else {
-      console.error('ID del prodotto non definito');
     }
   }
+
+
+
+
+
+
+
 
   private updateLikesArray(prodotto: Prodotti) {
     const productId = prodotto.id;
@@ -112,6 +227,8 @@ export class ProdottiComponent implements OnInit {
 
       if (index !== -1) {
         this.likeService.removeLike(productId);
+        console.log(this.likes);
+
       } else {
         const utenteId = this.prodottiSrv.getId() || '';
         const newLike: Like = {
@@ -120,7 +237,12 @@ export class ProdottiComponent implements OnInit {
           dataLike: new Date()
         };
         this.likeService.addLike(newLike);
+        console.log(this.likes);
+
       }
+
+      this.likes = this.likeService.getLikes(); // Aggiorna this.likes
+      this.saveLikesToSessionStorage(); // Salva i like nel localStorage
     } else {
       console.error('ID del prodotto non definito');
     }
@@ -129,22 +251,119 @@ export class ProdottiComponent implements OnInit {
 
 
 
+
+
+
   private saveLikesToSessionStorage() {
-    sessionStorage.setItem('likes', JSON.stringify(this.likes));
+    const likesString = JSON.stringify(this.likes);
+    localStorage.setItem('likes', likesString);
+
+    // Verifica che i likes siano stati salvati correttamente nel sessionStorage
+    console.log('Likes salvati nel sessionStorage:', likesString);
+    console.log(this.likes);
   }
+
+
+
   private loadLikesFromSessionStorage() {
-    console.log('Loading likes from sessionStorage'); // Aggiunto per debug
-
-    const likesString = sessionStorage.getItem('likes');
-    console.log(likesString); // Aggiunto per debug
-
+    const likesString = localStorage.getItem('likes');
+    console.log('Valore di likesString:', likesString);
     if (likesString) {
-      const likes = JSON.parse(likesString);
-      this.likes = likes; // Assegna i likes
-      this.likeService.setLikes(likes);
-      this.updateIsLiked();
+      try {
+        const likes = JSON.parse(likesString);
+        console.log('Valore di likes dopo il parsing:', likes);
+        if (Array.isArray(likes)) {
+          this.likes = likes;
+          this.likeService.setLikes(likes);
+          console.log('Likes caricati dal sessionStorage:', this.likes);
+          this.saveLikesToSessionStorage();
+        } else {
+          console.error('Dati di like non validi nel sessionStorage');
+        }
+      } catch (error) {
+        console.error('Errore durante il parsing del JSON:', error);
+      }
     }
   }
 
 
+  createCommento(utenteId: string, prodotto: Prodotti) {
+    if (prodotto.id) {
+      this.prodottoInCommento = prodotto;
+      this.commentoService.createCommento(utenteId, prodotto.id, this.nuovoTestoCommento).subscribe(
+        (commento) => {
+          console.log('Commento creato con successo:', commento);
+          if (!prodotto.commenti) {
+            prodotto.commenti = [];
+          }
+          prodotto.commenti.push(commento);
+          this.nuovoTestoCommento = ''; // Resetta il campo dopo l'invio del commento
+
+          // Nascondi il form dopo l'invio del commento
+          prodotto.mostraFormCommento = false;
+        },
+        (error) => {
+          console.error('Errore durante la creazione del commento:', error);
+        }
+      );
+    } else {
+      console.error('ID del prodotto non definito');
+    }
+  }
+
+
+  mostraFormCommento(prodotto: Prodotti) {
+    prodotto.mostraFormCommento = !prodotto.mostraFormCommento; // Inverti lo stato del form
+    this.prodottoInCommento = prodotto; // Imposta il prodotto corrente
+  }
+
+  editCommento(commento: Commento, prodotto: Prodotti) {
+    this.prodottoInCommento = prodotto;
+    this.commentoInModifica = commento;
+    this.formDati.nuovoTestoCommento = commento.testoCommento;
 }
+
+
+
+  formDati = {
+    nuovoTestoCommento: ''
+  };
+
+  // ...
+
+  updateCommento() {
+    console.log('Commento in modifica:', this.commentoInModifica);
+    if (this.commentoInModifica) {
+      console.log('Nuovo testo commento:', this.formDati.nuovoTestoCommento);
+      this.commentoService.updateCommentoById(this.commentoInModifica.id, this.formDati.nuovoTestoCommento).subscribe(
+        (commento) => {
+          console.log('Commento aggiornato con successo:', commento);
+          this.commentoInModifica = null;
+          this.formDati.nuovoTestoCommento = '';
+          console.log('Metodo updateCommento chiamato.');
+          console.log('Commento in modifica:', this.commentoInModifica);
+          console.log('Nuovo testo commento:', this.formDati.nuovoTestoCommento); // Resetta il campo dopo l'aggiornamento del commento
+        },
+        (error) => {
+          console.error('Errore durante l\'aggiornamento del commento:', error);
+        }
+      );
+    }
+  }
+
+
+  deleteCommento(prodotto: Prodotti, commentoId: string) {
+    this.commentoService.deleteCommento(commentoId).subscribe(
+      () => {
+        console.log('Commento cancellato con successo');
+        if (prodotto.commenti) {
+          prodotto.commenti = prodotto.commenti.filter(commento => commento.id !== commentoId);
+        }
+      },
+      (error) => {
+        console.error('Errore durante la cancellazione del commento:', error);
+      }
+    );
+  }
+}
+

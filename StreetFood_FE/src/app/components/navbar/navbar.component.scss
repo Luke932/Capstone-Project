@@ -13,7 +13,7 @@
   max-width: 10%;
   height: auto;
   flex-shrink: 0;
-  margin-right: 10px;
+  margin-right: 5px;
 }
 
 .navbar-content h1 {
@@ -21,12 +21,13 @@
   font-size: 24px;
   margin: 0;
   flex-grow: 1;
+  white-space: nowrap;
 }
 
 .navbar-username, a {
   font-family: "Comic Sans MS", cursive;
   font-size: 24px;
-  margin-left: 10px;
+  margin-left: 5px;
 }
 
 @media screen and (max-width: 450px) {
@@ -36,9 +37,16 @@
 }
 
 
-.rounded-user-photo {
-  border-radius: 100%;
-  overflow: hidden;
-  margin: 0;
-  width: 100%;
+
+
+.avatar {
+  width: 50%;
+  height: 50%;
+  border-radius: 500px;
 }
+
+.material-symbols-outlined {
+  color: black;
+}
+
+

@@ -24,7 +24,7 @@ export class ProdottiService {
     this.likedItemsSubject.next(likedItems);
   }
 
-  getAllProdotti(page: number) {
+  getAllProdotti(page: number): Observable<Prodotti[]> {
     const utenteId = this.getId(); // Recupera l'ID dell'utente
     const params = new HttpParams().set('utenteId', utenteId || ''); // Aggiungi l'ID dell'utente come parametro
     return this.http.get<Prodotti[]>(`${this.baseUrl}prodotti?page=${page}`, { params })
@@ -34,12 +34,13 @@ export class ProdottiService {
   }
 
 
-  getLikeByUserAndProduct(utenteId: string, prodottoId: string) {
+  getLikesByUserAndProduct(utenteId: string, prodottoId: string): Observable<Like[]> {
     const url = `${this.baseUrl}like?utenteId=${utenteId}&prodottoId=${prodottoId}`;
     return this.http.get<Like[]>(url).pipe(
       catchError(this.handleError)
     );
   }
+
 
 getLikesByUser(utenteId: string) {
   const url = `${this.baseUrl}like?utenteId=${utenteId}`;

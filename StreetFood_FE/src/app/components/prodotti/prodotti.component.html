@@ -1,17 +1,55 @@
 <div class="container">
-  <div class="row card-link">
+  <div class="row">
     <div class="col-lg-3 col-md-4 col-sm-6" *ngFor="let prodotto of prodotti; let i = index">
-      <div class="card">
-        <h5 class="card-title">{{ prodotto.nomeProdotto }}</h5>
+      <div class="card mb-4">
+        <div class="card-header">
+          <!-- Inserisci qui elementi come l'avatar, nome dell'utente, data, ecc. -->
+        </div>
+        <img [src]="prodotto.immagine" class="card-img-top" alt="...">
         <div class="card-body">
-          <img [src]="prodotto.immagine" class="card-img-top" alt="...">
+          <h5 class="card-title">{{ prodotto.nomeProdotto }}</h5>
           <p class="card-text">{{ prodotto.descrizione }}</p>
-
+        </div>
+        <div class="card-footer">
           <span class="material-symbols-outlined heart-icon"
-                [ngClass]="{'liked': isLiked[i]}"
-                (click)="toggleLike(prodotto, i)">
+            (click)="toggleLike(prodotto, i)"
+            [ngClass]="{'liked': isLiked[i]}">
             favorite
           </span>
+          <button class="btn btn-primary mr-2" (click)="mostraFormCommento(prodotto)">Commenta</button>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item commento-item" *ngFor="let commento of prodotto.commenti">
+            <div class="commento-content">
+              <div class="avatar-container">
+                <img [src]="userPhotoUrl" alt="Immagine Utente" class="avatar">
+              </div>
+              <div class="commento-text-container">
+                <div class="commento-testo">
+                  {{ commento.testoCommento }}
+                </div>
+                <div class="commento-buttons">
+                  <button class="btn btn-link btn-modifica" (click)="editCommento(commento, prodotto)">Modifica</button>
+                  <button class="btn btn-link btn-elimina" (click)="deleteCommento(prodotto, commento.id)">Elimina</button>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+
+
+
+
+        <div class="card-footer">
+          <form *ngIf="prodotto.mostraFormCommento && prodotto.id === prodottoInCommento?.id"
+            (ngSubmit)="createCommento(utenteId, prodotto)">
+            <div class="form-group">
+              <label for="nuovoTestoCommento">Inserisci un commento:</label>
+              <textarea class="form-control" id="nuovoTestoCommento" [(ngModel)]="nuovoTestoCommento"
+                name="nuovoTestoCommento" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary" [disabled]="!prodotto.id">Invia Commento</button>
+          </form>
         </div>
       </div>
     </div>

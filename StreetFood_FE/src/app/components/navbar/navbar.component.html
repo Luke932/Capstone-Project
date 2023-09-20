@@ -3,17 +3,14 @@
     <div class="container-fluid">
       <div class="d-flex align-items-center navbar-content">
         <img src="../../../assets/img/benvenuti-a-palermo-italia-vintage-metallo-arrugginito-segno-su-uno-sfondo-bianco-illustrazione-vettoriale-w21k27.png" alt="Palermo">
-        <h1 class="navbar-username text-wood me-5">
+        <h1 class="navbar-username text-wood me-lg-3">
           Benvenuto a Palermo, {{ username }}
         </h1>
-        <div *ngIf="userPhotoUrl" >
-          <img [src]="userPhotoUrl" alt="Foto Utente" class="rounded-user-photo">
+        <div *ngIf="userPhotoUrl" class="avatar-container" >
+          <img [src]="userPhotoUrl" alt="Foto Utente" class="avatar">
         </div>
-      <button class="navbar-toggler ms-5" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
       </div>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
             <a class="nav-link text-wood" [routerLink]="'/user/home'" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" >Home</a>
@@ -24,11 +21,17 @@
           <li class="nav-item">
             <a class="nav-link text-wood" [routerLink]="'/user/profilo'" routerLinkActive="active">Profilo</a>
           </li>
+          <li class="nav-item">
+            <a class="logout" (click)="logout()" href="#"><span class="material-symbols-outlined">
+              logout
+              </span></a>
+          </li>
         </ul>
-        <a (click)="logout()" href="#"><img src="../../../assets/icons/logout_icon_151219.png" alt="logout"></a>
+
       </div>
-    </div>
+
   </nav>
+
 </div>
 
 
@@ -39,25 +42,33 @@
     <div class="container-fluid">
       <div class="d-flex align-items-center navbar-content">
         <img src="../../../assets/img/benvenuti-a-palermo-italia-vintage-metallo-arrugginito-segno-su-uno-sfondo-bianco-illustrazione-vettoriale-w21k27.png" alt="Palermo">
-        <h1 class="navbar-username text-wood me-5">
+        <h1 class="navbar-username text-wood me-lg-3">
           Benvenuto a Palermo, {{ username }}
         </h1>
-        <div *ngIf="userPhotoUrl" >
-          <img [src]="userPhotoUrl" alt="Foto Utente" class="rounded-user-photo">
+        <div *ngIf="userPhotoUrl" class="avatar-container" >
+          <img [src]="userPhotoUrl" alt="Foto Utente" class="avatar">
         </div>
-      <button class="navbar-toggler ms-5" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
       </div>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
             <a class="nav-link text-wood" [routerLink]="'/user/homemodifiche'" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" >Home</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link text-wood" [routerLink]="'/user/prodotti'" routerLinkActive="active">Prodotti</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-wood" [routerLink]="'/user/profilo'" routerLinkActive="active">Profilo</a>
+          </li>
+          <li class="nav-item">
+            <a class="logout" (click)="logout()" href="#"><span class="material-symbols-outlined">
+              logout
+              </span></a>
+          </li>
         </ul>
+
       </div>
-      <a (click)="logout()" href="#"><img src="../../../assets/icons/logout_icon_151219.png" alt="logout"></a>
-    </div>
+
   </nav>
   </div>
 
