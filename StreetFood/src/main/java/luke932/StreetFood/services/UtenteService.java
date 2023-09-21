@@ -1,6 +1,7 @@
 package luke932.StreetFood.services;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import luke932.StreetFood.entities.Commento;
 import luke932.StreetFood.entities.Ruolo;
 import luke932.StreetFood.entities.Utente;
 import luke932.StreetFood.exceptions.BadRequestException;
@@ -17,6 +19,7 @@ import luke932.StreetFood.exceptions.ItemNotFoundException;
 import luke932.StreetFood.exceptions.NotFoundException;
 import luke932.StreetFood.payloads.UtenteSavePayloadUser;
 import luke932.StreetFood.payloads.UtenteUpdatePayload;
+import luke932.StreetFood.repositories.CommentoRepository;
 import luke932.StreetFood.repositories.RuoloRepository;
 import luke932.StreetFood.repositories.UtenteRepository;
 
@@ -25,11 +28,13 @@ public class UtenteService {
 
 	private final UtenteRepository utenteR;
 	private final RuoloRepository ruoloR;
+	private final CommentoRepository commentoR;
 
 	@Autowired
-	public UtenteService(UtenteRepository utenteR, RuoloRepository ruoloR) {
+	public UtenteService(UtenteRepository utenteR, RuoloRepository ruoloR, CommentoRepository commentoR) {
 		this.utenteR = utenteR;
 		this.ruoloR = ruoloR;
+		this.commentoR = commentoR;
 	}
 
 	// -----------------CREATE UTENTE USER
@@ -167,6 +172,17 @@ public class UtenteService {
 	// PRODOTTO
 	public List<Utente> findUtentiConLike() {
 		return utenteR.findUtentiConLike();
+	}
+
+	// -----------------RECUPERO LA FOTO DELL'UTENTE TRAMITE L'ID COMMENTO
+	public byte[] getFotoUtenteByCommentoId(UUID commentoId) {
+		Optional<Commento> commentoOptional = commentoR.findById(commentoId);
+		if (commentoOptional.isPresent()) {
+			Commento commento = commentoOptional.get();
+			return commento.getUtente().getFoto();
+		} else {
+			throw new NotFoundException("Commento non trovato con ID: " + commentoId);
+		}
 	}
 
 }

@@ -24,8 +24,7 @@ export class HomeModificheComponent implements OnInit {
   mostraForm: boolean = false;
 formLuogo: any = {};
 luogoDaNascondere: string = '';
-selectedFile!: File;
-userPhotoUrls: SafeUrl[] = [];
+
 
 
   constructor(private homeSrv: HomeServiceService, private footSrv: FooterService, private domSan: DomSanitizer, private cdr: ChangeDetectorRef) {
@@ -124,13 +123,6 @@ userPhotoUrls: SafeUrl[] = [];
     );
   }
 
-
-  onFileSelected(event: Event): void {
-    const inputElement = event.target as HTMLInputElement;
-    if (inputElement?.files && inputElement.files[0]) {
-      this.selectedFile = inputElement.files[0];
-    }
-  }
 
 
 

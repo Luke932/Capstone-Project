@@ -50,27 +50,6 @@ public class AppRunner implements CommandLineRunner {
 //		ruoloSrv.save(ruolo1);
 //		ruoloSrv.save(ruolo2);
 
-		// ----------------CREAZIONE PRODOTTI
-//		List<Luogo> luoghiDalDb = luogoSrv.findNoPage();
-//
-//		if (!luoghiDalDb.isEmpty()) {
-//			IntStream.range(0, 10).forEach(i -> {
-//				Prodotto product = new Prodotto();
-//				product.setNomeProdotto(faker.food().dish());
-//				product.setDescrizione(faker.lorem().sentence());
-//				product.setImmagine(faker.internet().image());
-//				product.setAltro(faker.internet().avatar());
-//
-//				int numLuoghiAssociati = faker.number().numberBetween(1, 6);
-//				List<Luogo> luoghiAssociati = IntStream.range(0, numLuoghiAssociati)
-//						.mapToObj(j -> luoghiDalDb.get(faker.number().numberBetween(0, luoghiDalDb.size() - 1)))
-//						.collect(Collectors.toList());
-//
-//				product.setLuoghi(luoghiAssociati);
-//				 prodottoSrv.saveProdotto(product);
-//			});
-//		}
-
 		// ----------------ASSOCIAZIONE TRA LUOGHI E PRODOTTI
 		List<Luogo> luoghi = luogoSrv.findNoPage();
 		List<Prodotto> prodotti = prodottoSrv.findNoPage();
@@ -89,29 +68,6 @@ public class AppRunner implements CommandLineRunner {
 		for (Prodotto prodotto : prodotti) {
 			prodottoSrv.saveProdotto(prodotto);
 		}
-
-		// ----------------CREAZIONE COMMENTO
-//		UUID getBYid = UUID.fromString("480c9358-981f-468d-9dc8-b29bf3912286");
-//		Prodotto prodottoDalDb = prodottoSrv.getProdottoByID(getBYid);
-//		UUID getBYidUT = UUID.fromString("2667404d-dbab-4168-a2cf-6bf94936e93b");
-//		Utente utenteDalDb = utenteSrv.findById(getBYidUT);
-//		System.out.println(prodottoDalDb);
-//		System.out.println(utenteDalDb);
-//		Commento commento = new Commento();
-//		commento.setTestoCommento("ciao");
-//		commento.setDataCommento(LocalDate.now());
-//		commento.setProdotto(prodottoDalDb);
-//		commento.setUtente(utenteDalDb);
-
-		// commentoSrv.saveCommento(commento);
-
-		// ----------------CREAZIONE LIKE
-//		Like like = new Like();
-//		like.setDataLike(LocalDate.now());
-//		like.setProdotto(prodottoDalDb);
-//		like.setUtente(utenteDalDb);
-
-		// likeSrv.saveLike(like);
 
 	}
 

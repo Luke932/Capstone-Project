@@ -20,6 +20,7 @@ import { RoleService } from './auth/role.service';
 import { LikeService } from './services/like.service';
 import { ProdottiService } from './services/prodotti.service';
 import { FooterService } from './services/footer.service';
+import { ProdottimodificheComponent } from './components/prodottimodifiche/prodottimodifiche.component';
 
 
 
@@ -48,7 +49,7 @@ const routes: Routes = [
     children: [
       { path: '', redirectTo: 'homemodifiche', pathMatch: 'full' },
       { path: 'homemodifiche', component: HomeModificheComponent },
-      // Altre rotte amministratore...
+      { path: 'prodottimodifiche', component: ProdottimodificheComponent },
     ],
     canActivate: [AuthGuard],
     data: { expectedRole: 'ADMIN' }
@@ -68,7 +69,8 @@ const routes: Routes = [
     ProfiloComponent,
     NavbarComponent,
     AccessoNegatoComponent,
-    FooterComponent
+    FooterComponent,
+    ProdottimodificheComponent
   ],
   imports: [
     BrowserModule,

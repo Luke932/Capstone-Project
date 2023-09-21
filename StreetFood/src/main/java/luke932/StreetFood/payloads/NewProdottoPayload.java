@@ -14,5 +14,4 @@ public class NewProdottoPayload {
 	private String nomeProdotto;
 	private String Descrizione;
 	private String immagine;
-	private String altro;
 }

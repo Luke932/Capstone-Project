@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -28,12 +29,14 @@ public class Prodotto {
 
 	@Id
 	@GeneratedValue
+	@Column(length = 100000000)
 	private UUID id;
-
+	@Column(length = 100000000)
 	private String nomeProdotto;
+	@Column(length = 100000000)
 	private String descrizione;
+	@Column(length = 100000000)
 	private String immagine;
-	private String altro;
 
 	@ManyToMany(mappedBy = "prodotti")
 	@JsonBackReference
@@ -50,27 +53,25 @@ public class Prodotto {
 	@Transient
 	private String titolo;
 
-	public Prodotto(String nomeProdotto, String descrizione, String immagine, String altro, String titolo) {
+	public Prodotto(String nomeProdotto, String descrizione, String immagine, String titolo) {
 		this.nomeProdotto = nomeProdotto;
 		this.descrizione = descrizione;
 		this.immagine = immagine;
-		this.altro = altro;
 		this.titolo = titolo;
 	}
 
-	public Prodotto(String nomeProdotto, String descrizione, String immagine, String altro, List<Luogo> luoghi) {
+	public Prodotto(String nomeProdotto, String descrizione, String immagine, List<Luogo> luoghi) {
 		super();
 		this.nomeProdotto = nomeProdotto;
 		this.descrizione = descrizione;
 		this.immagine = immagine;
-		this.altro = altro;
 		this.luoghi = luoghi;
 	}
 
 	@Override
 	public String toString() {
 		return "Prodotto [id=" + id + ", nomeProdotto=" + nomeProdotto + ", descrizione=" + descrizione + ", immagine="
-				+ immagine + ", altro=" + altro + "]";
+				+ immagine + "]";
 	}
 
 }

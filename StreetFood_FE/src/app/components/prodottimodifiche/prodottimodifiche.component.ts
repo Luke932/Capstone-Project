@@ -1,22 +1,19 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { SafeUrl, DomSanitizer } from '@angular/platform-browser';
+import { Commento } from 'src/app/models/commento';
 import { Like } from 'src/app/models/like';
 import { Prodotti } from 'src/app/models/prodotti';
+import { CommentoService } from 'src/app/services/commento.service';
 import { LikeService } from 'src/app/services/like.service';
 import { ProdottiService } from 'src/app/services/prodotti.service';
 
-import { Commento } from 'src/app/models/commento';
-
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { CommentoService } from 'src/app/services/commento.service';
-
-
 @Component({
-  selector: 'app-prodotti',
-  templateUrl: './prodotti.component.html',
-  styleUrls: ['./prodotti.component.scss']
+  selector: 'app-prodottimodifiche',
+  templateUrl: './prodottimodifiche.component.html',
+  styleUrls: ['./prodottimodifiche.component.scss']
 })
-export class ProdottiComponent implements OnInit {
+export class ProdottimodificheComponent implements OnInit {
   prodotti: Prodotti[] = [];
   currentPage: number = 0;
   totalPages: number = 0;
@@ -32,6 +29,9 @@ export class ProdottiComponent implements OnInit {
   showCommentForm: boolean = false;
   prodottoInCommento: Prodotti | null = null;
    userPhotoUrl!: SafeUrl | null;
+   mostraForm: boolean = false;
+   formProdotto: any = {};
+   mostraRisultati: boolean = false;
 
   constructor(private prodottiSrv: ProdottiService, private likeService: LikeService,private commentoService: CommentoService,private domSan: DomSanitizer) {
     this.likes = this.likeService.getLikes();
@@ -183,6 +183,7 @@ export class ProdottiComponent implements OnInit {
                     prodotto.likeId = undefined;
                     this.isLiked[index] = false;
                     this.updateLikesArray(prodotto);
+                    localStorage.removeItem('likes');
                     this.isLiked = [...this.isLiked];
                   },
                   (error) => {
@@ -231,11 +232,11 @@ export class ProdottiComponent implements OnInit {
       }
 
       this.likes = this.likeService.getLikes(); // Aggiorna this.likes
+     // Salva i like nel localStorage
     } else {
       console.error('ID del prodotto non definito');
     }
   }
-
 
 
 
@@ -259,9 +260,9 @@ export class ProdottiComponent implements OnInit {
             prodotto.commenti = [];
           }
           prodotto.commenti.push(commento);
-          this.nuovoTestoCommento = ''; // Resetta il campo dopo l'invio del commento
+          this.nuovoTestoCommento = '';
 
-          // Nascondi il form dopo l'invio del commento
+
           prodotto.mostraFormCommento = false;
         },
         (error) => {
@@ -320,7 +321,6 @@ export class ProdottiComponent implements OnInit {
         console.log('Commento cancellato con successo');
         if (prodotto.commenti) {
           prodotto.commenti = prodotto.commenti.filter(commento => commento.id !== commentoId);
-
         }
       },
       (error) => {
@@ -328,5 +328,79 @@ export class ProdottiComponent implements OnInit {
       }
     );
   }
+
+
+
+  creaProdotto(prodotto: any) {
+    this.prodottiSrv.createProdotto(prodotto).subscribe(
+      (response) => {
+        this.prodotti.push(response);
+        console.log('Prodotto creato con successo', response);
+      },
+      (error) => {
+        console.error('Errore durante la creazione del prodotto', error);
+      }
+    );
+  }
+
+
+  aggiornaProdotto(id: string, nuovoProdotto: any) {
+  this.prodottiSrv.updateProdotto(id, nuovoProdotto).subscribe(
+    (response) => {
+      const indice = this.prodotti.findIndex(lg => lg.id === id);
+      if (indice !== -1) {
+        this.prodotti[indice] = response;
+      }
+      console.log('Prodotto aggiornato con successo', response);
+    },
+    (error) => {
+      if (error.status === 404) {
+        console.error('Prodotto non trovato con ID:', id);
+      } else {
+        console.error('Errore durante l\'aggiornamento del prodotto', error);
+      }
+    }
+  );
 }
+
+
+
+
+  eliminaProdotto(id: string) {
+    this.prodottiSrv.deleteProdotti(id).subscribe(
+      () => {
+        this.prodotti = this.prodotti.filter(lg => lg.id !== id);
+        console.log('Prodotto eliminato con successo');
+      },
+      (error) => {
+        console.error('Errore durante l\'eliminazione del prodotto', error);
+      }
+    );
+  }
+
+
+  mostraFormCreazione(): void {
+    this.mostraForm = true;
+    this.formProdotto = {};
+  }
+
+  mostraFormAggiornamento(prodotto: any): void {
+    this.mostraForm = true;
+    this.formProdotto = { ...prodotto };
+  }
+
+  inviaForm(): void {
+    if (this.formProdotto.id) {
+
+      this.aggiornaProdotto(this.formProdotto.id, this.formProdotto);
+    } else {
+
+      this.creaProdotto(this.formProdotto);
+    }
+    this.mostraForm = false;
+  }
+}
+
+
+
 

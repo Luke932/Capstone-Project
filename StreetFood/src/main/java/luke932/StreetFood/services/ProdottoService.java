@@ -35,15 +35,21 @@ public class ProdottoService {
 	// -----------SALVATAGGIO PRODOTTI
 	@Transactional
 	public Prodotto saveProdotto(Prodotto prodotto) {
-		Luogo luogo = prodotto.getLuoghi().get(0);
 
-		List<Luogo> listaLuoghi = new ArrayList<>();
-		listaLuoghi.add(luogo);
+		List<Luogo> listaLuoghi = luogoR.findAll();
 
-		Prodotto newProd = new Prodotto(prodotto.getNomeProdotto(), prodotto.getDescrizione(), prodotto.getImmagine(),
-				prodotto.getAltro(), listaLuoghi);
+		if (listaLuoghi != null && !listaLuoghi.isEmpty()) {
+			Luogo luogo = listaLuoghi.get(0);
+			List<Luogo> listaLuoghiProdotto = new ArrayList<>();
+			listaLuoghiProdotto.add(luogo);
 
-		return prodottoR.save(newProd);
+			Prodotto newProd = new Prodotto(prodotto.getNomeProdotto(), prodotto.getDescrizione(),
+					prodotto.getImmagine(), listaLuoghiProdotto);
+
+			return prodottoR.save(newProd);
+		} else {
+			throw new IllegalArgumentException("La lista di luoghi non può essere vuota o nulla.");
+		}
 	}
 
 	// -----------GET PRODOTTI
@@ -74,7 +80,6 @@ public class ProdottoService {
 		found.setNomeProdotto(body.getNomeProdotto());
 		found.setDescrizione(body.getDescrizione());
 		found.setImmagine(body.getImmagine());
-		found.setAltro(body.getAltro());
 
 		return prodottoR.save(found);
 	}

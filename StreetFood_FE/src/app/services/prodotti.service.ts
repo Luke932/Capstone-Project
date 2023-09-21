@@ -81,7 +81,21 @@ getLikesByUser(utenteId: string) {
       );
   }
 
+  createProdotto(prodotto: any) {
+    return this.http.post<any>(`${this.baseUrl}prodotti`, prodotto);
+  }
 
+
+
+
+
+  updateProdotto(id: string, nuovoProdotto: any) {
+    return this.http.put<any>(`${this.baseUrl}prodotti/${id}`, nuovoProdotto);
+  }
+
+  deleteProdotti(id: string) {
+    return this.http.delete(`${this.baseUrl}prodotti/${id}`);
+  }
 
   getId() {
     return localStorage.getItem('id');
@@ -106,4 +120,9 @@ getLikesByUser(utenteId: string) {
     return throwError(
       'Qualcosa è andato storto; riprova più tardi.');
   }
+
+  getFotoUtenteByCommentoId(commentoId: string): Observable<any> {
+    return this.http.get(`commenti/${commentoId}/foto`, { responseType: 'arraybuffer' });
+  }
+
 }

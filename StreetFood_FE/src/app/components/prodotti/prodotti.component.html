@@ -1,22 +1,21 @@
+<div class="background-image">
 <div class="container">
   <div class="row">
-    <div class="col-lg-3 col-md-4 col-sm-6" *ngFor="let prodotto of prodotti; let i = index">
+    <div class="col-lg-4 col-md-6 col-sm-12" *ngFor="let prodotto of prodotti; let i = index">
       <div class="card mb-4">
-        <div class="card-header">
-          <!-- Inserisci qui elementi come l'avatar, nome dell'utente, data, ecc. -->
-        </div>
         <img [src]="prodotto.immagine" class="card-img-top" alt="...">
         <div class="card-body">
           <h5 class="card-title">{{ prodotto.nomeProdotto }}</h5>
           <p class="card-text">{{ prodotto.descrizione }}</p>
         </div>
         <div class="card-footer">
-          <span class="material-symbols-outlined heart-icon"
-            (click)="toggleLike(prodotto, i)"
-            [ngClass]="{'liked': isLiked[i]}">
-            favorite
-          </span>
-          <button class="btn btn-primary mr-2" (click)="mostraFormCommento(prodotto)">Commenta</button>
+          <div class="card-footer d-flex">
+            <span class="material-symbols-outlined heart-icon click"
+              (click)="toggleLike(prodotto, i)"
+              [ngClass]="{'liked': isLiked[i]}">
+              favorite
+            </span>
+            <span><a class="material-symbols-outlined  mr-2 click" (click)="mostraFormCommento(prodotto)">Commenta</a></span>
         </div>
         <ul class="list-group list-group-flush">
           <li class="list-group-item commento-item" *ngFor="let commento of prodotto.commenti">
@@ -48,10 +47,11 @@
               <textarea class="form-control" id="nuovoTestoCommento" [(ngModel)]="nuovoTestoCommento"
                 name="nuovoTestoCommento" required></textarea>
             </div>
-            <button type="submit" class="btn btn-primary" [disabled]="!prodotto.id">Invia Commento</button>
+            <button type="submit" class="btn btn-primary mt" [disabled]="!prodotto.id">Invia Commento</button>
           </form>
         </div>
       </div>
     </div>
   </div>
+</div>
 </div>

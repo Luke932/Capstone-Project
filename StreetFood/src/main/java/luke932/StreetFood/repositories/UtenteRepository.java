@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import luke932.StreetFood.entities.Utente;
@@ -32,4 +33,6 @@ public interface UtenteRepository extends JpaRepository<Utente, UUID> {
 	@Query("SELECT DISTINCT u FROM Utente u WHERE EXISTS (SELECT 1 FROM Like l WHERE l.utente = u)")
 	List<Utente> findUtentiConLike();
 
+	@Query("SELECT u.foto FROM Utente u JOIN u.commenti c WHERE c.id = :commentoId")
+	byte[] findFotoByCommentoId(@Param("commentoId") UUID commentoId);
 }
