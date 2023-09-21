@@ -12,6 +12,6 @@ import lombok.Setter;
 public class NewLuogoPayload {
 
 	private String titolo;
-	private byte[] immagine;
+	private String immagine;
 	private String descrizione;
 }

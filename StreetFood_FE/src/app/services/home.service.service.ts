@@ -43,21 +43,10 @@ export class HomeServiceService {
   }
 
   createLuogo(luogo: any) {
-    return this.http.post<Luoghi[]>(`${this.baseUrl}luoghi`, luogo);
+    return this.http.post<any>(`${this.baseUrl}luoghi`, luogo);
   }
 
-  createLuogoWithFile(luogo: any, file: File) {
-    const formData = new FormData();
 
-    if (file) {
-      formData.append('file', file, file.name);
-    }
-
-    formData.append('titolo', luogo.titolo);
-    formData.append('descrizione', luogo.descrizione);
-
-    return this.http.post<Luoghi>(`${this.baseUrl}luoghi`, formData);
-  }
 
 
 

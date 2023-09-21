@@ -1,9 +1,11 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { SafeUrl } from '@angular/platform-browser';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Luoghi } from 'src/app/models/luoghi';
 import { FooterService } from 'src/app/services/footer.service';
 import { HomeServiceService } from 'src/app/services/home.service.service';
+import { ChangeDetectorRef } from '@angular/core';
+
 
 @Component({
   selector: 'app-home.modifiche',
@@ -23,10 +25,10 @@ export class HomeModificheComponent implements OnInit {
 formLuogo: any = {};
 luogoDaNascondere: string = '';
 selectedFile!: File;
-userPhotoUrl!: SafeUrl | null;
+userPhotoUrls: SafeUrl[] = [];
 
 
-  constructor(private homeSrv: HomeServiceService, private footSrv: FooterService) {
+  constructor(private homeSrv: HomeServiceService, private footSrv: FooterService, private domSan: DomSanitizer, private cdr: ChangeDetectorRef) {
     this.footSrv.setShowFooter(true);
   }
 
@@ -41,20 +43,7 @@ userPhotoUrl!: SafeUrl | null;
         this.totalElements = data.totalElements;
         this.totalPages = data.totalPages;
         this.currentPage = page;
-
-        for (let luogo of this.luoghi) {
-          if (luogo.immagineBase64) {
-            const byteCharacters = atob(luogo.immagineBase64);
-            const byteNumbers = new Array(byteCharacters.length);
-            for (let i = 0; i < byteCharacters.length; i++) {
-              byteNumbers[i] = byteCharacters.charCodeAt(i);
-            }
-            const byteArray = new Uint8Array(byteNumbers);
-            luogo.immagineBlob = new Blob([byteArray], { type: 'image/jpeg' });
-          }
-        }
-
-        this.mostraRisultati = false;
+        this.mostraRisultati = false; // Assicurati che mostri i risultati di getLuoghi
       } else {
         console.error("I dati ricevuti non sono un array", data);
       }
@@ -63,6 +52,9 @@ userPhotoUrl!: SafeUrl | null;
       console.error('Errore nella richiesta HTTP:', error);
     });
   }
+
+
+
 
 
   cercaLuogo(tipoRicerca: string): void {
@@ -120,11 +112,8 @@ userPhotoUrl!: SafeUrl | null;
     }
   }
 
-  creaLuogo() {
-    const file = this.selectedFile; // Assume che selectedFile contenga il file selezionato
-    const luogo = this.formLuogo;
-
-    this.homeSrv.createLuogoWithFile(luogo, file).subscribe(
+  creaLuogo(luogo: any) {
+    this.homeSrv.createLuogo(luogo).subscribe(
       (response) => {
         this.luoghi.push(response);
         console.log('Luogo creato con successo', response);
@@ -147,20 +136,25 @@ userPhotoUrl!: SafeUrl | null;
 
 
   aggiornaLuogo(id: string, nuovoLuogo: any) {
-    this.homeSrv.updateLuogo(id, nuovoLuogo).subscribe(
-      (response) => {
-
-        const indice = this.luoghi.findIndex(lg => lg.id === id);
-        if (indice !== -1) {
-          this.luoghi[indice] = nuovoLuogo;
-        }
-        console.log('Luogo aggiornato con successo', response);
-      },
-      (error) => {
+  this.homeSrv.updateLuogo(id, nuovoLuogo).subscribe(
+    (response) => {
+      const indice = this.luoghi.findIndex(lg => lg.id === id);
+      if (indice !== -1) {
+        this.luoghi[indice] = response; // Aggiorna l'oggetto Luogo con la risposta dal backend
+      }
+      console.log('Luogo aggiornato con successo', response);
+    },
+    (error) => {
+      if (error.status === 404) {
+        console.error('Luogo non trovato con ID:', id);
+      } else {
         console.error('Errore durante l\'aggiornamento del luogo', error);
       }
-    );
-  }
+    }
+  );
+}
+
+
 
 
   eliminaLuogo(id: string) {
@@ -178,6 +172,7 @@ userPhotoUrl!: SafeUrl | null;
 
   mostraFormCreazione(): void {
     this.mostraForm = true;
+    this.formLuogo = {};
   }
 
   mostraFormAggiornamento(luogo: any): void {
@@ -185,23 +180,15 @@ userPhotoUrl!: SafeUrl | null;
     this.formLuogo = { ...luogo };
   }
 
-  inviaForm() {
-    const file = this.selectedFile;
-    const luogo = this.formLuogo;
-
-    if (file) { // Controlla se un file è stato selezionato
-      this.homeSrv.createLuogoWithFile(luogo, file).subscribe(
-        (response) => {
-          this.luoghi.push(response);
-          console.log('Luogo creato con successo', response);
-        },
-        (error) => {
-          console.error('Errore durante la creazione del luogo', error);
-        }
-      );
+  inviaForm(): void {
+    if (this.formLuogo.id) {
+      // Esegui l'aggiornamento
+      this.aggiornaLuogo(this.formLuogo.id, this.formLuogo);
     } else {
-      console.error('Nessun file selezionato');
+      // Esegui la creazione
+      this.creaLuogo(this.formLuogo);
     }
+    this.mostraForm = false;
   }
 
 
