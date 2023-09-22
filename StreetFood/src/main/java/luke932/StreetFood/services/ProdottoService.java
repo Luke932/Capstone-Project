@@ -123,8 +123,8 @@ public class ProdottoService {
 	}
 
 	// ------------TROVA TUTTI I PRODOTTI DI UN LUOGO
-	public List<Prodotto> findByLuoghi(Luogo luogo) {
-		return prodottoR.findByLuoghi(luogo);
+	public List<Prodotto> findProdottiByTitoloLuogo(String titoloLuogo) {
+		return prodottoR.findByTitoloLuogo(titoloLuogo);
 	}
 
 	// ------------TROVA TUTTI I PRODOTTI TRAMITE IL NOME DI UN PRODOTTO E UNA LISTA

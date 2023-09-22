@@ -18,8 +18,17 @@
   padding: 0 15px;
 }
 
+.search-button {
+  padding: 5px 10px;
+  background-color: #007bff;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+}
+
 .barra {
   margin-top:3rem;
+  margin-bottom: 2rem;
 }
 
 .form-group.comment-form {
@@ -55,4 +64,8 @@
 
 .card {
   height: 900px;
+}
+
+.cursor {
+  cursor: pointer;
 }

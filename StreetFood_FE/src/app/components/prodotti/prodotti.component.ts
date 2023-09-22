@@ -1,20 +1,19 @@
-import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
-import { Like } from 'src/app/models/like';
-import { Prodotti } from 'src/app/models/prodotti';
-import { LikeService } from 'src/app/services/like.service';
-import { ProdottiService } from 'src/app/services/prodotti.service';
+import { HttpErrorResponse } from "@angular/common/http";
+import { Component, OnInit } from "@angular/core";
+import { Like } from "src/app/models/like";
+import { Prodotti } from "src/app/models/prodotti";
+import { LikeService } from "src/app/services/like.service";
+import { ProdottiService } from "src/app/services/prodotti.service";
 
-import { Commento } from 'src/app/models/commento';
+import { Commento } from "src/app/models/commento";
 
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { CommentoService } from 'src/app/services/commento.service';
-
+import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
+import { CommentoService } from "src/app/services/commento.service";
 
 @Component({
-  selector: 'app-prodotti',
-  templateUrl: './prodotti.component.html',
-  styleUrls: ['./prodotti.component.scss']
+  selector: "app-prodotti",
+  templateUrl: "./prodotti.component.html",
+  styleUrls: ["./prodotti.component.scss"],
 })
 export class ProdottiComponent implements OnInit {
   prodotti: Prodotti[] = [];
@@ -23,48 +22,58 @@ export class ProdottiComponent implements OnInit {
   totalElements: number = 0;
   likes: Like[] = [];
   isLiked: boolean[] = [];
-  nuovoTestoCommento: string = ''; // Aggiungi questa proprietà per il nuovo testo del commento
-  commentoId: string = '';
-  utenteId: string = '';
-  testoCommento: string = '';
+  nuovoTestoCommento: string = ""; // Aggiungi questa proprietà per il nuovo testo del commento
+  commentoId: string = "";
+  utenteId: string = "";
+  testoCommento: string = "";
   commentoInModifica: Commento | null = null; // Commento attualmente in modifica
   commentoDaEliminare: Commento | null = null;
   showCommentForm: boolean = false;
   prodottoInCommento: Prodotti | null = null;
-   userPhotoUrl!: SafeUrl | null;
-   titoloDaCercare: string = '';
-prodottiTrovati: Prodotti [] = [];
-mostraRisultati: boolean = false;
-tipoRicerca: string = 'prodotto';
+  userPhotoUrl!: SafeUrl | null;
+  titoloDaCercare: string = "";
+  prodottiTrovati: Prodotti[] = [];
+  mostraRisultati: boolean = false;
+  tipoRicerca: string = "prodotto";
 
-  constructor(private prodottiSrv: ProdottiService, private likeService: LikeService,private commentoService: CommentoService,private domSan: DomSanitizer) {
+  constructor(
+    private prodottiSrv: ProdottiService,
+    private likeService: LikeService,
+    private commentoService: CommentoService,
+    private domSan: DomSanitizer
+  ) {
     this.likes = this.likeService.getLikes();
-        console.log('Likes nel costruttore:', this.likes); // Aggiunto per debug
+    console.log("Likes nel costruttore:", this.likes); // Aggiunto per debug
   }
 
   ngOnInit(): void {
-    this.utenteId = this.prodottiSrv.getId() || '';
+    this.utenteId = this.prodottiSrv.getId() || "";
     this.getProdotti(0);
     this.updateIsLiked();
 
     // Aggiungi questo
-    this.prodotti.forEach(prodotto => {
+    this.prodotti.forEach((prodotto) => {
       if (prodotto.id) {
-        this.prodottiSrv.getLikesByUserAndProduct(this.utenteId, prodotto.id).subscribe(
-          (likes) => {
-            const likedByUser = likes.length > 0;
-            if (likedByUser) {
-              prodotto.isLiked = true;
+        this.prodottiSrv
+          .getLikesByUserAndProduct(this.utenteId, prodotto.id)
+          .subscribe(
+            (likes) => {
+              const likedByUser = likes.length > 0;
+              if (likedByUser) {
+                prodotto.isLiked = true;
+              }
+            },
+            (error) => {
+              console.error(
+                `Errore durante il recupero dei like per il prodotto ${prodotto.id}:`,
+                error
+              );
             }
-          },
-          (error) => {
-            console.error(`Errore durante il recupero dei like per il prodotto ${prodotto.id}:`, error);
-          }
-        );
+          );
       }
     });
 
-    const imageByte = localStorage.getItem('userPhotoUrl');
+    const imageByte = localStorage.getItem("userPhotoUrl");
     console.log(imageByte);
 
     if (imageByte) {
@@ -74,71 +83,64 @@ tipoRicerca: string = 'prodotto';
         byteNumbers[i] = byteCharacters.charCodeAt(i);
       }
       const byteArray = new Uint8Array(byteNumbers);
-      const blob = new Blob([byteArray], { type: 'image/jpeg' });
+      const blob = new Blob([byteArray], { type: "image/jpeg" });
 
-      this.userPhotoUrl = this.domSan.bypassSecurityTrustUrl(URL.createObjectURL(blob));
+      this.userPhotoUrl = this.domSan.bypassSecurityTrustUrl(
+        URL.createObjectURL(blob)
+      );
     }
 
     console.log(this.userPhotoUrl);
 
-
-
-
-    this.prodotti.forEach(prodotto => {
+    this.prodotti.forEach((prodotto) => {
       prodotto.mostraFormCommento = false; // Inizializza a false
       // ...
     });
-
   }
 
-
-
-
-
-
-
   private updateIsLiked() {
-    console.log('Updating isLiked');
+    console.log("Updating isLiked");
 
     const likes = this.likeService.getLikes(); // Ottieni l'array dei like dal servizio
 
-    this.isLiked = this.prodotti.map(prodotto => {
-      const likedInSession = likes.some(like => like.prodottoId === prodotto.id);
+    this.isLiked = this.prodotti.map((prodotto) => {
+      const likedInSession = likes.some(
+        (like) => like.prodottoId === prodotto.id
+      );
       return likedInSession;
     });
 
     console.log(this.isLiked); // Aggiunto per debug
   }
 
-
-
-
   getProdotti(page: number): void {
-    this.prodottiSrv.getAllProdotti(page).subscribe((data: any) => {
-      if (Array.isArray(data.content)) {
-        this.prodotti = data.content.map((prodotto: Prodotti) => {
-          prodotto.isLiked = false;
-          return prodotto;
-        });
+    this.prodottiSrv.getAllProdotti(page).subscribe(
+      (data: any) => {
+        if (Array.isArray(data.content)) {
+          this.prodotti = data.content.map((prodotto: Prodotti) => {
+            prodotto.isLiked = false;
+            return prodotto;
+          });
 
-        this.isLiked = this.prodotti.map(_ => false);
+          this.isLiked = this.prodotti.map((_) => false);
 
-        this.totalElements = data.totalElements;
-        this.totalPages = data.totalPages;
-        this.currentPage = page;
+          this.totalElements = data.totalElements;
+          this.totalPages = data.totalPages;
+          this.currentPage = page;
 
-        this.updateIsLiked(); // Aggiorna lo stato dei like
-      } else {
-        console.error("I dati ricevuti non sono un array", data);
+          this.updateIsLiked(); // Aggiorna lo stato dei like
+        } else {
+          console.error("I dati ricevuti non sono un array", data);
+        }
+      },
+      (error: HttpErrorResponse) => {
+        console.error("Errore nella richiesta HTTP:", error);
       }
-    },
-    (error: HttpErrorResponse) => {
-      console.error('Errore nella richiesta HTTP:', error);
-    });
+    );
   }
 
   toggleLike(prodotto: Prodotti, index: number) {
-    const utenteId = this.prodottiSrv.getId() || '';
+    const utenteId = this.prodottiSrv.getId() || "";
     const likeId = prodotto.likeId;
 
     if (likeId !== undefined) {
@@ -148,15 +150,17 @@ tipoRicerca: string = 'prodotto';
           prodotto.likeId = undefined;
           this.isLiked[index] = false;
           this.updateLikesArray(prodotto);
-          localStorage.removeItem('likes');
+          localStorage.removeItem("likes");
           this.isLiked = [...this.isLiked];
         },
         (error) => {
-          console.error('Errore durante la cancellazione del like:', error);
+          console.error("Errore durante la cancellazione del like:", error);
         }
       );
     } else if (prodotto.id) {
-      const alreadyLiked = this.likes.some(like => like.prodottoId === prodotto.id);
+      const alreadyLiked = this.likes.some(
+        (like) => like.prodottoId === prodotto.id
+      );
       if (!alreadyLiked) {
         this.prodottiSrv.createLike(utenteId, prodotto.id).subscribe(
           (response) => {
@@ -164,101 +168,103 @@ tipoRicerca: string = 'prodotto';
               prodotto.likeId = response;
               this.isLiked[index] = true;
               this.updateLikesArray(prodotto);
-              localStorage.setItem('likes', JSON.stringify(this.likes));
+              localStorage.setItem("likes", JSON.stringify(this.likes));
               this.isLiked = [...this.isLiked];
             } else {
-              console.error('Errore: likeId non ricevuto dal backend');
+              console.error("Errore: likeId non ricevuto dal backend");
             }
           },
           (error) => {
-            console.error('Errore durante la creazione del like:', error);
+            console.error("Errore durante la creazione del like:", error);
           }
         );
       } else {
         // L'utente ha già messo "mi piace", quindi rimuoviamo il like
-        this.prodottiSrv.getLikesByUserAndProduct(utenteId, prodotto.id).subscribe(
-          (likes) => {
-            if (likes && likes.length > 0) {
-              const likeToRemove = likes[0];
-              if (likeToRemove.id) {
-                this.prodottiSrv.deleteLike(likeToRemove.id).subscribe(
-                  (response) => {
-                    console.log(response);
-                    prodotto.likeId = undefined;
-                    this.isLiked[index] = false;
-                    this.updateLikesArray(prodotto);
-                    this.isLiked = [...this.isLiked];
-                  },
-                  (error) => {
-                    console.error('Errore durante la cancellazione del like:', error);
-                  }
-                );
+        this.prodottiSrv
+          .getLikesByUserAndProduct(utenteId, prodotto.id)
+          .subscribe(
+            (likes) => {
+              if (likes && likes.length > 0) {
+                const likeToRemove = likes[0];
+                if (likeToRemove.id) {
+                  this.prodottiSrv.deleteLike(likeToRemove.id).subscribe(
+                    (response) => {
+                      console.log(response);
+                      prodotto.likeId = undefined;
+                      this.isLiked[index] = false;
+                      this.updateLikesArray(prodotto);
+                      this.isLiked = [...this.isLiked];
+                    },
+                    (error) => {
+                      console.error(
+                        "Errore durante la cancellazione del like:",
+                        error
+                      );
+                    }
+                  );
+                }
               }
+            },
+            (error) => {
+              console.error("Errore durante il recupero dei like:", error);
             }
-          },
-          (error) => {
-            console.error('Errore durante il recupero dei like:', error);
-          }
-        );
+          );
       }
     }
   }
-
 
   private updateLikesArray(prodotto: Prodotti) {
     const productId = prodotto.id;
 
     if (productId !== undefined) {
       const likes = this.likeService.getLikes(); // Usa il servizio LikeService
-      const index = likes.findIndex(like => like.prodottoId === productId);
+      const index = likes.findIndex((like) => like.prodottoId === productId);
 
       if (index !== -1) {
         this.likeService.removeLike(productId);
         console.log(this.likes);
-
       } else {
-        const utenteId = this.prodottiSrv.getId() || '';
+        const utenteId = this.prodottiSrv.getId() || "";
         const newLike: Like = {
           prodottoId: productId,
           utente: utenteId,
-          dataLike: new Date()
+          dataLike: new Date(),
         };
         this.likeService.addLike(newLike);
         console.log(this.likes);
-
       }
 
       this.likes = this.likeService.getLikes(); // Aggiorna this.likes
     } else {
-      console.error('ID del prodotto non definito');
+      console.error("ID del prodotto non definito");
     }
   }
-
 
   createCommento(utenteId: string, prodotto: Prodotti) {
     if (prodotto.id) {
       this.prodottoInCommento = prodotto;
-      this.commentoService.createCommento(utenteId, prodotto.id, this.nuovoTestoCommento).subscribe(
-        (commento) => {
-          console.log('Commento creato con successo:', commento);
-          if (!prodotto.commenti) {
-            prodotto.commenti = [];
-          }
-          prodotto.commenti.push(commento);
-          this.nuovoTestoCommento = ''; // Resetta il campo dopo l'invio del commento
+      this.commentoService
+        .createCommento(utenteId, prodotto.id, this.nuovoTestoCommento)
+        .subscribe(
+          (commento) => {
+            console.log("Commento creato con successo:", commento);
+            if (!prodotto.commenti) {
+              prodotto.commenti = [];
+            }
+            prodotto.commenti.push(commento);
+            this.nuovoTestoCommento = ""; // Resetta il campo dopo l'invio del commento
 
-          // Nascondi il form dopo l'invio del commento
-          prodotto.mostraFormCommento = false;
-        },
-        (error) => {
-          console.error('Errore durante la creazione del commento:', error);
-        }
-      );
+            // Nascondi il form dopo l'invio del commento
+            prodotto.mostraFormCommento = false;
+          },
+          (error) => {
+            console.error("Errore durante la creazione del commento:", error);
+          }
+        );
     } else {
-      console.error('ID del prodotto non definito');
+      console.error("ID del prodotto non definito");
     }
   }
-
 
   mostraFormCommento(prodotto: Prodotti) {
     prodotto.mostraFormCommento = !prodotto.mostraFormCommento; // Inverti lo stato del form
@@ -269,59 +275,66 @@ tipoRicerca: string = 'prodotto';
     this.prodottoInCommento = prodotto;
     this.commentoInModifica = commento;
     this.formDati.nuovoTestoCommento = commento.testoCommento;
-}
-
-
-
-  formDati = {
-    nuovoTestoCommento: ''
-  };
-
-
-
-  updateCommento() {
-    console.log('Commento in modifica:', this.commentoInModifica);
-    if (this.commentoInModifica) {
-      console.log('Nuovo testo commento:', this.formDati.nuovoTestoCommento);
-      this.commentoService.updateCommentoById(this.commentoInModifica.id, this.formDati.nuovoTestoCommento).subscribe(
-        (commento) => {
-          console.log('Commento aggiornato con successo:', commento);
-          this.commentoInModifica = null;
-          this.formDati.nuovoTestoCommento = '';
-          console.log('Metodo updateCommento chiamato.');
-          console.log('Commento in modifica:', this.commentoInModifica);
-          console.log('Nuovo testo commento:', this.formDati.nuovoTestoCommento); // Resetta il campo dopo l'aggiornamento del commento
-        },
-        (error) => {
-          console.error('Errore durante l\'aggiornamento del commento:', error);
-        }
-      );
-    }
   }
 
+  formDati = {
+    nuovoTestoCommento: "",
+  };
+
+  updateCommento() {
+    console.log("Commento in modifica:", this.commentoInModifica);
+    if (this.commentoInModifica) {
+      console.log("Nuovo testo commento:", this.formDati.nuovoTestoCommento);
+      this.commentoService
+        .updateCommentoById(
+          this.commentoInModifica.id,
+          this.formDati.nuovoTestoCommento
+        )
+        .subscribe(
+          (commento) => {
+            console.log("Commento aggiornato con successo:", commento);
+            this.commentoInModifica = null;
+            this.formDati.nuovoTestoCommento = "";
+            console.log("Metodo updateCommento chiamato.");
+            console.log("Commento in modifica:", this.commentoInModifica);
+            console.log(
+              "Nuovo testo commento:",
+              this.formDati.nuovoTestoCommento
+            ); // Resetta il campo dopo l'aggiornamento del commento
+          },
+          (error) => {
+            console.error(
+              "Errore durante l'aggiornamento del commento:",
+              error
+            );
+          }
+        );
+    }
+  }
 
   deleteCommento(prodotto: Prodotti, commentoId: string) {
     this.commentoService.deleteCommento(commentoId).subscribe(
       () => {
-        console.log('Commento cancellato con successo');
+        console.log("Commento cancellato con successo");
         if (prodotto.commenti) {
-          prodotto.commenti = prodotto.commenti.filter(commento => commento.id !== commentoId);
-
+          prodotto.commenti = prodotto.commenti.filter(
+            (commento) => commento.id !== commentoId
+          );
         }
       },
       (error) => {
-        console.error('Errore durante la cancellazione del commento:', error);
+        console.error("Errore durante la cancellazione del commento:", error);
       }
     );
   }
 
   cercaProdotto(tipoRicerca: string): void {
-    if (this.titoloDaCercare.trim() !== '') {
+    if (this.titoloDaCercare.trim() !== "") {
       switch (tipoRicerca) {
-        case 'prodotto':
+        case "prodotto":
           this.prodottiSrv.getProdottoByNome(this.titoloDaCercare).subscribe(
             (data: any) => {
-              if (data && typeof data === 'object' && !Array.isArray(data)) {
+              if (data && typeof data === "object" && !Array.isArray(data)) {
                 this.prodottiTrovati = [data];
                 this.mostraRisultati = true;
               } else {
@@ -329,11 +342,11 @@ tipoRicerca: string = 'prodotto';
               }
             },
             (error: HttpErrorResponse) => {
-              console.error('Errore nella richiesta HTTP:', error);
+              console.error("Errore nella richiesta HTTP:", error);
             }
           );
           break;
-        case 'luogo':
+        case "titolo":
           this.prodottiSrv.getProdottiByLuogo(this.titoloDaCercare).subscribe(
             (data: any) => {
               if (Array.isArray(data)) {
@@ -344,11 +357,11 @@ tipoRicerca: string = 'prodotto';
               }
             },
             (error: HttpErrorResponse) => {
-              console.error('Errore nella richiesta HTTP:', error);
+              console.error("Errore nella richiesta HTTP:", error);
             }
           );
           break;
-        case 'prodotto':
+        case "prodotto":
         default:
           console.error("Tipo di ricerca non valido");
           break;
@@ -356,5 +369,15 @@ tipoRicerca: string = 'prodotto';
     }
   }
 
-}
+  nextPage(): void {
+    if (this.currentPage < this.totalPages - 1) {
+      this.getProdotti(this.currentPage + 1);
+    }
+  }
 
+  previousPage(): void {
+    if (this.currentPage > 0) {
+      this.getProdotti(this.currentPage - 1);
+    }
+  }
+}

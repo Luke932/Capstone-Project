@@ -78,12 +78,12 @@
               <ul class="pagination">
                 <li class="page-item" [class.disabled]="currentPage === 0">
                   <a class="page-link" (click)="previousPage()" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
+                    <span class="cursor" aria-hidden="true">&laquo;</span>
                   </a>
                 </li>
                 <li class="page-item" [class.disabled]="currentPage === totalPages - 1">
                   <a class="page-link" (click)="nextPage()" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
+                    <span class="cursor" aria-hidden="true">&raquo;</span>
                   </a>
                 </li>
               </ul>

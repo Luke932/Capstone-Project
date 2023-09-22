@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import luke932.StreetFood.entities.Luogo;
 import luke932.StreetFood.entities.Prodotto;
 import luke932.StreetFood.exceptions.NotFoundException;
 import luke932.StreetFood.payloads.NewProdottoPayload;
@@ -122,11 +121,9 @@ public class ProdottoController {
 	}
 
 	// ------------TROVA TUTTI I PRODOTTI DI UN CERTO LUOGO
-	@GetMapping("/luogo")
-	public List<Prodotto> findByLuogo(@RequestParam UUID luogoId) {
-		Luogo luogo = new Luogo();
-		luogo.setId(luogoId);
-		return prodottoSrv.findByLuoghi(luogo);
+	@GetMapping("/luoghi/{titoloLuogo}")
+	public List<Prodotto> getProdottiByTitoloLuogo(@PathVariable String titoloLuogo) {
+		return prodottoSrv.findProdottiByTitoloLuogo(titoloLuogo);
 	}
 
 	// ------------TROVA TUTTI I PRODOTTI TRAMITE IL NOME DI UN PRODOTTO E UNA LISTA

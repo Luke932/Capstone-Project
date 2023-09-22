@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import luke932.StreetFood.entities.Luogo;
 import luke932.StreetFood.entities.Prodotto;
 
 @Repository
@@ -31,7 +30,8 @@ public interface ProdottoRepository extends JpaRepository<Prodotto, UUID> {
 	@Query(value = "SELECT p FROM Prodotto p JOIN p.luoghi luoghi JOIN p.likes likes WHERE luoghi.id = :luogoId GROUP BY p.id HAVING COUNT(likes.id) >= :minLikes")
 	List<Prodotto> findProdottiByLuogoAndMinLikes(@Param("luogoId") UUID luogoId, @Param("minLikes") int minLikes);
 
-	List<Prodotto> findByLuoghi(Luogo luogo);
+	@Query("SELECT DISTINCT p FROM Prodotto p JOIN p.luoghi l WHERE l.titolo = :titoloLuogo")
+	List<Prodotto> findByTitoloLuogo(@Param("titoloLuogo") String titoloLuogo);
 
 	@Query("SELECT p FROM Prodotto p JOIN p.luoghi luogo WHERE p.nomeProdotto = :nome AND luogo.id IN :luoghiIds")
 	List<Prodotto> findProdottiByNomeAndLuoghi(@Param("nome") String nomeProdotto,

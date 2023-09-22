@@ -1,12 +1,11 @@
 <div class="background-image">
-<div class="container">
-  <div class="row">
+  <div class="container">
     <div class="row">
       <div class="col-12 d-flex justify-content-center barra">
         <input class="input-field me-2" [(ngModel)]="titoloDaCercare" placeholder="Inserisci il titolo...">
         <select class="dropdown-field me-2" [(ngModel)]="tipoRicerca">
           <option value="prodotto">Ricerca per prodotto</option>
-          <option value="luogo">Ricerca per luogo</option>
+          <option value="titolo">Ricerca per luogo</option>
         </select>
         <button class="search-button" (click)="cercaProdotto(tipoRicerca)">Cerca</button>
       </div>
@@ -15,58 +14,143 @@
 
 
 
-
-    <div class="col-lg-4 col-md-6 col-sm-12 mb-5" *ngFor="let prodotto of prodotti; let i = index">
-      <div class="card mb-4">
-        <img [src]="prodotto.immagine" class="card-img-top" alt="...">
-        <div class="card-body">
-          <h5 class="card-title">{{ prodotto.nomeProdotto }}</h5>
-          <p class="card-text">{{ prodotto.descrizione }}</p>
-        </div>
-        <div class="card-footer">
-          <div class="card-footer d-flex">
-            <span class="material-symbols-outlined heart-icon click"
-              (click)="toggleLike(prodotto, i)"
-              [ngClass]="{'liked': isLiked[i]}">
-              favorite
-            </span>
-            <span><a class="material-symbols-outlined  mr-2 click" (click)="mostraFormCommento(prodotto)">Commenta</a></span>
-        </div>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item commento-item" *ngFor="let commento of prodotto.commenti">
-            <div class="commento-content">
-              <div class="avatar-container">
-                <img [src]="userPhotoUrl" alt="Immagine Utente" class="avatar">
+    <div class="row">
+      <div class="col-lg-4 col-md-6 col-sm-12 mb-5" *ngFor="let prodotto of prodotti; let i = index">
+        <div *ngIf="!mostraRisultati">
+          <div class="card mb-4">
+            <img [src]="prodotto.immagine" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">{{ prodotto.nomeProdotto }}</h5>
+              <p class="card-text">{{ prodotto.descrizione }}</p>
+            </div>
+            <div class="card-footer">
+              <div class="card-footer d-flex">
+                <span class="material-symbols-outlined heart-icon click" (click)="toggleLike(prodotto, i)"
+                  [ngClass]="{'liked': isLiked[i]}">
+                  favorite
+                </span>
+                <span><a class="material-symbols-outlined  mr-2 click"
+                    (click)="mostraFormCommento(prodotto)">Commenta</a></span>
               </div>
-              <div class="commento-text-container">
-                <div class="commento-testo">
-                  {{ commento.testoCommento }}
-                </div>
-                <div class="commento-buttons">
-                  <button class="btn btn-link btn-modifica" (click)="editCommento(commento, prodotto)">Modifica</button>
-                  <button class="btn btn-link btn-elimina" (click)="deleteCommento(prodotto, commento.id)">Elimina</button>
-                </div>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item commento-item" *ngFor="let commento of prodotto.commenti">
+                  <div class="commento-content">
+                    <div class="avatar-container">
+                      <img [src]="userPhotoUrl" alt="Immagine Utente" class="avatar">
+                    </div>
+                    <div class="commento-text-container">
+                      <div class="commento-testo">
+                        {{ commento.testoCommento }}
+                      </div>
+                      <div class="commento-buttons">
+                        <button class="btn btn-link btn-modifica"
+                          (click)="editCommento(commento, prodotto)">Modifica</button>
+                        <button class="btn btn-link btn-elimina"
+                          (click)="deleteCommento(prodotto, commento.id)">Elimina</button>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+
+
+
+
+              <div class="card-footer">
+                <form *ngIf="prodotto.mostraFormCommento && prodotto.id === prodottoInCommento?.id"
+                  (ngSubmit)="createCommento(utenteId, prodotto)">
+                  <div class="form-group">
+                    <label for="nuovoTestoCommento">Inserisci un commento:</label>
+                    <textarea class="form-control" id="nuovoTestoCommento" [(ngModel)]="nuovoTestoCommento"
+                      name="nuovoTestoCommento" required></textarea>
+                  </div>
+                  <button type="submit" class="btn btn-primary mt" [disabled]="!prodotto.id">Invia Commento</button>
+                </form>
               </div>
             </div>
-          </li>
-        </ul>
-
-
-
-
-        <div class="card-footer">
-          <form *ngIf="prodotto.mostraFormCommento && prodotto.id === prodottoInCommento?.id"
-            (ngSubmit)="createCommento(utenteId, prodotto)">
-            <div class="form-group">
-              <label for="nuovoTestoCommento">Inserisci un commento:</label>
-              <textarea class="form-control" id="nuovoTestoCommento" [(ngModel)]="nuovoTestoCommento"
-                name="nuovoTestoCommento" required></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary mt" [disabled]="!prodotto.id">Invia Commento</button>
-          </form>
+          </div>
         </div>
       </div>
     </div>
+
+
+    <div class="row">
+      <div class="col-lg-4 col-md-6 col-sm-12 mb-5" *ngFor="let prodotto of prodottiTrovati; let i = index">
+        <div *ngIf="mostraRisultati">
+          <div class="card mb-4">
+            <img [src]="prodotto.immagine" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">{{ prodotto.nomeProdotto }}</h5>
+              <p class="card-text">{{ prodotto.descrizione }}</p>
+            </div>
+            <div class="card-footer">
+              <div class="card-footer d-flex">
+                <span class="material-symbols-outlined heart-icon click" (click)="toggleLike(prodotto, i)"
+                  [ngClass]="{'liked': isLiked[i]}">
+                  favorite
+                </span>
+                <span><a class="material-symbols-outlined  mr-2 click"
+                    (click)="mostraFormCommento(prodotto)">Commenta</a></span>
+              </div>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item commento-item" *ngFor="let commento of prodotto.commenti">
+                  <div class="commento-content">
+                    <div class="avatar-container">
+                      <img [src]="userPhotoUrl" alt="Immagine Utente" class="avatar">
+                    </div>
+                    <div class="commento-text-container">
+                      <div class="commento-testo">
+                        {{ commento.testoCommento }}
+                      </div>
+                      <div class="commento-buttons">
+                        <button class="btn btn-link btn-modifica"
+                          (click)="editCommento(commento, prodotto)">Modifica</button>
+                        <button class="btn btn-link btn-elimina"
+                          (click)="deleteCommento(prodotto, commento.id)">Elimina</button>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+
+
+
+
+              <div class="card-footer">
+                <form *ngIf="prodotto.mostraFormCommento && prodotto.id === prodottoInCommento?.id"
+                  (ngSubmit)="createCommento(utenteId, prodotto)">
+                  <div class="form-group">
+                    <label for="nuovoTestoCommento">Inserisci un commento:</label>
+                    <textarea class="form-control" id="nuovoTestoCommento" [(ngModel)]="nuovoTestoCommento"
+                      name="nuovoTestoCommento" required></textarea>
+                  </div>
+                  <button type="submit" class="btn btn-primary mt" [disabled]="!prodotto.id">Invia Commento</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12 d-flex justify-content-center mb-2">
+        <nav aria-label="Page navigation example">
+          <ul class="pagination">
+            <li class="page-item" [class.disabled]="currentPage === 0">
+              <a class="page-link" (click)="previousPage()" aria-label="Previous">
+                <span class="cursor" aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+            <li class="page-item" [class.disabled]="currentPage === totalPages - 1">
+              <a class="page-link" (click)="nextPage()" aria-label="Next">
+                <span class="cursor" aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+
   </div>
-</div>
 </div>

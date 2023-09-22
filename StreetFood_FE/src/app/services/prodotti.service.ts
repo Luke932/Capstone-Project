@@ -126,11 +126,11 @@ getLikesByUser(utenteId: string) {
   }
 
   getProdottoByNome(nomeProdotto: string): Observable<Prodotti> {
-    return this.http.get<Prodotti>(`${this.baseUrl}prodotto/${nomeProdotto}`);
+    return this.http.get<Prodotti>(`${this.baseUrl}prodotti/prodotto/${nomeProdotto}`);
   }
 
-  getProdottiByLuogo(luogoId: string): Observable<Prodotti[]> {
-    return this.http.get<Prodotti[]>(`${this.baseUrl}prodotti/luogo?luogoId=${luogoId}`);
+  getProdottiByLuogo(titoloLuogo: string): Observable<Prodotti[]> {
+    return this.http.get<Prodotti[]>(`${this.baseUrl}prodotti/luoghi/${titoloLuogo}`);
   }
 
 
