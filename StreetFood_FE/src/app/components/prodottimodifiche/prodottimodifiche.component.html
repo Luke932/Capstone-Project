@@ -31,7 +31,7 @@
     </div>
 
     <div class="row">
-      <div class="col-lg-4 col-md-6 col-sm-12 mb-3" *ngFor="let prodotto of prodotti; let i = index">
+      <div class="col-lg-4 col-md-6 col-sm-12 mb-2" *ngFor="let prodotto of prodotti; let i = index">
         <div *ngIf="!mostraRisultati">
           <div class="card mb-4 mt" >
             <img [src]="prodotto.immagine" class="card-img-top" alt="...">
@@ -92,7 +92,7 @@
     </div>
 
     <div class="row">
-      <div class="col-lg-4 col-md-6 col-sm-12 mb-3" *ngFor="let prodotto of prodotti; let i = index">
+      <div class="col-lg-4 col-md-6 col-sm-12 mb-2" *ngFor="let prodotto of prodotti; let i = index">
         <div *ngIf="mostraRisultati">
           <div class="card mb-4 mt" >
             <img [src]="prodotto.immagine" class="card-img-top" alt="...">
@@ -151,5 +151,27 @@
         </div>
       </div>
     </div>
+
+
+
+    <div class="row">
+      <div class="col-12 d-flex justify-content-center mb-2">
+        <nav aria-label="Page navigation example">
+          <ul class="pagination">
+            <li class="page-item" [class.disabled]="currentPage === 0">
+              <a class="page-link" (click)="previousPage()" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+            <li class="page-item" [class.disabled]="currentPage === totalPages - 1">
+              <a class="page-link" (click)="nextPage()" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+
   </div>
 </div>

@@ -32,6 +32,10 @@ export class ProdottiComponent implements OnInit {
   showCommentForm: boolean = false;
   prodottoInCommento: Prodotti | null = null;
    userPhotoUrl!: SafeUrl | null;
+   titoloDaCercare: string = '';
+prodottiTrovati: Prodotti [] = [];
+mostraRisultati: boolean = false;
+tipoRicerca: string = 'prodotto';
 
   constructor(private prodottiSrv: ProdottiService, private likeService: LikeService,private commentoService: CommentoService,private domSan: DomSanitizer) {
     this.likes = this.likeService.getLikes();
@@ -201,12 +205,6 @@ export class ProdottiComponent implements OnInit {
   }
 
 
-
-
-
-
-
-
   private updateLikesArray(prodotto: Prodotti) {
     const productId = prodotto.id;
 
@@ -235,18 +233,6 @@ export class ProdottiComponent implements OnInit {
       console.error('ID del prodotto non definito');
     }
   }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
   createCommento(utenteId: string, prodotto: Prodotti) {
@@ -291,7 +277,7 @@ export class ProdottiComponent implements OnInit {
     nuovoTestoCommento: ''
   };
 
-  // ...
+
 
   updateCommento() {
     console.log('Commento in modifica:', this.commentoInModifica);
@@ -328,5 +314,47 @@ export class ProdottiComponent implements OnInit {
       }
     );
   }
+
+  cercaProdotto(tipoRicerca: string): void {
+    if (this.titoloDaCercare.trim() !== '') {
+      switch (tipoRicerca) {
+        case 'prodotto':
+          this.prodottiSrv.getProdottoByNome(this.titoloDaCercare).subscribe(
+            (data: any) => {
+              if (data && typeof data === 'object' && !Array.isArray(data)) {
+                this.prodottiTrovati = [data];
+                this.mostraRisultati = true;
+              } else {
+                console.error("I dati ricevuti non sono validi", data);
+              }
+            },
+            (error: HttpErrorResponse) => {
+              console.error('Errore nella richiesta HTTP:', error);
+            }
+          );
+          break;
+        case 'luogo':
+          this.prodottiSrv.getProdottiByLuogo(this.titoloDaCercare).subscribe(
+            (data: any) => {
+              if (Array.isArray(data)) {
+                this.prodottiTrovati = data;
+                this.mostraRisultati = true;
+              } else {
+                console.error("I dati ricevuti non sono validi", data);
+              }
+            },
+            (error: HttpErrorResponse) => {
+              console.error('Errore nella richiesta HTTP:', error);
+            }
+          );
+          break;
+        case 'prodotto':
+        default:
+          console.error("Tipo di ricerca non valido");
+          break;
+      }
+    }
+  }
+
 }
 

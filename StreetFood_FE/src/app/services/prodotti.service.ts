@@ -125,4 +125,13 @@ getLikesByUser(utenteId: string) {
     return this.http.get(`commenti/${commentoId}/foto`, { responseType: 'arraybuffer' });
   }
 
+  getProdottoByNome(nomeProdotto: string): Observable<Prodotti> {
+    return this.http.get<Prodotti>(`${this.baseUrl}prodotto/${nomeProdotto}`);
+  }
+
+  getProdottiByLuogo(luogoId: string): Observable<Prodotti[]> {
+    return this.http.get<Prodotti[]>(`${this.baseUrl}prodotti/luogo?luogoId=${luogoId}`);
+  }
+
+
 }

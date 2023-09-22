@@ -85,6 +85,8 @@ export class ProdottimodificheComponent implements OnInit {
       // ...
     });
 
+    this.getProdotti(0);
+
   }
 
 
@@ -240,16 +242,6 @@ export class ProdottimodificheComponent implements OnInit {
 
 
 
-
-
-
-
-
-
-
-
-
-
   createCommento(utenteId: string, prodotto: Prodotti) {
     if (prodotto.id) {
       this.prodottoInCommento = prodotto;
@@ -399,6 +391,19 @@ export class ProdottimodificheComponent implements OnInit {
     }
     this.mostraForm = false;
   }
+
+  nextPage(): void {
+    if (this.currentPage < this.totalPages - 1) {
+      this.getProdotti(this.currentPage + 1);
+    }
+  }
+
+  previousPage(): void {
+    if (this.currentPage > 0) {
+      this.getProdotti(this.currentPage - 1);
+    }
+  }
+
 }
 
 

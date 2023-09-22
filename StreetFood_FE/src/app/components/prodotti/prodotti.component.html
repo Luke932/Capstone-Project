@@ -1,7 +1,22 @@
 <div class="background-image">
 <div class="container">
   <div class="row">
-    <div class="col-lg-4 col-md-6 col-sm-12" *ngFor="let prodotto of prodotti; let i = index">
+    <div class="row">
+      <div class="col-12 d-flex justify-content-center barra">
+        <input class="input-field me-2" [(ngModel)]="titoloDaCercare" placeholder="Inserisci il titolo...">
+        <select class="dropdown-field me-2" [(ngModel)]="tipoRicerca">
+          <option value="prodotto">Ricerca per prodotto</option>
+          <option value="luogo">Ricerca per luogo</option>
+        </select>
+        <button class="search-button" (click)="cercaProdotto(tipoRicerca)">Cerca</button>
+      </div>
+    </div>
+
+
+
+
+
+    <div class="col-lg-4 col-md-6 col-sm-12 mb-5" *ngFor="let prodotto of prodotti; let i = index">
       <div class="card mb-4">
         <img [src]="prodotto.immagine" class="card-img-top" alt="...">
         <div class="card-body">

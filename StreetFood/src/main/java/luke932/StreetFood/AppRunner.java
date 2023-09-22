@@ -1,6 +1,5 @@
 package luke932.StreetFood;
 
-import java.util.List;
 import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +10,6 @@ import org.springframework.stereotype.Component;
 import com.github.javafaker.Faker;
 
 import jakarta.transaction.Transactional;
-import luke932.StreetFood.entities.Luogo;
-import luke932.StreetFood.entities.Prodotto;
 import luke932.StreetFood.payloads.RuoloSavePayload;
 import luke932.StreetFood.services.CommentoService;
 import luke932.StreetFood.services.LikeService;
@@ -51,23 +48,16 @@ public class AppRunner implements CommandLineRunner {
 //		ruoloSrv.save(ruolo2);
 
 		// ----------------ASSOCIAZIONE TRA LUOGHI E PRODOTTI
-		List<Luogo> luoghi = luogoSrv.findNoPage();
-		List<Prodotto> prodotti = prodottoSrv.findNoPage();
-
-		for (Luogo luogo : luoghi) {
-			for (Prodotto prodotto : prodotti) {
-				luogo.getProdotti().add(prodotto);
-				prodotto.getLuoghi().add(luogo);
-			}
-		}
-
-		for (Luogo luogo : luoghi) {
-			luogoSrv.saveLuogo(luogo);
-		}
-
-		for (Prodotto prodotto : prodotti) {
-			prodottoSrv.saveProdotto(prodotto);
-		}
+//		UUID idLuogo = UUID.fromString("e9352fee-97bd-48a0-9e88-82db88eebcad");
+//		UUID idProdotto = UUID.fromString("3f12a440-069f-459e-9abb-5fe1702ea3d1");
+//
+//		Luogo luogo = luogoSrv.getLuogoByID(idLuogo);
+//		Prodotto prodotto = prodottoSrv.getProdottoByID(idProdotto);
+//
+//		luogo.getProdotti().add(prodotto);
+//		prodotto.getLuoghi().add(luogo);
+//
+//		luogoSrv.saveLuogo(luogo);
 
 	}
 
