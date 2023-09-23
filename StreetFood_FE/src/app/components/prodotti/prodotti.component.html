@@ -3,13 +3,17 @@
     <br>
     <h1 class="display-1 text-white mb-4 animated-text hover-effect animeted-text">Qui i principali prodotti dello Street Food Palermitano</h1>
     <div class="row">
-      <div class="col-12 d-flex justify-content-center barra">
-        <input class="input-field me-2" [(ngModel)]="titoloDaCercare" placeholder="Inserisci il titolo...">
-        <select class="dropdown-field me-2" [(ngModel)]="tipoRicerca">
+      <div class="col-md-3 col-sm-6 mb-3 barra">
+        <input class="input-field form-control" [(ngModel)]="titoloDaCercare" placeholder="Inserisci il titolo...">
+      </div>
+      <div class="col-md-3 col-sm-6 mb-3 barra">
+        <select class="dropdown-field form-select width" [(ngModel)]="tipoRicerca">
           <option value="prodotto">Ricerca per prodotto</option>
-          <option value="titolo">Ricerca per luogo</option>
+          <option value="titolo">Ricerca per titolo</option>
         </select>
-        <button class="search-button" (click)="cercaProdotto(tipoRicerca)">Cerca</button>
+      </div>
+      <div class="col-md-3 col-sm-6 mb-3 barra">
+        <button class="search-button btn btn-primary search" (click)="cercaProdotto(tipoRicerca)">Cerca</button>
       </div>
     </div>
 

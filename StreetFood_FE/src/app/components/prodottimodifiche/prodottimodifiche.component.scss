@@ -8,11 +8,17 @@
   height: auto;
 }
 
-
-
-.row {
-  margin: 0 -30px;
+.input-field {
+  padding: 5px;
+  margin-right: 10px;
 }
+
+.dropdown-field {
+  padding: 5px;
+  margin-right: 10px;
+}
+
+
 
 .col-lg-4, .col-md-6, .col-sm-12 {
   padding: 0 15px;
@@ -28,7 +34,6 @@
 
 .barra {
   margin-top:3rem;
-  margin-bottom: 2rem;
 }
 
 .form-group.comment-form {
@@ -72,4 +77,45 @@
 
 .container {
   padding-bottom: 10rem;
+  padding: 0 15px;
+}
+
+
+.search {
+  margin-left: 5rem;
+}
+
+.width {
+  width: 200px;
+}
+
+.display-1 {
+  font-size: 4rem;
+}
+
+.hover-effect {
+  transition: transform 0.3s;
+}
+
+.hover-effect:hover {
+  transform: scale(1.1);
+}
+
+.animated-text {
+  animation: blink 1s infinite alternate;
+}
+
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}
+
+@media (max-width: 576px) {
+  .hover-effect:hover {
+    transform: none !important;
+  }
 }

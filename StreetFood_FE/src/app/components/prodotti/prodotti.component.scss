@@ -79,9 +79,7 @@
 
 
 
-.row {
-  margin: 0 -30px;
-}
+
 
 .col-lg-4, .col-md-6, .col-sm-12 {
   padding: 0 15px;
@@ -136,3 +134,15 @@
   }
 }
 
+@media (max-width: 576px) {
+  .hover-effect:hover {
+    transform: none !important;
+  }
+}
+
+
+
+
+.width {
+  width: 200px;
+}

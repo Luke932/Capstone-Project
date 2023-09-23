@@ -1,14 +1,21 @@
 <div class="background-image">
   <div class="container">
+    <br>
+    <h1 class="display-1 text-white mb-4 animated-text hover-effect animeted-text">I principali luoghi dello Street Food
+      Palermitano</h1>
     <div class="row">
-      <div class="col-12 d-flex justify-content-center barra">
-        <input class="input-field" [(ngModel)]="titoloDaCercare" placeholder="Inserisci il titolo...">
-        <select class="dropdown-field" [(ngModel)]="tipoRicerca">
+      <div class="col-md-3 col-sm-6 mb-3 barra">
+        <input class="input-field form-control" [(ngModel)]="titoloDaCercare" placeholder="Inserisci il titolo...">
+      </div>
+      <div class="col-md-3 col-sm-6 mb-3 barra">
+        <select class="dropdown-field form-select width" [(ngModel)]="tipoRicerca">
           <option value="descrizione">Ricerca per descrizione</option>
           <option value="prodotto">Ricerca per prodotto</option>
           <option value="titolo">Ricerca per titolo</option>
         </select>
-        <button class="search-button" (click)="cercaLuogo(tipoRicerca)">Cerca</button>
+      </div>
+      <div class="col-md-3 col-sm-6 mb-3 barra">
+        <button class="search-button btn btn-primary search" (click)="cercaLuogo(tipoRicerca)">Cerca</button>
       </div>
     </div>
 
@@ -18,45 +25,45 @@
     <div class="row">
       <div class="col-12">
         <div *ngIf="!mostraRisultati">
-        <div class="card rounded-lg" *ngFor="let lg of luoghi" >
-          <img src="{{ lg.immagine }}" class="card-img-top" alt="Card Image">
-          <div class="card-body">
-            <h5 class="card-title">{{ lg.titolo }}</h5>
-            <p class="card-text">{{ lg.descrizione }}</p>
+          <div class="card rounded-lg" *ngFor="let lg of luoghi">
+            <img src="{{ lg.immagine }}" class="card-img-top" alt="Card Image">
+            <div class="card-body">
+              <h5 class="card-title">{{ lg.titolo }}</h5>
+              <p class="card-text">{{ lg.descrizione }}</p>
+            </div>
           </div>
-        </div>
         </div>
         <div class="row">
           <div class="col-12">
             <div *ngIf="mostraRisultati">
-            <div class="card rounded-lg" *ngFor="let lg of luoghiTrovati" >
-              <img src="{{ lg.immagine }}" class="card-img-top" alt="Card Image">
-              <div class="card-body">
-                <h5 class="card-title">{{ lg.titolo }}</h5>
-                <p class="card-text">{{ lg.descrizione }}</p>
+              <div class="card rounded-lg" *ngFor="let lg of luoghiTrovati">
+                <img src="{{ lg.immagine }}" class="card-img-top" alt="Card Image">
+                <div class="card-body">
+                  <h5 class="card-title">{{ lg.titolo }}</h5>
+                  <p class="card-text">{{ lg.descrizione }}</p>
+                </div>
               </div>
             </div>
-            </div>
 
-    <div class="row mt-4">
-      <div class="col-12 d-flex justify-content-center">
-        <nav aria-label="Page navigation example">
-          <ul class="pagination">
-            <li class="page-item" [class.disabled]="currentPage === 0">
-              <a class="page-link" (click)="previousPage()" aria-label="Previous">
-                <span class="cursor" aria-hidden="true">&laquo;</span>
-              </a>
-            </li>
-            <li class="page-item" [class.disabled]="currentPage === totalPages - 1">
-              <a class="page-link" (click)="nextPage()" aria-label="Next">
-                <span class="cursor" aria-hidden="true">&raquo;</span>
-              </a>
-            </li>
-          </ul>
-        </nav>
+            <div class="row mt-4">
+              <div class="col-12 d-flex justify-content-center">
+                <nav aria-label="Page navigation example">
+                  <ul class="pagination">
+                    <li class="page-item" [class.disabled]="currentPage === 0">
+                      <a class="page-link" (click)="previousPage()" aria-label="Previous">
+                        <span class="cursor" aria-hidden="true">&laquo;</span>
+                      </a>
+                    </li>
+                    <li class="page-item" [class.disabled]="currentPage === totalPages - 1">
+                      <a class="page-link" (click)="nextPage()" aria-label="Next">
+                        <span class="cursor" aria-hidden="true">&raquo;</span>
+                      </a>
+                    </li>
+                  </ul>
+                </nav>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
-</div>
-</div>
