@@ -1,33 +1,35 @@
-import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { Luoghi } from 'src/app/models/luoghi';
-import { FooterService } from 'src/app/services/footer.service';
-import { HomeServiceService } from 'src/app/services/home.service.service';
-import { ChangeDetectorRef } from '@angular/core';
-
+import { HttpErrorResponse } from "@angular/common/http";
+import { Component, OnInit } from "@angular/core";
+import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
+import { Luoghi } from "src/app/models/luoghi";
+import { FooterService } from "src/app/services/footer.service";
+import { HomeServiceService } from "src/app/services/home.service.service";
+import { ChangeDetectorRef } from "@angular/core";
 
 @Component({
-  selector: 'app-home.modifiche',
-  templateUrl: './home.modifiche.component.html',
-  styleUrls: ['./home.modifiche.component.scss']
+  selector: "app-home.modifiche",
+  templateUrl: "./home.modifiche.component.html",
+  styleUrls: ["./home.modifiche.component.scss"],
 })
 export class HomeModificheComponent implements OnInit {
   luoghi: Luoghi[] = [];
-  luoghiTrovati: Luoghi [] = [];
+  luoghiTrovati: Luoghi[] = [];
   currentPage: number = 0;
   totalPages: number = 0;
   totalElements: number = 0;
-  titoloDaCercare: string = '';
+  titoloDaCercare: string = "";
   mostraRisultati: boolean = false;
-  tipoRicerca: string = 'descrizione';
+  tipoRicerca: string = "descrizione";
   mostraForm: boolean = false;
-formLuogo: any = {};
-luogoDaNascondere: string = '';
+  formLuogo: any = {};
+  luogoDaNascondere: string = "";
 
-
-
-  constructor(private homeSrv: HomeServiceService, private footSrv: FooterService, private domSan: DomSanitizer, private cdr: ChangeDetectorRef) {
+  constructor(
+    private homeSrv: HomeServiceService,
+    private footSrv: FooterService,
+    private domSan: DomSanitizer,
+    private cdr: ChangeDetectorRef
+  ) {
     this.footSrv.setShowFooter(true);
   }
 
@@ -36,33 +38,31 @@ luogoDaNascondere: string = '';
   }
 
   getLuoghi(page: number): void {
-    this.homeSrv.getAllLuoghi(page).subscribe((data: any) => {
-      if (Array.isArray(data.content)) {
-        this.luoghi = data.content;
-        this.totalElements = data.totalElements;
-        this.totalPages = data.totalPages;
-        this.currentPage = page;
-        this.mostraRisultati = false; // Assicurati che mostri i risultati di getLuoghi
-      } else {
-        console.error("I dati ricevuti non sono un array", data);
+    this.homeSrv.getAllLuoghi(page).subscribe(
+      (data: any) => {
+        if (Array.isArray(data.content)) {
+          this.luoghi = data.content;
+          this.totalElements = data.totalElements;
+          this.totalPages = data.totalPages;
+          this.currentPage = page;
+          this.mostraRisultati = false; // Assicurati che mostri i risultati di getLuoghi
+        } else {
+          console.error("I dati ricevuti non sono un array", data);
+        }
+      },
+      (error: HttpErrorResponse) => {
+        console.error("Errore nella richiesta HTTP:", error);
       }
-    },
-    (error: HttpErrorResponse) => {
-      console.error('Errore nella richiesta HTTP:', error);
-    });
+    );
   }
 
-
-
-
-
   cercaLuogo(tipoRicerca: string): void {
-    if (this.titoloDaCercare.trim() !== '') {
+    if (this.titoloDaCercare.trim() !== "") {
       switch (tipoRicerca) {
-        case 'titolo':
+        case "titolo":
           this.homeSrv.getLuogoByTitolo(this.titoloDaCercare).subscribe(
             (data: any) => {
-              if (data && typeof data === 'object' && !Array.isArray(data)) {
+              if (data && typeof data === "object" && !Array.isArray(data)) {
                 this.luoghiTrovati = [data];
                 this.mostraRisultati = true;
               } else {
@@ -70,11 +70,11 @@ luogoDaNascondere: string = '';
               }
             },
             (error: HttpErrorResponse) => {
-              console.error('Errore nella richiesta HTTP:', error);
+              console.error("Errore nella richiesta HTTP:", error);
             }
           );
           break;
-        case 'descrizione':
+        case "descrizione":
           this.homeSrv.getLuogoByDescrizione(this.titoloDaCercare).subscribe(
             (data: any) => {
               if (Array.isArray(data)) {
@@ -85,11 +85,11 @@ luogoDaNascondere: string = '';
               }
             },
             (error: HttpErrorResponse) => {
-              console.error('Errore nella richiesta HTTP:', error);
+              console.error("Errore nella richiesta HTTP:", error);
             }
           );
           break;
-        case 'prodotto':
+        case "prodotto":
           this.homeSrv.getLuogoByNomeProdotto(this.titoloDaCercare).subscribe(
             (data: any) => {
               if (Array.isArray(data)) {
@@ -100,7 +100,7 @@ luogoDaNascondere: string = '';
               }
             },
             (error: HttpErrorResponse) => {
-              console.error('Errore nella richiesta HTTP:', error);
+              console.error("Errore nella richiesta HTTP:", error);
             }
           );
           break;
@@ -115,52 +115,44 @@ luogoDaNascondere: string = '';
     this.homeSrv.createLuogo(luogo).subscribe(
       (response) => {
         this.luoghi.push(response);
-        console.log('Luogo creato con successo', response);
+        console.log("Luogo creato con successo", response);
       },
       (error) => {
-        console.error('Errore durante la creazione del luogo', error);
+        console.error("Errore durante la creazione del luogo", error);
       }
     );
   }
 
-
-
-
-
   aggiornaLuogo(id: string, nuovoLuogo: any) {
-  this.homeSrv.updateLuogo(id, nuovoLuogo).subscribe(
-    (response) => {
-      const indice = this.luoghi.findIndex(lg => lg.id === id);
-      if (indice !== -1) {
-        this.luoghi[indice] = response; // Aggiorna l'oggetto Luogo con la risposta dal backend
+    this.homeSrv.updateLuogo(id, nuovoLuogo).subscribe(
+      (response) => {
+        const indice = this.luoghi.findIndex((lg) => lg.id === id);
+        if (indice !== -1) {
+          this.luoghi[indice] = response; // Aggiorna l'oggetto Luogo con la risposta dal backend
+        }
+        console.log("Luogo aggiornato con successo", response);
+      },
+      (error) => {
+        if (error.status === 404) {
+          console.error("Luogo non trovato con ID:", id);
+        } else {
+          console.error("Errore durante l'aggiornamento del luogo", error);
+        }
       }
-      console.log('Luogo aggiornato con successo', response);
-    },
-    (error) => {
-      if (error.status === 404) {
-        console.error('Luogo non trovato con ID:', id);
-      } else {
-        console.error('Errore durante l\'aggiornamento del luogo', error);
-      }
-    }
-  );
-}
-
-
-
+    );
+  }
 
   eliminaLuogo(id: string) {
     this.homeSrv.deleteLuogo(id).subscribe(
       () => {
-        this.luoghi = this.luoghi.filter(lg => lg.id !== id);
-        console.log('Luogo eliminato con successo');
+        this.luoghi = this.luoghi.filter((lg) => lg.id !== id);
+        console.log("Luogo eliminato con successo");
       },
       (error) => {
-        console.error('Errore durante l\'eliminazione del luogo', error);
+        console.error("Errore durante l'eliminazione del luogo", error);
       }
     );
   }
-
 
   mostraFormCreazione(): void {
     this.mostraForm = true;
@@ -182,9 +174,6 @@ luogoDaNascondere: string = '';
     }
     this.mostraForm = false;
   }
-
-
-
 
   nextPage(): void {
     if (this.currentPage < this.totalPages - 1) {

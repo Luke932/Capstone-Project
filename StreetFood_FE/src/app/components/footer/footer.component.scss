@@ -1,6 +1,9 @@
 footer {
   background-color:#73aff3;
-  padding: 1rem;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
 }
 
 .font{
@@ -14,3 +17,6 @@ img {
   height: 25px;
   margin-right: 5px;
 }
+
+
+

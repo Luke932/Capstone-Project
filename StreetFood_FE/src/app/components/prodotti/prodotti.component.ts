@@ -34,6 +34,7 @@ export class ProdottiComponent implements OnInit {
   titoloDaCercare: string = "";
   prodottiTrovati: Prodotti[] = [];
   mostraRisultati: boolean = false;
+  mostraMessaggio: boolean = false;
   tipoRicerca: string = "prodotto";
 
   constructor(
@@ -58,6 +59,8 @@ export class ProdottiComponent implements OnInit {
           .getLikesByUserAndProduct(this.utenteId, prodotto.id)
           .subscribe(
             (likes) => {
+              console.log(likes);
+
               const likedByUser = likes.length > 0;
               if (likedByUser) {
                 prodotto.isLiked = true;
@@ -327,7 +330,6 @@ export class ProdottiComponent implements OnInit {
       }
     );
   }
-
   cercaProdotto(tipoRicerca: string): void {
     if (this.titoloDaCercare.trim() !== "") {
       switch (tipoRicerca) {
@@ -337,12 +339,17 @@ export class ProdottiComponent implements OnInit {
               if (data && typeof data === "object" && !Array.isArray(data)) {
                 this.prodottiTrovati = [data];
                 this.mostraRisultati = true;
+                this.mostraMessaggio = false;
               } else {
                 console.error("I dati ricevuti non sono validi", data);
+                this.mostraRisultati = false;
+                this.mostraMessaggio = true; // Aggiunto
               }
             },
             (error: HttpErrorResponse) => {
               console.error("Errore nella richiesta HTTP:", error);
+              this.mostraRisultati = false;
+              this.mostraMessaggio = true; // Aggiunto
             }
           );
           break;
@@ -352,22 +359,29 @@ export class ProdottiComponent implements OnInit {
               if (Array.isArray(data)) {
                 this.prodottiTrovati = data;
                 this.mostraRisultati = true;
+                this.mostraMessaggio = false;
               } else {
                 console.error("I dati ricevuti non sono validi", data);
+                this.mostraRisultati = false;
+                this.mostraMessaggio = true; // Aggiunto
               }
             },
             (error: HttpErrorResponse) => {
               console.error("Errore nella richiesta HTTP:", error);
+              this.mostraRisultati = false;
+              this.mostraMessaggio = true; // Aggiunto
             }
           );
           break;
-        case "prodotto":
         default:
           console.error("Tipo di ricerca non valido");
           break;
       }
     }
   }
+
+
+
 
   nextPage(): void {
     if (this.currentPage < this.totalPages - 1) {
