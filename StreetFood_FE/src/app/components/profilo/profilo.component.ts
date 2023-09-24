@@ -1,7 +1,6 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from 'src/app/auth/auth.service.service';
-import { UtenteService } from 'src/app/services/utente.service';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+
 
 @Component({
   selector: 'app-profilo',
@@ -9,24 +8,25 @@ import { UtenteService } from 'src/app/services/utente.service';
   styleUrls: ['./profilo.component.scss']
 })
 export class ProfiloComponent implements OnInit {
+  userPhotoUrl!: SafeUrl | null;
 
-  constructor(private UtenteSrv: UtenteService, private authSrv: AuthService) { }
+  constructor(private domSan: DomSanitizer) { }
 
   ngOnInit(): void {
-    this.UtenteSrv.getAllUtenti().subscribe(
-      (data: any) => {
-        // Verifica se data è un array prima di assegnarlo a clienti
-        if (Array.isArray(data.content)) {
-          this.UtenteSrv = data.content;
-          console.log(this.UtenteSrv);
-        } else {
-          console.error('I dati ricevuti non sono un array:', data);
-        }
-      },
-      (error: HttpErrorResponse) => {
-        console.error('Errore nella richiesta HTTP:', error);
+    const imageByte = localStorage.getItem('userPhotoUrl');
+    console.log(imageByte);
+
+    if (imageByte) {
+      const byteCharacters = atob(imageByte);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
       }
-    );
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: 'image/jpeg' });
+
+      this.userPhotoUrl = this.domSan.bypassSecurityTrustUrl(URL.createObjectURL(blob));
+    }
   }
 
 }

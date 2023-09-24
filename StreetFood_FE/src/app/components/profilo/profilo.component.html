@@ -1,7 +1,22 @@
 <div class="background-image">
   <div class="container">
     <h1 class="display-1 text-white mb-4 animated-text hover-effect animeted-text">Pagina Profilo</h1>
+    <br>
+    <div class="d-flex align-items-start">
+      <div *ngIf="userPhotoUrl" class="avatar-container">
+        <img [src]="userPhotoUrl" alt="Foto Utente" class="avatar">
+      </div>
+      <div class="ms-5">
+        <h2 class="display-2 mb-4 hover-effect">
+          <a [routerLink]="['preferiti']" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Preferiti</a>
+        </h2>
+        <h2 class="display-2 mb-4 hover-effect">
+          <a [routerLink]="['anagrafica']" routerLinkActive="active">Anagrafica</a>
+        </h2>
+      </div>
+      <div class="ms-5">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
   </div>
 </div>
-
-

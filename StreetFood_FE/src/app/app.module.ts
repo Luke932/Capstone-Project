@@ -40,14 +40,14 @@ const routes: Routes = [
     children: [
       { path: '', redirectTo: 'home', pathMatch: 'full' },
       { path: 'home', component: HomeComponent },
-      { path: 'prodotti',
-      component: ProdottiComponent,
-      children: [
+      { path: 'prodotti', component: ProdottiComponent},
+      { path: 'profilo',
+       component: ProfiloComponent,
+       children: [
         { path: 'preferiti', component: PreferitiComponent},
         {path: 'anagrafica', component: AnagraficaComponent}
       ]
-    },
-      { path: 'profilo', component: ProfiloComponent },
+      },
     ],
     canActivate: [AuthGuard],
     data: { expectedRole: 'USER' }

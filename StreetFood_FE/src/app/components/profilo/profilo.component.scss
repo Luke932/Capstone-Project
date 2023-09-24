@@ -6,6 +6,10 @@
   height: auto;
 }
 
+.container {
+  padding-bottom: 10rem;
+}
+
 .display-1 {
   font-size: 4rem;
 }
@@ -35,4 +39,30 @@
   .hover-effect:hover {
     transform: none !important;
   }
+}
+
+.avatar {
+  width: 250px;
+  height: 250px;
+  border-radius: 50% / 20%;
+  object-fit: cover;
+  border: 2px solid rgb(64, 70, 70);
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
+  margin-right: 2rem;
+}
+
+.display-2 {
+  font-size: 2rem;
+  color: rgb(206, 86, 6);
+  cursor: pointer;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+a:hover {
+  text-decoration: none;
+  color: inherit;
 }
