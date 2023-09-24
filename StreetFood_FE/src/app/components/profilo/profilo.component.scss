@@ -1,0 +1,38 @@
+.background-image {
+  background-image: url("../../../assets/img/water-20.gif.webp");
+  background-size: cover;
+  background-position: center center;
+  background-repeat: repeat;
+  height: auto;
+}
+
+.display-1 {
+  font-size: 4rem;
+}
+
+.hover-effect {
+  transition: transform 0.3s;
+}
+
+.hover-effect:hover {
+  transform: scale(1.1);
+}
+
+.animated-text {
+  animation: blink 1s infinite alternate;
+}
+
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}
+
+@media (max-width: 576px) {
+  .hover-effect:hover {
+    transform: none !important;
+  }
+}

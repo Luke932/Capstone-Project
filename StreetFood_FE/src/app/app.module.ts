@@ -21,6 +21,8 @@ import { LikeService } from './services/like.service';
 import { ProdottiService } from './services/prodotti.service';
 import { FooterService } from './services/footer.service';
 import { ProdottimodificheComponent } from './components/prodottimodifiche/prodottimodifiche.component';
+import { AnagraficaComponent } from './components/anagrafica/anagrafica.component';
+import {  PreferitiComponent } from './components/preferiti/components-preferiti.component';
 
 
 
@@ -38,7 +40,13 @@ const routes: Routes = [
     children: [
       { path: '', redirectTo: 'home', pathMatch: 'full' },
       { path: 'home', component: HomeComponent },
-      { path: 'prodotti', component: ProdottiComponent },
+      { path: 'prodotti',
+      component: ProdottiComponent,
+      children: [
+        { path: 'preferiti', component: PreferitiComponent},
+        {path: 'anagrafica', component: AnagraficaComponent}
+      ]
+    },
       { path: 'profilo', component: ProfiloComponent },
     ],
     canActivate: [AuthGuard],
@@ -70,7 +78,9 @@ const routes: Routes = [
     NavbarComponent,
     AccessoNegatoComponent,
     FooterComponent,
-    ProdottimodificheComponent
+    ProdottimodificheComponent,
+    AnagraficaComponent,
+    PreferitiComponent
   ],
   imports: [
     BrowserModule,
