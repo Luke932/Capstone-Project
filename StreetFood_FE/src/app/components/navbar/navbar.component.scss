@@ -40,9 +40,10 @@
 
 
 .avatar {
-  width: 50%;
-  height: 50%;
-  border-radius: 500px;
+  width: 500px;
+  height: 500px;
+  border-radius: 50% / 20%;
+  object-fit: cover;
 }
 
 .material-symbols-outlined {

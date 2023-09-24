@@ -23,6 +23,7 @@ export class HomeModificheComponent implements OnInit {
   mostraForm: boolean = false;
   formLuogo: any = {};
   luogoDaNascondere: string = "";
+  mostraMessaggio: boolean = false;
 
   constructor(
     private homeSrv: HomeServiceService,
@@ -65,12 +66,17 @@ export class HomeModificheComponent implements OnInit {
               if (data && typeof data === "object" && !Array.isArray(data)) {
                 this.luoghiTrovati = [data];
                 this.mostraRisultati = true;
+                this.mostraMessaggio = false;
               } else {
                 console.error("I dati ricevuti non sono validi", data);
+                this.mostraRisultati = false;
+                this.mostraMessaggio = true; // Aggiunto
               }
             },
             (error: HttpErrorResponse) => {
               console.error("Errore nella richiesta HTTP:", error);
+              this.mostraRisultati = false;
+              this.mostraMessaggio = true; // Aggiunto
             }
           );
           break;
@@ -80,12 +86,17 @@ export class HomeModificheComponent implements OnInit {
               if (Array.isArray(data)) {
                 this.luoghiTrovati = data;
                 this.mostraRisultati = true;
+                this.mostraMessaggio = false;
               } else {
                 console.error("I dati ricevuti non sono validi", data);
+                this.mostraRisultati = false;
+                this.mostraMessaggio = true; // Aggiunto
               }
             },
             (error: HttpErrorResponse) => {
               console.error("Errore nella richiesta HTTP:", error);
+              this.mostraRisultati = false;
+              this.mostraMessaggio = true; // Aggiunto
             }
           );
           break;
@@ -95,12 +106,17 @@ export class HomeModificheComponent implements OnInit {
               if (Array.isArray(data)) {
                 this.luoghiTrovati = data;
                 this.mostraRisultati = true;
+                this.mostraMessaggio = false;
               } else {
                 console.error("I dati ricevuti non sono validi", data);
+                this.mostraRisultati = false;
+                this.mostraMessaggio = true; // Aggiunto
               }
             },
             (error: HttpErrorResponse) => {
               console.error("Errore nella richiesta HTTP:", error);
+              this.mostraRisultati = false;
+              this.mostraMessaggio = true; // Aggiunto
             }
           );
           break;

@@ -46,7 +46,13 @@ public class LuogoService {
 
 	// -----------------RICERCA PER TITOLO PRODOTTO
 	public Luogo findByTitolo(String titolo) {
-		return luogoR.findByTitolo(titolo);
+		Luogo luogo = luogoR.findByTitolo(titolo);
+
+		if (luogo == null) {
+			return null;
+		} else {
+			return luogo;
+		}
 	}
 
 	// ------------RICERCA LUOGO PER ID
@@ -73,12 +79,24 @@ public class LuogoService {
 
 	// ------------TROVA TUTTI I LUOGHI CHE CONTENGONO UNA CERTA DESCRIZIONE
 	public List<Luogo> findLuoghiByDescrizione(String descrizione) {
-		return luogoR.findByDescrizioneContaining(descrizione);
+		List<Luogo> luoghi = luogoR.findByDescrizioneContaining(descrizione);
+
+		if (luoghi.isEmpty()) {
+			return null;
+		} else {
+			return luoghi;
+		}
 	}
 
 	// ------------TROVA TUTTI I LUOGHI DATO UN NOME PRODOTTO
 	public List<Luogo> findLuoghiConProdotto(String nomeProdotto) {
-		return luogoR.findLuoghiConProdotto(nomeProdotto);
+		List<Luogo> luoghi = luogoR.findLuoghiConProdotto(nomeProdotto);
+
+		if (luoghi.isEmpty()) {
+			return null;
+		} else {
+			return luoghi;
+		}
 	}
 
 }

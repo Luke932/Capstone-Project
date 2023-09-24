@@ -35,6 +35,7 @@ export class ProdottimodificheComponent implements OnInit {
   titoloDaCercare: string = "";
   prodottiTrovati: Prodotti[] = [];
   tipoRicerca: string = "prodotto";
+  mostraMessaggio: boolean = false;
 
   constructor(
     private prodottiSrv: ProdottiService,
@@ -404,12 +405,17 @@ export class ProdottimodificheComponent implements OnInit {
               if (data && typeof data === "object" && !Array.isArray(data)) {
                 this.prodottiTrovati = [data];
                 this.mostraRisultati = true;
+                this.mostraMessaggio = false;
               } else {
                 console.error("I dati ricevuti non sono validi", data);
+                this.mostraRisultati = false;
+                this.mostraMessaggio = true; // Aggiunto
               }
             },
             (error: HttpErrorResponse) => {
               console.error("Errore nella richiesta HTTP:", error);
+              this.mostraRisultati = false;
+              this.mostraMessaggio = true; // Aggiunto
             }
           );
           break;
@@ -419,18 +425,23 @@ export class ProdottimodificheComponent implements OnInit {
               if (Array.isArray(data)) {
                 this.prodottiTrovati = data;
                 this.mostraRisultati = true;
+                this.mostraMessaggio = false;
               } else {
                 console.error("I dati ricevuti non sono validi", data);
+                this.mostraRisultati = false;
+                this.mostraMessaggio = true; // Aggiunto
               }
             },
             (error: HttpErrorResponse) => {
               console.error("Errore nella richiesta HTTP:", error);
+              this.mostraRisultati = false;
+              this.mostraMessaggio = true; // Aggiunto
             }
           );
           break;
-        case "prodotto":
         default:
           console.error("Tipo di ricerca non valido");
+          this.mostraMessaggio = true;
           break;
       }
     }

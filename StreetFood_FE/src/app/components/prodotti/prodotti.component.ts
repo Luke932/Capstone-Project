@@ -330,6 +330,8 @@ export class ProdottiComponent implements OnInit {
       }
     );
   }
+
+
   cercaProdotto(tipoRicerca: string): void {
     if (this.titoloDaCercare.trim() !== "") {
       switch (tipoRicerca) {

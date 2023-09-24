@@ -124,7 +124,13 @@ public class ProdottoService {
 
 	// ------------TROVA TUTTI I PRODOTTI DI UN LUOGO
 	public List<Prodotto> findProdottiByTitoloLuogo(String titoloLuogo) {
-		return prodottoR.findByTitoloLuogo(titoloLuogo);
+		List<Prodotto> prodotti = prodottoR.findByTitoloLuogo(titoloLuogo);
+
+		if (prodotti.isEmpty()) {
+			return null;
+		} else {
+			return prodotti;
+		}
 	}
 
 	// ------------TROVA TUTTI I PRODOTTI TRAMITE IL NOME DI UN PRODOTTO E UNA LISTA
