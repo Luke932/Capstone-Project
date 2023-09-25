@@ -17,6 +17,6 @@ export class UtenteService {
   }
 
   updateUser(userId: string, payload: any) {
-    return this.http.put<any>(`${this.baseUrl}utenti/${userId}`, payload);
+    return this.http.put<any>(`${this.baseUrl}auth/${userId}`, payload);
   }
 }

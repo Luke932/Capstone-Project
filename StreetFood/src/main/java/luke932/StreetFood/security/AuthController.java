@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,6 +26,7 @@ import luke932.StreetFood.exceptions.UnauthorizedException;
 import luke932.StreetFood.payloads.UtenteLoginPayload;
 import luke932.StreetFood.payloads.UtenteLoginSuccessful;
 import luke932.StreetFood.payloads.UtenteSavePayloadUser;
+import luke932.StreetFood.payloads.UtenteUpdatePayload;
 import luke932.StreetFood.services.FileService;
 import luke932.StreetFood.services.UtenteService;
 
@@ -91,6 +93,13 @@ public class AuthController {
 	public void deleteUtente(@PathVariable UUID id) throws BadRequestException {
 		utenteSrv.deleteUtente(id);
 
+	}
+
+	@PutMapping("/{id}")
+	public Utente updateUtente(@PathVariable UUID id, @RequestBody UtenteUpdatePayload body) {
+		body.setPassword(bcrypt.encode(body.getPassword())); // Codifica la nuova password
+
+		return utenteSrv.updateUtente(id, body);
 	}
 
 }

@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -22,7 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import luke932.StreetFood.entities.Utente;
 import luke932.StreetFood.exceptions.NotFoundException;
-import luke932.StreetFood.payloads.UtenteUpdatePayload;
 import luke932.StreetFood.services.UtenteService;
 
 @RestController
@@ -68,10 +65,13 @@ public class UtenteController {
 	}
 
 	// --------------- PUT UTENTE
-	@PutMapping("/{userId}")
-	public Utente updateUser(@PathVariable UUID userId, @RequestBody UtenteUpdatePayload body) {
-		return utenteService.updateUtente(userId, body);
-	}
+//	@PutMapping("/{userId}")
+//	public Utente updateUser(@PathVariable UUID userId, @RequestBody UtenteUpdatePayload body) {
+//		body.setPassword(bcrypt.encode(body.getPassword()));
+//		Utente created = utenteSrv.createUser(body);
+//
+//		return created;
+//	}
 
 	// --------------- DELETE UTENTE
 	@DeleteMapping("/{userId}")
