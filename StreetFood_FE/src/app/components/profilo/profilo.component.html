@@ -3,22 +3,31 @@
     <h1 class="display-1 text-white mb-4 animated-text hover-effect animeted-text">Pagina Profilo</h1>
     <br>
     <div class="d-flex align-items-start">
-      <div *ngIf="userPhotoUrl" class="avatar-container">
-        <img [src]="userPhotoUrl" alt="Foto Utente" class="avatar">
+      <div class="d-flex flex-column">
+        <div *ngIf="userPhotoUrl" class="avatar-container mb-4 da-nascondere">
+          <img [src]="userPhotoUrl" alt="Foto Utente" class="avatar">
+        </div>
+        <ul class="lista-trasparente da-nascondere"> <!-- Aggiunta della classe "da-nascondere" -->
+          <li>Username: {{ username }}</li>
+          <li>Nome: {{ nome }}</li>
+          <li>Cognome: {{ cognome }}</li>
+          <li>Email: {{ email }}</li>
+          <li>Ruolo: {{ userRuolo }}</li>
+        </ul>
       </div>
+
       <div class="ms-5">
         <div class="row">
           <div class="col-md-6">
-            <h2 class="display-2 mb-4 hover-effect"
-                (click)="handleClick('preferiti')"
-                [class.click-effect]="selectedRoute === 'preferiti'">
-              <a [routerLink]="['preferiti']" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Preferiti</a>
+            <h2 class="display-2 mb-4 hover-effect" (click)="handleClick('preferiti')"
+              [class.click-effect]="selectedRoute === 'preferiti'">
+              <a [routerLink]="['preferiti']" routerLinkActive="active"
+                [routerLinkActiveOptions]="{ exact: true }">Preferiti</a>
             </h2>
           </div>
           <div class="col-md-6">
-            <h2 class="display-2 mb-4 hover-effect"
-                (click)="handleClick('anagrafica')"
-                [class.click-effect]="selectedRoute === 'anagrafica'">
+            <h2 class="display-2 mb-4 hover-effect" (click)="handleClick('anagrafica')"
+              [class.click-effect]="selectedRoute === 'anagrafica'">
               <a [routerLink]="['anagrafica']" routerLinkActive="active">Anagrafica</a>
             </h2>
           </div>

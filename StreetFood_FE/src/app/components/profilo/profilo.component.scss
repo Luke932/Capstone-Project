@@ -71,6 +71,27 @@ a:hover {
   background-image: linear-gradient(to right, rgba(201, 255, 51, 0.5), rgba(201, 255, 51, 0));
 }
 
+.lista-trasparente {
+  list-style-type: none;
+  padding: 0;
+  border-radius: 8px;
+  width: 90%;
+}
 
+.lista-trasparente li {
+  padding: 8px 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  color: rgb(206, 86, 6);
+}
+
+.lista-trasparente li:last-child {
+  border-bottom: none;
+}
+
+@media screen and (max-width: 700px) {
+  .da-nascondere {
+    display: none;
+  }
+}
 
 

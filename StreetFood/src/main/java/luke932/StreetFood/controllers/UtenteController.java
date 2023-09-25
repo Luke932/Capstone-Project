@@ -63,10 +63,8 @@ public class UtenteController {
 
 	// --------------- GET UTENTE BY ID
 	@GetMapping("/{userId}")
-	// @PreAuthorize("hasAuthority('ADMIN')")
 	public Utente getUserById(@PathVariable UUID userId) {
 		return utenteService.findById(userId);
-
 	}
 
 	// --------------- PUT UTENTE
