@@ -23,6 +23,7 @@ import { FooterService } from './services/footer.service';
 import { ProdottimodificheComponent } from './components/prodottimodifiche/prodottimodifiche.component';
 import { AnagraficaComponent } from './components/anagrafica/anagrafica.component';
 import {  PreferitiComponent } from './components/preferiti/components-preferiti.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 
@@ -88,6 +89,7 @@ const routes: Routes = [
     HttpClientModule,
     RouterModule.forRoot(routes),
     FormsModule,
+    ReactiveFormsModule
   ],
   providers: [
     AuthService,

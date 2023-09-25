@@ -69,7 +69,6 @@ public class UtenteController {
 
 	// --------------- PUT UTENTE
 	@PutMapping("/{userId}")
-	@PreAuthorize("hasAuthority('ADMIN')")
 	public Utente updateUser(@PathVariable UUID userId, @RequestBody UtenteUpdatePayload body) {
 		return utenteService.updateUtente(userId, body);
 	}

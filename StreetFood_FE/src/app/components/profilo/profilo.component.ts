@@ -4,6 +4,7 @@ import { Utente } from 'src/app/models/utente.interface';
 import { LikeService } from 'src/app/services/like.service';
 import { ProdottiService } from 'src/app/services/prodotti.service';
 import { ProfiloService } from 'src/app/services/profilo.service';
+import { SharedDataService } from 'src/app/services/shared-data.service';
 
 
 @Component({
@@ -23,7 +24,8 @@ export class ProfiloComponent implements OnInit {
 
 
 
-  constructor(private domSan: DomSanitizer,private profiloService: ProfiloService, private prodottiSrv: ProdottiService) { }
+
+  constructor(private domSan: DomSanitizer,private profiloService: ProfiloService, private prodottiSrv: ProdottiService, private sharedDataService: SharedDataService) { }
 
   ngOnInit(): void {
     const imageByte = localStorage.getItem('userPhotoUrl');
@@ -59,7 +61,10 @@ getUtenteById(utenteId: string) {
     this.email = utente.email;
     this.username = utente.username;
     this.userRuolo = utente.ruolo.nome;
-  })
+
+
+
+  });
 }
 
 
@@ -67,5 +72,7 @@ getUtenteById(utenteId: string) {
     this.selectedRoute = route;
     localStorage.setItem('selectedRoute', route);
   }
+
+
 }
 
