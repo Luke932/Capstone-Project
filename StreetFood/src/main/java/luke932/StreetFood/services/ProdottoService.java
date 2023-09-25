@@ -13,6 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
+import luke932.StreetFood.entities.Like;
 import luke932.StreetFood.entities.Luogo;
 import luke932.StreetFood.entities.Prodotto;
 import luke932.StreetFood.exceptions.NotFoundException;
@@ -148,6 +149,15 @@ public class ProdottoService {
 	// DI LIKE
 	public List<Prodotto> findProdottiByLuoghiAndNumLikes(List<UUID> luoghiIds, int numLikes) {
 		return prodottoR.findProdottiByLuoghiAndNumLikes(luoghiIds, numLikes);
+	}
+
+	// ------------TROVA TUTTI I PRODOTTI CON LIKE
+	public List<Prodotto> getProdottiByLikes(List<Like> likes) {
+		List<Prodotto> prodottiConLike = new ArrayList<>();
+		for (Like like : likes) {
+			prodottiConLike.add(like.getProdotto());
+		}
+		return prodottiConLike;
 	}
 
 }

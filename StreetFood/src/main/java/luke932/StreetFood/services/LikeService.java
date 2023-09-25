@@ -89,7 +89,7 @@ public class LikeService {
 		return likeR.countLikesByProdottoId(prodottoId);
 	}
 
-	// ------------RESTITUISCE UNA NUMERO DI LIKE ASSOCIATI A QUESTO PRODOTTO
+	// ------------RESTITUISCE UNA NUMERO DI LIKE ASSOCIATI A QUESTO UTENTE
 	public Long countLikesByUtenteId(UUID utenteId) {
 		return likeR.countLikesByUtenteId(utenteId);
 	}

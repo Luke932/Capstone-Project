@@ -27,6 +27,8 @@ import luke932.StreetFood.exceptions.NotFoundException;
 import luke932.StreetFood.repositories.ProdottoRepository;
 import luke932.StreetFood.repositories.UtenteRepository;
 import luke932.StreetFood.services.LikeService;
+import luke932.StreetFood.services.ProdottoService;
+import luke932.StreetFood.services.UtenteService;
 
 @RestController
 @RequestMapping("/like")
@@ -35,12 +37,16 @@ public class LikeController {
 	private final LikeService likeSrv;
 	private final UtenteRepository utenteRepository;
 	private final ProdottoRepository prodottoRepository;
+	private final UtenteService utenteSrv;
+	private final ProdottoService prodottoSrv;
 
-	public LikeController(LikeService likeSrv, UtenteRepository utenteRepository,
-			ProdottoRepository prodottoRepository) {
+	public LikeController(LikeService likeSrv, UtenteRepository utenteRepository, ProdottoRepository prodottoRepository,
+			UtenteService utenteSrv, ProdottoService prodottoSrv) {
 		this.likeSrv = likeSrv;
 		this.utenteRepository = utenteRepository;
 		this.prodottoRepository = prodottoRepository;
+		this.utenteSrv = utenteSrv;
+		this.prodottoSrv = prodottoSrv;
 	}
 
 	// ------------RICERCA LIKE PER ID
@@ -136,14 +142,11 @@ public class LikeController {
 	}
 
 	// ------------RESTITUISCE UNA LISTA DI LIKE ASSOCIATI A QUESTO UTENTE
-	@GetMapping("/byUtente/{utenteId}")
-	@PreAuthorize("hasAuthority('ADMIN')")
-	public List<Like> getLikesByUtenteId(@PathVariable UUID utenteId) {
+	@GetMapping("/prodotti-con-like/{utenteId}")
+	public List<Prodotto> getProdottiConLikeDaUtente(@PathVariable UUID utenteId) {
 		List<Like> likes = likeSrv.findByUtenteId(utenteId);
-		if (likes.isEmpty()) {
-			throw new NotFoundException("Nessun like trovato per l'utente con ID " + utenteId);
-		}
-		return likes;
+		List<Prodotto> prodottiConLike = prodottoSrv.getProdottiByLikes(likes);
+		return prodottiConLike;
 	}
 
 	// ------------RESTITUISCE UN NUMERO DI LIKE ASSOCIATI A QUESTO PRODOTTO

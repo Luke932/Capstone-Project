@@ -44,6 +44,7 @@ const routes: Routes = [
       { path: 'profilo',
        component: ProfiloComponent,
        children: [
+        { path: '', redirectTo: 'preferiti', pathMatch: 'full' },
         { path: 'preferiti', component: PreferitiComponent},
         {path: 'anagrafica', component: AnagraficaComponent}
       ]
