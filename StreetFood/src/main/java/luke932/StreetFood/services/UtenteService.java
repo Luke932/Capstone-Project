@@ -134,12 +134,20 @@ public class UtenteService {
 				throw new NotFoundException("Ruolo 'USER' non trovato nel database");
 			}
 			body.setRuolo(userRole);
+		} else {
+			// Se body.getRuolo() non è nullo, allora sostituisci solo la proprietà nome
+			Ruolo existingRole = found.getRuolo();
+			Ruolo newRole = body.getRuolo();
+			existingRole.setNome(newRole.getNome());
+			body.setRuolo(existingRole);
 		}
+
 		found.setUsername(body.getUsername());
 		found.setNome(body.getNome());
 		found.setCognome(body.getCognome());
 		found.setEmail(body.getEmail());
 		found.setPassword(body.getPassword());
+		found.setRuolo(body.getRuolo());
 
 		return utenteR.save(found);
 	}

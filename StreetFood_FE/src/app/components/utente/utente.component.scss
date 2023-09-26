@@ -1,0 +1,103 @@
+.background-image {
+  background-image: url("../../../assets/img/water-20.gif.webp");
+  background-size: cover;
+  background-position: center center;
+  background-repeat: repeat;
+  height: auto;
+}
+
+.container {
+  padding-bottom: 10rem;
+}
+
+.display-1 {
+  font-size: 4rem;
+}
+
+.hover-effect {
+  transition: transform 0.3s;
+}
+
+.hover-effect:hover {
+  transform: scale(1.1);
+}
+
+.animated-text {
+  animation: blink 1s infinite alternate;
+}
+
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}
+
+@media (max-width: 576px) {
+  .hover-effect:hover {
+    transform: none !important;
+  }
+}
+
+a:hover {
+  text-decoration: none;
+  color: inherit;
+}
+
+.click-effect {
+  background-image: linear-gradient(to right, rgba(201, 255, 51, 0.5), rgba(201, 255, 51, 0));
+}
+
+.lista-trasparente {
+  list-style-type: none;
+  padding: 0;
+  border-radius: 8px;
+  width: 90%;
+}
+
+.lista-trasparente td {
+  padding: 8px 16px;
+  padding-left: 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  color: rgb(206, 86, 6);
+}
+
+.lista-trasparente td:last-child {
+  border-bottom: none;
+}
+
+.avatar {
+  border-radius: 50% / 20%;
+  object-fit: cover;
+  border: 2px solid rgb(64, 70, 70);
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
+  margin-right: 2rem;
+}
+
+button {
+  margin-right: 3rem;
+}
+
+span {
+  cursor: pointer;
+}
+
+.form-container {
+  margin-bottom: 5rem;
+}
+
+@media screen and (max-width: 770px) {
+
+  .lista-trasparente th:nth-child(3),
+  .lista-trasparente td:nth-child(3) {
+    display: none;
+  }
+
+
+  .lista-trasparente th:nth-child(4),
+  .lista-trasparente td:nth-child(4) {
+    display: none;
+  }
+}

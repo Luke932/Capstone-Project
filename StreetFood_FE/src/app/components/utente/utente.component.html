@@ -1,0 +1,90 @@
+<div class="background-image">
+  <div class="container">
+    <h1 class="display-1 text-white mb-4 animated-text hover-effect animeted-text">Pagina Utenti</h1>
+    <br>
+
+    <div *ngIf="showForm" class="form-container">
+      <form #form="ngForm" (ngSubmit)="saveOrUpdateUtente(form)">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input type="text" id="username" class="form-control" name="username" required ngModel>
+        </div>
+
+        <div class="form-group">
+          <label for="nome">Nome</label>
+          <input type="text" id="nome" class="form-control" name="nome" required ngModel>
+        </div>
+
+        <div class="form-group">
+          <label for="cognome">Cognome</label>
+          <input type="text" id="cognome" class="form-control" name="cognome" required ngModel>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="text" id="email" class="form-control" name="email" required ngModel>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" class="form-control mb-3" name="password" required ngModel>
+        </div>
+
+
+
+        <div class="photo mb-3">
+          <label for="photo">Carica Foto:</label>
+          <input type="file" id="photo" (change)="onFileSelected($event)" required>
+        </div>
+
+
+        <button class="me-3" *ngIf="isNewUser" type="button" class="btn btn-primary" (click)="createUtenteUser(form)">Crea Utente</button>
+        <button class="me-3" *ngIf="isNewUser" type="button" class="btn btn-success" (click)="createUtenteAdmin(form)">Crea Admin</button>
+
+
+        <button *ngIf="!isNewUser" type="submit" class="btn btn-primary">{{ isNewUser ? 'Crea Utente' : 'Salva Modifiche' }}</button>
+        <button type="button" class="btn btn-danger" (click)="cancelEdit()">Annulla</button>
+      </form>
+    </div>
+
+    <div *ngIf="!showForm" class="table-responsive">
+      <table class="lista-trasparente">
+        <thead>
+          <tr>
+            <th>Username</th>
+            <th>Nome</th>
+            <th>Cognome</th>
+            <th>Email</th>
+            <th>Ruolo</th>
+            <th>Foto</th>
+            <th>
+              <span class="material-symbols-outlined" (click)="showCreateForm()">
+                edit
+              </span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let utente of utenti">
+            <td>{{ utente.username }}</td>
+            <td>{{ utente.nome }}</td>
+            <td>{{ utente.cognome }}</td>
+            <td>{{ utente.email }}</td>
+            <td>{{ utente.ruolo.nome }}</td>
+            <td>
+              <img class="avatar" [src]="convertByteArrayToImageUrl(utente.foto)" alt="Foto Utente" width="50" height="50">
+            </td>
+            <td>
+              <span class="material-symbols-outlined" (click)="showEditForm(utente)">
+                rebase_edit
+              </span>
+              <span class="material-symbols-outlined" *ngIf="utente.id" (click)="deleteUser(utente.id)">
+                delete
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

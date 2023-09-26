@@ -4,6 +4,7 @@ export interface Utente {
   nome:string,
   cognome:string,
   username:string,
+  immagine: string| any,
   ruolo?:string,
   id?:string
 }

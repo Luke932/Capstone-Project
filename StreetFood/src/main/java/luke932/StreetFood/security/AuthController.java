@@ -47,7 +47,7 @@ public class AuthController {
 		this.fileService = fileService;
 	}
 
-	@PostMapping("/register")
+	@PostMapping("/register/user")
 	@ResponseStatus(HttpStatus.CREATED)
 	public Utente saveUser(@ModelAttribute @Validated UtenteSavePayloadUser body,
 			@RequestParam("file") MultipartFile file) throws IOException {
@@ -65,6 +65,28 @@ public class AuthController {
 
 		body.setPassword(bcrypt.encode(body.getPassword()));
 		Utente created = utenteSrv.createUser(body);
+
+		return created;
+	}
+
+	@PostMapping("/register/admin")
+	@ResponseStatus(HttpStatus.CREATED)
+	public Utente saveAdmin(@ModelAttribute @Validated UtenteSavePayloadUser body,
+			@RequestParam("file") MultipartFile file) throws IOException {
+
+		if (file != null && !file.isEmpty()) {
+			byte[] fileData = file.getBytes();
+			String fileName = file.getOriginalFilename();
+
+			// Salva il file utilizzando il servizio fileService
+			fileService.saveFile(fileName, fileData);
+
+			// Imposta i dati del file come array di byte nell'entità Utente
+			body.setFoto(fileData);
+		}
+
+		body.setPassword(bcrypt.encode(body.getPassword()));
+		Utente created = utenteSrv.createAdminUser(body);
 
 		return created;
 	}
@@ -91,8 +113,8 @@ public class AuthController {
 	@DeleteMapping("/{userId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deleteUtente(@PathVariable UUID id) throws BadRequestException {
+		System.out.println("Deleting user with ID: " + id);
 		utenteSrv.deleteUtente(id);
-
 	}
 
 	@PutMapping("/{id}")

@@ -24,6 +24,7 @@ import { ProdottimodificheComponent } from './components/prodottimodifiche/prodo
 import { AnagraficaComponent } from './components/anagrafica/anagrafica.component';
 import {  PreferitiComponent } from './components/preferiti/components-preferiti.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { UtenteComponent } from './components/utente/utente.component';
 
 
 
@@ -60,6 +61,7 @@ const routes: Routes = [
       { path: '', redirectTo: 'homemodifiche', pathMatch: 'full' },
       { path: 'homemodifiche', component: HomeModificheComponent },
       { path: 'prodottimodifiche', component: ProdottimodificheComponent },
+      { path: 'utenti', component: UtenteComponent },
     ],
     canActivate: [AuthGuard],
     data: { expectedRole: 'ADMIN' }
@@ -82,7 +84,8 @@ const routes: Routes = [
     FooterComponent,
     ProdottimodificheComponent,
     AnagraficaComponent,
-    PreferitiComponent
+    PreferitiComponent,
+    UtenteComponent
   ],
   imports: [
     BrowserModule,

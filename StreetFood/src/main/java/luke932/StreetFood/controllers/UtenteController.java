@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,34 +21,42 @@ import org.springframework.web.multipart.MultipartFile;
 
 import luke932.StreetFood.entities.Utente;
 import luke932.StreetFood.exceptions.NotFoundException;
+import luke932.StreetFood.services.FileService;
 import luke932.StreetFood.services.UtenteService;
 
 @RestController
 @RequestMapping("/utenti")
 public class UtenteController {
 	private final UtenteService utenteService;
+	private final PasswordEncoder bcrypt;
+	private final FileService fileService;
 
-	public UtenteController(UtenteService utenteService) {
+	public UtenteController(UtenteService utenteService, PasswordEncoder bcrypt, FileService fileService) {
 		this.utenteService = utenteService;
+		this.bcrypt = bcrypt;
+		this.fileService = fileService;
+
 	}
 
 	// --------------- POST UTENTE USER
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	@PreAuthorize("hasAuthority('ADMIN')")
-	public Utente saveUser(@RequestPart("file") MultipartFile file, @RequestPart("user") Utente body) {
+	public Utente saveUser(@RequestPart("file") MultipartFile file, @RequestPart("user") Utente body)
+			throws IOException {
 
 		if (file != null && !file.isEmpty()) {
-			try {
-				byte[] bytes = file.getBytes();
-				body.setFoto(bytes);
-			} catch (IOException e) {
-				e.printStackTrace();
+			byte[] fileData = file.getBytes();
+			body.setFoto(fileData);
 
-			}
+			// Salva il file utilizzando il servizio fileService
+			String fileName = file.getOriginalFilename();
+			fileService.saveFile(fileName, fileData);
 		}
 
+		body.setPassword(bcrypt.encode(body.getPassword()));
 		Utente created = utenteService.save(body);
+
 		return created;
 	}
 
