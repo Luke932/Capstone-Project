@@ -4,30 +4,30 @@
     <br>
 
     <div *ngIf="showForm" class="form-container">
-      <form #form="ngForm" (ngSubmit)="saveOrUpdateUtente(form)">
+      <form #form="ngForm">
         <div class="form-group">
           <label for="username">Username</label>
-          <input type="text" id="username" class="form-control" name="username" required ngModel>
+          <input type="text" id="username" class="form-control" name="username" required [(ngModel)]="utenteForm.value.username">
         </div>
 
         <div class="form-group">
           <label for="nome">Nome</label>
-          <input type="text" id="nome" class="form-control" name="nome" required ngModel>
+          <input type="text" id="nome" class="form-control" name="nome" required [(ngModel)]="utenteForm.value.nome">
         </div>
 
         <div class="form-group">
           <label for="cognome">Cognome</label>
-          <input type="text" id="cognome" class="form-control" name="cognome" required ngModel>
+          <input type="text" id="cognome" class="form-control" name="cognome" required [(ngModel)]="utenteForm.value.cognome">
         </div>
 
         <div class="form-group">
           <label for="email">Email</label>
-          <input type="text" id="email" class="form-control" name="email" required ngModel>
+          <input type="text" id="email" class="form-control" name="email" required [(ngModel)]="utenteForm.value.email">
         </div>
 
         <div class="form-group">
           <label for="password">Password</label>
-          <input type="password" id="password" class="form-control mb-3" name="password" required ngModel>
+          <input type="password" id="password" class="form-control mb-3" name="password" required [(ngModel)]="utenteForm.value.password">
         </div>
 
 
@@ -42,8 +42,48 @@
         <button class="me-3" *ngIf="isNewUser" type="button" class="btn btn-success" (click)="createUtenteAdmin(form)">Crea Admin</button>
 
 
-        <button *ngIf="!isNewUser" type="submit" class="btn btn-primary">{{ isNewUser ? 'Crea Utente' : 'Salva Modifiche' }}</button>
+
         <button type="button" class="btn btn-danger" (click)="cancelEdit()">Annulla</button>
+      </form>
+    </div>
+
+    <div *ngIf="showUpdateForm" class="form-container">
+      <form [formGroup]="updateForm" (ngSubmit)="updateUtente()">
+        <div class="form-group">
+          <label for="updateUsername">Username</label>
+          <input type="text" id="updateUsername" class="form-control" formControlName="username" [(ngModel)]="utenteForm.value.username" required>
+        </div>
+
+        <div class="form-group">
+          <label for="updateNome">Nome</label>
+          <input type="text" id="updateNome" class="form-control" formControlName="nome" [(ngModel)]="utenteForm.value.nome" required>
+        </div>
+
+        <div class="form-group">
+          <label for="updateCognome">Cognome</label>
+          <input type="text" id="updateCognome" class="form-control" formControlName="cognome" [(ngModel)]="utenteForm.value.cognome" required>
+        </div>
+
+        <div class="form-group">
+          <label for="updateEmail">Email</label>
+          <input type="text" id="updateEmail" class="form-control" formControlName="email" [(ngModel)]="utenteForm.value.email" required>
+        </div>
+
+        <div class="form-group">
+          <label for="updatePassword">Password</label>
+          <input type="password" id="updatePassword" class="form-control mb-3" formControlName="password" [(ngModel)]="utenteForm.value.password" required>
+        </div>
+
+        <div class="form-group">
+          <label for="updateRuolo">Ruolo</label>
+          <select id="updateRuolo" class="form-control" formControlName="nomeRuolo" [(ngModel)]="utenteForm.value.ruolo" required>
+            <option value="USER">USER</option>
+            <option value="ADMIN">ADMIN</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary" >Salva Modifiche</button>
+        <button type="button" class="btn btn-danger" (click)="cancelUpdate()">Annulla</button>
       </form>
     </div>
 
@@ -75,7 +115,7 @@
               <img class="avatar" [src]="convertByteArrayToImageUrl(utente.foto)" alt="Foto Utente" width="50" height="50">
             </td>
             <td>
-              <span class="material-symbols-outlined" (click)="showEditForm(utente)">
+              <span class="material-symbols-outlined" (click)="showUpdateForms(utente)">
                 rebase_edit
               </span>
               <span class="material-symbols-outlined" *ngIf="utente.id" (click)="deleteUser(utente.id)">

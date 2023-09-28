@@ -80,7 +80,7 @@ export class AuthService {
 
 
   signup(formData: FormData) {
-    return this.http.post(`${this.baseUrl}auth/register`, formData);
+    return this.http.post(`${this.baseUrl}auth/register/user`, formData);
   }
 
 

@@ -9,4 +9,5 @@ export interface UtentiInterface {
   ruolo: {
     nome: string;
   };
+  nomeRuolo: string;
 }

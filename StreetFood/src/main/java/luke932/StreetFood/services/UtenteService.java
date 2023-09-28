@@ -125,31 +125,27 @@ public class UtenteService {
 
 	// -----------------AGGIORNA UTENTE
 	public Utente updateUtente(UUID id, UtenteUpdatePayload body) {
+
 		Utente found = this.findById(id);
 
-		if (body.getRuolo() == null || body.getRuolo().getNome() == null) {
-			Ruolo userRole = ruoloR.findByNome("USER");
+		String nomeRuolo = body.getNomeRuolo();
+		System.out.println("Nome Ruolo nel payload: " + nomeRuolo);
 
-			if (userRole == null) {
-				throw new NotFoundException("Ruolo 'USER' non trovato nel database");
-			}
-			body.setRuolo(userRole);
+		Ruolo ruolo = ruoloR.findByNome(body.getNomeRuolo());
+
+		if (ruolo != null) {
+			found.setUsername(body.getUsername());
+			found.setNome(body.getNome());
+			found.setCognome(body.getCognome());
+			found.setEmail(body.getEmail());
+			found.setPassword(body.getPassword());
+
+			found.setRuolo(ruolo);
+
+			return utenteR.save(found);
 		} else {
-			// Se body.getRuolo() non è nullo, allora sostituisci solo la proprietà nome
-			Ruolo existingRole = found.getRuolo();
-			Ruolo newRole = body.getRuolo();
-			existingRole.setNome(newRole.getNome());
-			body.setRuolo(existingRole);
+			throw new RuntimeException("Ruolo non trovato: " + body.getNomeRuolo());
 		}
-
-		found.setUsername(body.getUsername());
-		found.setNome(body.getNome());
-		found.setCognome(body.getCognome());
-		found.setEmail(body.getEmail());
-		found.setPassword(body.getPassword());
-		found.setRuolo(body.getRuolo());
-
-		return utenteR.save(found);
 	}
 
 	// -----------------ELIMINA UTENTE

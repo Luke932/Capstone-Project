@@ -17,6 +17,8 @@ export class UtenteComponent implements OnInit {
   showForm: boolean = false;
   isNewUser: boolean = false;
   selectedRuolo!: string;
+  updateForm!: FormGroup;
+  showUpdateForm = false;
 
   constructor(private utenteSrv: UtenteService, private domSan: DomSanitizer, private fb: FormBuilder) {
     this.utenteForm = this.fb.group({
@@ -34,6 +36,24 @@ export class UtenteComponent implements OnInit {
           ),
         ],
       ],
+    });
+
+    this.updateForm = this.fb.group({
+      username: ["", Validators.required],
+      nome: ["", Validators.required],
+      cognome: ["", Validators.required],
+      email: ["", [Validators.required, Validators.email]],
+      password: [
+        "",
+        [
+          Validators.required,
+          Validators.minLength(8),
+          Validators.pattern(
+            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+          ),
+        ],
+      ],
+      nomeRuolo: ["", Validators.required],
     });
   }
 
@@ -76,22 +96,26 @@ export class UtenteComponent implements OnInit {
     }
   }
 
-  showEditForm(utente: UtentiInterface) {
-    this.showForm = true;
+
+
+  showUpdateForms(utente: UtentiInterface) {
+    console.log(utente);
+
+    this.showForm = false;
+    this.showUpdateForm = true;
     this.isNewUser = false;
     this.utenteId = utente.id ? utente.id : "";
-    this.selectedRuolo = utente.ruolo.nome; // Aggiungi questa riga
+    this.selectedRuolo = utente.ruolo.nome;
 
-    this.utenteForm.setValue({
+    this.utenteForm.patchValue({
       username: utente.username,
       nome: utente.nome,
       cognome: utente.cognome,
       email: utente.email,
-      password: "", // Assicurati che il campo password sia vuoto
+      password: "",
+      nomeRuolo: utente.ruolo.nome,
     });
   }
-
-
 
   showCreateForm() {
     this.utenteForm.reset(); // Resetta il form
@@ -100,21 +124,23 @@ export class UtenteComponent implements OnInit {
     this.utenteId = ""; // Resetta l'ID dell'utente
   }
 
-  updateUtente(idUtente: string) {
-    try {
-      const formData = new FormData();
-      formData.append('username', this.utenteForm.get('username')!.value);
-      formData.append('nome', this.utenteForm.get('nome')!.value);
-      formData.append('cognome', this.utenteForm.get('cognome')!.value);
-      formData.append('email', this.utenteForm.get('email')!.value);
-      formData.append('password', this.utenteForm.get('password')!.value);
-      formData.append('ruolo', this.utenteForm.get('ruolo')!.value.nome);
-      formData.append('file', this.selectedFile);
 
-      this.utenteSrv.updateUser(idUtente, formData).subscribe(
+  updateUtente() {
+    console.log('updateUtente() chiamata');
+    const updateData = this.updateForm.value;
+    const idUtente = this.utenteId;
+
+    try {
+      console.log('Dati di aggiornamento:', updateData); // Aggiunto
+      console.log('ID Utente:', idUtente); // Aggiunto
+
+      // Esegui l'aggiornamento utilizzando i dati
+      this.utenteSrv.updateUser(idUtente, updateData).subscribe(
         response => {
           console.log('Utente aggiornato con successo', response);
           this.getAllUtenti();
+          this.showUpdateForm = false;
+          this.updateForm.reset();
         },
         error => {
           console.error('Errore durante l\'aggiornamento dell\'utente', error);
@@ -124,6 +150,8 @@ export class UtenteComponent implements OnInit {
       console.error('Errore durante l\'aggiornamento dell\'utente', error);
     }
   }
+
+
 
   createUtenteUser(form: NgForm) {
       const formData = new FormData();
@@ -169,15 +197,7 @@ export class UtenteComponent implements OnInit {
     );
 }
 
-  saveOrUpdateUtente(form: NgForm) {
-    const idUtente = this.utenteId;
 
-    if (idUtente) {
-      this.updateUtente(idUtente);
-    } else {
-      this.createUtenteUser(form);
-    }
-  }
 
 
 
@@ -195,7 +215,11 @@ export class UtenteComponent implements OnInit {
   }
 
 
-
+  cancelUpdate() {
+    this.showUpdateForm = false;
+    // Resetta il form di aggiornamento
+    this.updateForm.reset();
+  }
 
   cancelEdit() {
     this.showForm = false; // Nasconde il form
@@ -203,7 +227,4 @@ export class UtenteComponent implements OnInit {
     this.utenteId = ""; // Resetta l'ID dell'utente
   }
 }
-  function saveOrUpdateUtente() {
-    throw new Error('Function not implemented.');
-  }
 

@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import luke932.StreetFood.entities.Ruolo;
 
 @Getter
 @Setter
@@ -18,15 +17,6 @@ public class UtenteUpdatePayload {
 	private String nome;
 	private String cognome;
 
-	private Ruolo ruolo;
-
-	public UtenteUpdatePayload(String username, String password, String email, String nome, String cognome) {
-		super();
-		this.username = username;
-		this.password = password;
-		this.email = email;
-		this.nome = nome;
-		this.cognome = cognome;
-	}
+	private String nomeRuolo;
 
 }
