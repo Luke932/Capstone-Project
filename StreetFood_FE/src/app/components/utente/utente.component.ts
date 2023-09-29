@@ -20,6 +20,9 @@ export class UtenteComponent implements OnInit {
   updateForm!: FormGroup;
   showUpdateForm = false;
   updateFormRef: any;
+  loading = false;
+  userType: string = '';
+
 
   constructor(private utenteSrv: UtenteService, private domSan: DomSanitizer, private fb: FormBuilder) {
     this.utenteForm = this.fb.group({
@@ -127,34 +130,45 @@ export class UtenteComponent implements OnInit {
 
 
   updateUtente() {
-    console.log('updateUtente() chiamata');
-    const updateData = this.updateForm.value;
-    const idUtente = this.utenteId;
+    this.loading = true;
 
-    try {
-      console.log('Dati di aggiornamento:', updateData); // Aggiunto
-      console.log('ID Utente:', idUtente); // Aggiunto
 
-      // Esegui l'aggiornamento utilizzando i dati
-      this.utenteSrv.updateUser(idUtente, updateData).subscribe(
-        response => {
-          console.log('Utente aggiornato con successo', response);
-          this.getAllUtenti();
-          this.showUpdateForm = false;
-          this.updateForm.reset();
-        },
-        error => {
-          console.error('Errore durante l\'aggiornamento dell\'utente', error);
-        }
-      );
-    } catch (error) {
-      console.error('Errore durante l\'aggiornamento dell\'utente', error);
-    }
+    setTimeout(() => {
+      const updateData = this.updateForm.value;
+      const idUtente = this.utenteId;
+
+      try {
+        console.log('Dati di aggiornamento:', updateData);
+        console.log('ID Utente:', idUtente);
+
+        this.utenteSrv.updateUser(idUtente, updateData).subscribe(
+          response => {
+            console.log('Utente aggiornato con successo', response);
+            this.getAllUtenti();
+            this.showUpdateForm = false;
+            this.updateForm.reset();
+            this.loading = false;
+          },
+          error => {
+            console.error('Errore durante l\'aggiornamento dell\'utente', error);
+            this.loading = false;
+          }
+        );
+      } catch (error) {
+        console.error('Errore durante l\'aggiornamento dell\'utente', error);
+        this.loading = false;
+      }
+    }, 5000);
   }
 
 
 
+
   createUtenteUser(form: NgForm) {
+    this.loading = true;
+    this.userType = 'user';
+
+    setTimeout(() => {
       const formData = new FormData();
       formData.append('username', form.value.username);
       formData.append('nome', form.value.nome);
@@ -163,40 +177,49 @@ export class UtenteComponent implements OnInit {
       formData.append('password', form.value.password);
       formData.append('file', this.selectedFile);
 
-
       this.utenteSrv.registerUserWithFile(formData).subscribe(
         response => {
           console.log('Utente creato con successo', response);
           this.getAllUtenti();
           this.cancelEdit();
+          this.loading = false; // Dopo il completamento, imposta loading a false
         },
         error => {
           console.error('Errore durante la creazione dell\'utente', error);
+          this.loading = false; // Se si verifica un errore, imposta loading a false
         }
       );
+    }, 5000); // Attende 5 secondi prima di eseguire la funzione
   }
 
   createUtenteAdmin(form: NgForm) {
-    const formData = new FormData();
-    formData.append('username', form.value.username);
-    formData.append('nome', form.value.nome);
-    formData.append('cognome', form.value.cognome);
-    formData.append('email', form.value.email);
-    formData.append('password', form.value.password);
-    formData.append('file', this.selectedFile);
+    this.loading = true;
+    this.userType = 'admin';
 
+    setTimeout(() => {
+      const formData = new FormData();
+      formData.append('username', form.value.username);
+      formData.append('nome', form.value.nome);
+      formData.append('cognome', form.value.cognome);
+      formData.append('email', form.value.email);
+      formData.append('password', form.value.password);
+      formData.append('file', this.selectedFile);
 
-    this.utenteSrv.saveUserWithFile(formData).subscribe(
-      response => {
-        console.log('Admin creato con successo', response);
-        this.getAllUtenti();
-        this.cancelEdit();
-      },
-      error => {
-        console.error('Errore durante la creazione dell\'utente', error);
-      }
-    );
-}
+      this.utenteSrv.saveUserWithFile(formData).subscribe(
+        response => {
+          console.log('Admin creato con successo', response);
+          this.getAllUtenti();
+          this.cancelEdit();
+          this.loading = false; // Dopo il completamento, imposta loading a false
+        },
+        error => {
+          console.error('Errore durante la creazione dell\'utente', error);
+          this.loading = false; // Se si verifica un errore, imposta loading a false
+        }
+      );
+    }, 5000); // Attende 5 secondi prima di eseguire la funzione
+  }
+
 
 
 
