@@ -8,27 +8,38 @@
         <div class="form-group">
           <label for="username">Username</label>
           <input type="text" id="username" class="form-control" name="username" required [(ngModel)]="utenteForm.value.username">
+          <div class="alert alert-danger" *ngIf="utenteForm.controls['username'].invalid && utenteForm.controls['username'].hasError('required')">L'username è obbligatorio</div>
         </div>
 
         <div class="form-group">
           <label for="nome">Nome</label>
           <input type="text" id="nome" class="form-control" name="nome" required [(ngModel)]="utenteForm.value.nome">
+          <div class="alert alert-danger" *ngIf="utenteForm.controls['nome'].invalid && utenteForm.controls['nome'].hasError('required')">Il nome è obbligatorio</div>
         </div>
 
         <div class="form-group">
           <label for="cognome">Cognome</label>
           <input type="text" id="cognome" class="form-control" name="cognome" required [(ngModel)]="utenteForm.value.cognome">
+          <div class="alert alert-danger" *ngIf="utenteForm.controls['cognome'].invalid && utenteForm.controls['cognome'].hasError('required')">Il cognome è obbligatorio</div>
         </div>
 
         <div class="form-group">
           <label for="email">Email</label>
           <input type="text" id="email" class="form-control" name="email" required [(ngModel)]="utenteForm.value.email">
+          <div class="alert alert-danger" *ngIf="utenteForm.controls['email'].invalid && utenteForm.controls['email'].hasError('required')">L'email</div>
+            <div class="alert alert-danger" *ngIf="utenteForm.controls['email'].hasError('email') && utenteForm.controls['email'].touched">Formato email non valido</div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group mb-3">
           <label for="password">Password</label>
-          <input type="password" id="password" class="form-control mb-3" name="password" required [(ngModel)]="utenteForm.value.password">
+          <input type="password" id="password" class="form-control" name="password" [(ngModel)]="utenteForm.value.password"
+            [ngModelOptions]="{standalone: true}" #passwordField="ngModel" required minlength="8" maxlength="16">
+            <div class="alert alert-danger" *ngIf="passwordField.errors?.['required']">Password è obbligatoria</div>
+          <div class="alert alert-danger" *ngIf="passwordField.invalid && passwordField.errors?.['minlength']">La password deve contenere almeno 8 caratteri</div>
+          <div class="alert alert-danger" *ngIf="passwordField.invalid && passwordField.errors?.['maxlength']">La password non può superare i 16 caratteri</div>
         </div>
+
+
 
 
 
@@ -38,8 +49,8 @@
         </div>
 
 
-        <button class="me-3" *ngIf="isNewUser" type="button" class="btn btn-primary" (click)="createUtenteUser(form)">Crea Utente</button>
-        <button class="me-3" *ngIf="isNewUser" type="button" class="btn btn-success" (click)="createUtenteAdmin(form)">Crea Admin</button>
+        <button class="me-3" *ngIf="isNewUser" type="button" class="btn btn-primary"  [disabled]="!form.valid" (click)="createUtenteUser(form)">Crea Utente</button>
+        <button class="me-3" *ngIf="isNewUser" type="button" class="btn btn-success"  [disabled]="!form.valid" (click)="createUtenteAdmin(form)">Crea Admin</button>
 
 
 
@@ -52,34 +63,42 @@
         <div class="form-group">
           <label for="updateUsername">Username</label>
           <input type="text" id="updateUsername" class="form-control" formControlName="username" [(ngModel)]="utenteForm.value.username" required>
+          <div class="alert alert-danger" *ngIf="updateFormRef.submitted && updateFormRef.controls['username'].hasError('required')">L'username è obbligatorio</div>
         </div>
 
         <div class="form-group">
           <label for="updateNome">Nome</label>
           <input type="text" id="updateNome" class="form-control" formControlName="nome" [(ngModel)]="utenteForm.value.nome" required>
+          <div class="alert alert-danger" *ngIf="updateFormRef.submitted && updateFormRef.controls['nome'].hasError('required')">Il nome è obbligatorio</div>
         </div>
 
         <div class="form-group">
           <label for="updateCognome">Cognome</label>
           <input type="text" id="updateCognome" class="form-control" formControlName="cognome" [(ngModel)]="utenteForm.value.cognome" required>
+          <div class="alert alert-danger" *ngIf="updateFormRef.submitted && updateFormRef.controls['cognome'].hasError('required')">Il cognome è obbligatorio</div>
         </div>
 
         <div class="form-group">
           <label for="updateEmail">Email</label>
           <input type="text" id="updateEmail" class="form-control" formControlName="email" [(ngModel)]="utenteForm.value.email" required>
+          <div class="alert alert-danger" *ngIf="updateFormRef.submitted && updateFormRef.controls['email'].hasError('required')">L'e-mail è obbligatoria</div>
         </div>
 
         <div class="form-group">
           <label for="updatePassword">Password</label>
           <input type="password" id="updatePassword" class="form-control mb-3" formControlName="password" [(ngModel)]="utenteForm.value.password" required>
+          <div class="alert alert-danger" *ngIf="updateFormRef.submitted && updateFormRef.controls['password'].hasError('required')">La password è obbligatoria</div>
+          <div class="alert alert-danger" *ngIf="updateFormRef.submitted && updateFormRef.controls('password').hasError('minlength')">La password deve contenere almeno 8 caratteri</div>
+          <div class="alert alert-danger" *ngIf="updateFormRef.submitted && updateFormRef.controls('password').hasError('maxlength')">La password non può superare i 16 caratteri</div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group mb-3">
           <label for="updateRuolo">Ruolo</label>
           <select id="updateRuolo" class="form-control" formControlName="nomeRuolo" [(ngModel)]="utenteForm.value.ruolo" required>
             <option value="USER">USER</option>
             <option value="ADMIN">ADMIN</option>
           </select>
+          <div class="alert alert-danger" *ngIf="updateFormRef.submitted && updateFormRef.controls['nomeRuolo'].hasError('required')">Il ruolo è obbligatorio</div>
         </div>
 
         <button type="submit" class="btn btn-primary" >Salva Modifiche</button>

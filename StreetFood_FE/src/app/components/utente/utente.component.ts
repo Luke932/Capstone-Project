@@ -19,6 +19,7 @@ export class UtenteComponent implements OnInit {
   selectedRuolo!: string;
   updateForm!: FormGroup;
   showUpdateForm = false;
+  updateFormRef: any;
 
   constructor(private utenteSrv: UtenteService, private domSan: DomSanitizer, private fb: FormBuilder) {
     this.utenteForm = this.fb.group({
