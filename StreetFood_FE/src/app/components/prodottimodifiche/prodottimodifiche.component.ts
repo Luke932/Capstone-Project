@@ -44,7 +44,7 @@ export class ProdottimodificheComponent implements OnInit {
     private domSan: DomSanitizer
   ) {
     this.likes = this.likeService.getLikes();
-    console.log("Likes nel costruttore:", this.likes); // Aggiunto per debug
+    console.log("Likes nel costruttore:", this.likes);
   }
 
   ngOnInit(): void {

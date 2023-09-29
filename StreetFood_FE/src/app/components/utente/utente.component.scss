@@ -101,3 +101,12 @@ span {
     display: none;
   }
 }
+
+@media screen and (max-width: 575px) {
+  .background-image {
+    min-height: 100vh;
+    position: relative;
+    z-index: 0.8;
+    text-align: center;
+  }
+}

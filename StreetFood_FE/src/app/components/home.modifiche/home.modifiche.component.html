@@ -21,29 +21,33 @@
           <label for="immagine" class="form-label">Carica Immagine</label>
           <input type="text" class="form-control" id="immagine" [(ngModel)]="formLuogo.immagine" name="immagine" required>
         </div>
-        <button type="submit" class="btn btn-primary">Aggiorna</button>
+        <button type="submit" class="btn btn-primary me-3">
+          {{ formLuogo.id ? 'Aggiorna' : 'Aggiungi' }}
+        </button>
+        <button type="button" class="btn btn-danger" (click)="mostraForm = false">Chiudi</button>
       </form>
     </div>
 
 
-      <div class="row">
-        <div class="col-md-3 col-sm-6 mb-3 barra">
-          <input class="input-field form-control" [(ngModel)]="titoloDaCercare" placeholder="Inserisci il titolo...">
-        </div>
-        <div class="col-md-3 col-sm-6 mb-3 barra">
-          <select class="dropdown-field form-select width" [(ngModel)]="tipoRicerca">
-            <option value="descrizione">Ricerca per descrizione</option>
-            <option value="prodotto">Ricerca per prodotto</option>
-            <option value="titolo">Ricerca per titolo</option>
-          </select>
-        </div>
-        <div class="col-md-3 col-sm-6 mb-3 barra">
-          <button class="search-button btn btn-primary search" (click)="cercaLuogo(tipoRicerca)">Cerca</button>
-        </div>
-        <div class="col-md-3 col-sm-6 mb-3 barra">
-          <button class="btn btn-success" (click)="mostraFormCreazione()">Crea</button>
-        </div>
+    <div class="row">
+      <div class="col-md-3 col-sm-6 mb-3 mb-sm-0 barra">
+        <input class="input-field form-control" [(ngModel)]="titoloDaCercare" placeholder="Inserisci il titolo...">
       </div>
+      <div class="col-md-3 col-sm-6 mb-3 mb-sm-0 barra">
+        <select class="dropdown-field form-select width" [(ngModel)]="tipoRicerca">
+          <option value="descrizione">Ricerca per descrizione</option>
+          <option value="prodotto">Ricerca per prodotto</option>
+          <option value="titolo">Ricerca per luogo</option>
+        </select>
+      </div>
+      <div class="col-md-3 col-sm-6 mb-3 mb-sm-0 barra">
+        <button class="search-button btn btn-primary search" (click)="cercaLuogo(tipoRicerca)">Cerca</button>
+      </div>
+      <div class="col-md-3 col-sm-6 barra">
+        <button class="btn btn-success" (click)="mostraFormCreazione()">Crea</button>
+      </div>
+  </div>
+
 
 
       <div class="row" *ngIf="mostraMessaggio">

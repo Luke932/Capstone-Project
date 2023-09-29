@@ -34,6 +34,7 @@
 
 .barra {
   margin-top:3rem;
+  margin-bottom: 1rem;
 }
 
 .form-group.comment-form {
@@ -119,3 +120,33 @@
   }
 }
 
+@media (max-width: 576px) {
+  .barra {
+    margin-top: 1rem;
+  }
+
+  .input-field,
+  .dropdown-field,
+  .search-button,
+  .btn-success {
+    margin-right: 0;
+  }
+
+  .search {
+    margin-left: 0;
+  }
+
+  .barra,
+  .input-field,
+  .dropdown-field,
+  .search-button,
+  .btn-success {
+    text-align: left;
+  }
+}
+
+@media (min-width: 736px) and (max-width: 988px) {
+  .barra .form-select {
+    width: 220px; /* Imposta la larghezza al 100% */
+  }
+}
