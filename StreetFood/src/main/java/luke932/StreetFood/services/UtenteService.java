@@ -49,7 +49,7 @@ public class UtenteService {
 			throw new NotFoundException("Ruolo 'USER' non trovato nel database");
 		}
 
-		Utente newUser = new Utente(body.getNome(), body.getCognome(), body.getUsername(), body.getEmail(),
+		Utente newUser = new Utente(body.getUsername(), body.getNome(), body.getCognome(), body.getEmail(),
 				body.getPassword(), body.getFoto());
 
 		newUser.setRuolo(userRole);

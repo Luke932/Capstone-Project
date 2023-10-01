@@ -36,7 +36,11 @@
   }
 }
 
-
+@media screen and (max-width: 650px) {
+  .avatar {
+    display: none;
+  }
+}
 
 
 .avatar {
