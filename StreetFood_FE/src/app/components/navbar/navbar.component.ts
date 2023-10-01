@@ -18,7 +18,7 @@ export class NavbarComponent implements OnInit {
   userPhotoUrl!: SafeUrl | null;
 
 
-  constructor(private roleSrv: RoleService, private router: Router, private authSrv: AuthService, private domSan: DomSanitizer) {}
+  constructor(private roleSrv: RoleService, private authSrv: AuthService, private domSan: DomSanitizer) {}
 
   ngOnInit(): void {
     this.userRole$ = this.roleSrv.getUserRole$();

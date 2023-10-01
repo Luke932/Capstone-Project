@@ -1,5 +1,5 @@
 <div class="access-denied">
   <h1>Accesso Negato</h1>
   <p>Spiacente, non hai i privilegi necessari per accedere a questa pagina.</p>
-  <p>Torna alla tua <a [routerLink]="['/user/home']">Homepage</a></p>
+  <p>Torna alla tua <a href="/user/home" (click)="reloadHomePage()">Homepage</a></p>
 </div>

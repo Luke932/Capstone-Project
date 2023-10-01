@@ -52,10 +52,10 @@
                       <div class="commento-testo">
                         {{ commento.testoCommento }}
                       </div>
-                      <div class="commento-buttons">
-                        <button class="btn btn-link btn-modifica"
+                      <div class="commento-buttons d-flex">
+                        <button class="btn btn-link btn-modifica text-warning"
                           (click)="editCommento(commento, prodotto)">Modifica</button>
-                        <button class="btn btn-link btn-elimina"
+                        <button class="btn btn-link btn-elimina text-danger"
                           (click)="deleteCommento(prodotto, commento.id)">Elimina</button>
                       </div>
                     </div>
