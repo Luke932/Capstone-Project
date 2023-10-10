@@ -1,0 +1,152 @@
+
+
+.background-image {
+  background-image: url('../../../assets/img/water-20.gif.webp');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: repeat;
+  height: auto;
+}
+
+.input-field {
+  padding: 5px;
+  margin-right: 10px;
+}
+
+.dropdown-field {
+  padding: 5px;
+  margin-right: 10px;
+}
+
+
+
+.col-lg-4, .col-md-6, .col-sm-12 {
+  padding: 0 15px;
+}
+
+.search-button {
+  padding: 5px 10px;
+  background-color: #007bff;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+}
+
+.barra {
+  margin-top:3rem;
+  margin-bottom: 1rem;
+}
+
+.form-group.comment-form {
+  margin-bottom: 1rem;
+}
+
+.comment-button {
+  margin-top: 1rem;
+}
+
+.mt{
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.click {
+  cursor: pointer;
+}
+
+.avatar-container {
+  margin-right: 10px;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.liked {
+  color: red;
+}
+
+.card {
+  height: 900px;
+}
+
+.cursor {
+  cursor: pointer;
+}
+
+.space {
+  padding-bottom: 10rem;
+}
+
+
+.search {
+  margin-left: 5rem;
+}
+
+.width {
+  width: 200px;
+}
+
+.display-1 {
+  font-size: 4rem;
+}
+
+.hover-effect {
+  transition: transform 0.3s;
+}
+
+.hover-effect:hover {
+  transform: scale(1.1);
+}
+
+.animated-text {
+  animation: blink 1s infinite alternate;
+}
+
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}
+
+@media (max-width: 576px) {
+  .hover-effect:hover {
+    transform: none !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .barra {
+    margin-top: 1rem;
+  }
+
+  .input-field,
+  .dropdown-field,
+  .search-button,
+  .btn-success {
+    margin-right: 0;
+  }
+
+  .search {
+    margin-left: 0;
+  }
+
+  .barra,
+  .input-field,
+  .dropdown-field,
+  .search-button,
+  .btn-success {
+    text-align: left;
+  }
+}
+
+@media (min-width: 736px) and (max-width: 988px) {
+  .barra .form-select {
+    width: 220px; /* Imposta la larghezza al 100% */
+  }
+}

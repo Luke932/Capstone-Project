@@ -1,0 +1,30 @@
+<div class="ms-5 form-container">
+  <form [formGroup]="utenteForm" (ngSubmit)="onSubmit()" class="mt-4">
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input formControlName="username" id="username" type="text" class="form-control">
+    </div>
+
+    <div class="form-group">
+      <label for="nome">Nome</label>
+      <input formControlName="nome" id="nome" type="text" class="form-control">
+    </div>
+
+    <div class="form-group">
+      <label for="cognome">Cognome</label>
+      <input formControlName="cognome" id="cognome" type="text" class="form-control">
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input formControlName="email" id="email" type="email" class="form-control">
+    </div>
+
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input formControlName="password" id="password" type="password" class="form-control mb-3">
+    </div>
+
+    <button type="submit" class="btn btn-primary">Aggiorna Utente</button>
+  </form>
+</div>

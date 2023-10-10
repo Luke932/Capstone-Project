@@ -1,0 +1,75 @@
+<div class="nav" *ngIf="(userRole$ | async) === 'USER'">
+  <nav class="navbar navbar-expand-lg navbar-bg">
+    <div class="container-fluid">
+      <div class="d-flex align-items-center navbar-content">
+        <img src="../../../assets/img/benvenuti-a-palermo-italia-vintage-metallo-arrugginito-segno-su-uno-sfondo-bianco-illustrazione-vettoriale-w21k27.png" alt="Palermo">
+        <h1 class="navbar-username text-wood me-lg-3">
+          Benvenuto a Palermo, {{ username }}
+        </h1>
+        <div *ngIf="userPhotoUrl" class="avatar-container" >
+          <img [src]="userPhotoUrl" alt="Foto Utente" class="avatar">
+        </div>
+      </div>
+
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link text-wood" [routerLink]="'/user/home'" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" >Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-wood" [routerLink]="'/user/prodotti'" routerLinkActive="active">Prodotti</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-wood" [routerLink]="'/user/profilo'" routerLinkActive="active">Profilo</a>
+          </li>
+          <li class="nav-item">
+            <a class="logout" (click)="logout()" href="#"><span class="material-symbols-outlined">
+              logout
+              </span></a>
+          </li>
+        </ul>
+
+      </div>
+
+  </nav>
+
+</div>
+
+
+
+
+<div *ngIf="(userRole$ | async) === 'ADMIN'">
+  <nav class="navbar navbar-expand-lg navbar-bg">
+    <div class="container-fluid">
+      <div class="d-flex align-items-center navbar-content">
+        <img src="../../../assets/img/benvenuti-a-palermo-italia-vintage-metallo-arrugginito-segno-su-uno-sfondo-bianco-illustrazione-vettoriale-w21k27.png" alt="Palermo" >
+        <h1 class="navbar-username text-wood me-lg-3">
+          Benvenuto a Palermo, {{ username }}
+        </h1>
+        <div *ngIf="userPhotoUrl" class="avatar-container" >
+          <img [src]="userPhotoUrl" alt="Foto Utente" class="avatar">
+        </div>
+      </div>
+
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link text-wood" [routerLink]="'/admin/homemodifiche'" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" >Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-wood" [routerLink]="'/admin/prodottimodifiche'" routerLinkActive="active">Prodotti</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-wood" [routerLink]="'/admin/utenti'" routerLinkActive="active">Utenti</a>
+          </li>
+          <li class="nav-item">
+            <a class="logout" (click)="logout()" href="#"><span class="material-symbols-outlined">
+              logout
+              </span></a>
+          </li>
+        </ul>
+
+      </div>
+
+  </nav>
+  </div>
+
+

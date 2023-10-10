@@ -1,0 +1,74 @@
+.card {
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: 2rem;
+}
+.background-image {
+  background-image: url("../../../assets/img/water-20.gif.webp");
+  background-size: cover;
+  background-position: center center;
+  background-repeat: repeat;
+  height: auto;
+}
+
+.barra {
+  margin-top: 3rem;
+}
+
+.input-field {
+  padding: 5px;
+  margin-right: 10px;
+}
+
+.dropdown-field {
+  padding: 5px;
+  margin-right: 10px;
+}
+
+.search-button {
+  padding: 5px 10px;
+  background-color: #007bff;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+}
+
+.cursor {
+  cursor: pointer;
+}
+
+.container {
+  padding-bottom: 10rem;
+}
+
+.display-1 {
+  font-size: 4rem;
+}
+
+.hover-effect {
+  transition: transform 0.3s;
+}
+
+.hover-effect:hover {
+  transform: scale(1.1);
+}
+
+.animated-text {
+  animation: blink 1s infinite alternate;
+}
+
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}
+
+@media (max-width: 576px) {
+  .hover-effect:hover {
+    transform: none !important;
+  }
+}
+

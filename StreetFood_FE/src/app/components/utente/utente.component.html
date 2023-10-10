@@ -1,0 +1,158 @@
+<div class="background-image">
+  <div class="container">
+    <h1 class="display-1 text-white mb-4 animated-text hover-effect animeted-text">Pagina Utenti</h1>
+    <br>
+
+    <div *ngIf="showForm" class="form-container">
+      <form #form="ngForm">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input type="text" id="username" class="form-control" name="username" required [(ngModel)]="utenteForm.value.username">
+          <div class="alert alert-danger" *ngIf="utenteForm.controls['username'].invalid && utenteForm.controls['username'].hasError('required')">L'username è obbligatorio</div>
+        </div>
+
+        <div class="form-group">
+          <label for="nome">Nome</label>
+          <input type="text" id="nome" class="form-control" name="nome" required [(ngModel)]="utenteForm.value.nome">
+          <div class="alert alert-danger" *ngIf="utenteForm.controls['nome'].invalid && utenteForm.controls['nome'].hasError('required')">Il nome è obbligatorio</div>
+        </div>
+
+        <div class="form-group">
+          <label for="cognome">Cognome</label>
+          <input type="text" id="cognome" class="form-control" name="cognome" required [(ngModel)]="utenteForm.value.cognome">
+          <div class="alert alert-danger" *ngIf="utenteForm.controls['cognome'].invalid && utenteForm.controls['cognome'].hasError('required')">Il cognome è obbligatorio</div>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="text" id="email" class="form-control" name="email" required [(ngModel)]="utenteForm.value.email">
+          <div class="alert alert-danger" *ngIf="utenteForm.controls['email'].invalid && utenteForm.controls['email'].hasError('required')">L'email è obbligatoria</div>
+            <div class="alert alert-danger" *ngIf="utenteForm.controls['email'].hasError('email') && utenteForm.controls['email'].touched">Formato email non valido</div>
+        </div>
+
+        <div class="form-group mb-3">
+          <label for="password">Password</label>
+          <input type="password" id="password" class="form-control" name="password" [(ngModel)]="utenteForm.value.password">
+          <div class="alert alert-danger" *ngIf="utenteForm.controls['password'].invalid && utenteForm.controls['password'].hasError('required')">La password è obbligatoria</div>
+        </div>
+
+
+
+
+
+        <div class="photo mb-3">
+          <label for="photo">Carica Foto:</label>
+          <input type="file" id="photo" (change)="onFileSelected($event)" required>
+        </div>
+
+
+        <button class="me-3 position-relative" *ngIf="isNewUser" type="button" class="btn btn-primary" [disabled]="!form.valid" (click)="createUtenteUser(form)">
+          <span *ngIf="loading && userType === 'user'" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          Crea Utente
+        </button>
+
+        <button class="me-3 position-relative" *ngIf="isNewUser" type="button" class="btn btn-success" [disabled]="!form.valid" (click)="createUtenteAdmin(form)">
+          <span *ngIf="loading && userType === 'admin'" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          Crea Admin
+        </button>
+
+
+
+
+
+
+        <button type="button" class="btn btn-danger" (click)="cancelEdit()">Annulla</button>
+      </form>
+    </div>
+
+    <div *ngIf="showUpdateForm" class="form-container">
+      <form [formGroup]="updateForm" (ngSubmit)="updateUtente()">
+        <div class="form-group">
+          <label for="updateUsername">Username</label>
+          <input type="text" id="updateUsername" class="form-control" formControlName="username" [(ngModel)]="utenteForm.value.username" required>
+          <div class="alert alert-danger" *ngIf="updateForm.controls['username'].hasError('required')">L'username è obbligatorio</div>
+        </div>
+
+        <div class="form-group">
+          <label for="updateNome">Nome</label>
+          <input type="text" id="updateNome" class="form-control" formControlName="nome" [(ngModel)]="utenteForm.value.nome" required>
+          <div class="alert alert-danger" *ngIf="updateForm.controls['nome'].hasError('required')">Il nome è obbligatorio</div>
+        </div>
+
+        <div class="form-group">
+          <label for="updateCognome">Cognome</label>
+          <input type="text" id="updateCognome" class="form-control" formControlName="cognome" [(ngModel)]="utenteForm.value.cognome" required>
+          <div class="alert alert-danger" *ngIf="updateForm.controls['cognome'].hasError('required')">Il cognome è obbligatorio</div>
+        </div>
+
+        <div class="form-group">
+          <label for="updateEmail">Email</label>
+          <input type="text" id="updateEmail" class="form-control" formControlName="email" [(ngModel)]="utenteForm.value.email" required>
+          <div class="alert alert-danger" *ngIf="updateForm.controls['email'].hasError('required')">L'e-mail è obbligatoria</div>
+        </div>
+
+        <div class="form-group mb-3">
+          <label for="updatePassword">Password</label>
+          <input type="password" id="updatePassword" class="form-control" formControlName="password" [(ngModel)]="utenteForm.value.password" required>
+          <div class="alert alert-danger" *ngIf="updateForm.controls['password'].hasError('required')">La password è obbligatoria</div>
+          <div class="alert alert-danger" *ngIf="updateForm.get('password')?.hasError('minlength')">La password deve contenere almeno 8 caratteri</div>
+          <div class="alert alert-danger" *ngIf="updateForm.get('password')?.hasError('maxlength')">La password deve contenere almeno 8 caratteri</div>
+        </div>
+
+        <div class="form-group mb-3">
+          <label for="updateRuolo">Ruolo</label>
+          <select id="updateRuolo" class="form-control" formControlName="nomeRuolo" [(ngModel)]="utenteForm.value.ruolo" required>
+            <option value="USER">USER</option>
+            <option value="ADMIN">ADMIN</option>
+          </select>
+          <div class="alert alert-danger" *ngIf="updateForm.controls['nomeRuolo'].hasError('required')">Il ruolo è obbligatorio</div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+          <span *ngIf="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          Salva Modifiche</button>
+        <button type="button" class="btn btn-danger" (click)="cancelUpdate()">Annulla</button>
+      </form>
+    </div>
+
+    <div *ngIf="!showForm" class="table-responsive">
+      <table class="lista-trasparente">
+        <thead>
+          <tr>
+            <th>Username</th>
+            <th>Nome</th>
+            <th>Cognome</th>
+            <th>Email</th>
+            <th>Ruolo</th>
+            <th>Foto</th>
+            <th>
+              <span class="material-symbols-outlined" (click)="showCreateForm()">
+                edit
+              </span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let utente of utenti">
+            <td>{{ utente.username }}</td>
+            <td>{{ utente.nome }}</td>
+            <td>{{ utente.cognome }}</td>
+            <td>{{ utente.email }}</td>
+            <td>{{ utente.ruolo.nome }}</td>
+            <td>
+              <img class="avatar" [src]="convertByteArrayToImageUrl(utente.foto)" alt="Foto Utente" width="50" height="50">
+            </td>
+            <td>
+              <span class="material-symbols-outlined" (click)="showUpdateForms(utente)">
+                rebase_edit
+              </span>
+              <span class="material-symbols-outlined" *ngIf="utente.id" (click)="deleteUser(utente.id)">
+                delete
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
